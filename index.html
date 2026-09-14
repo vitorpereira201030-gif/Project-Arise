@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Project Arise" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>Project Arise — Alpha 1.3 • Body Sync Update</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <div id="levelEffectLayer" class="level-effect-layer" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <header class="topbar panel">
+      <div>
+        <p class="eyebrow">[ SYSTEM ]</p>
+        <h1>PROJECT <span>ARISE</span></h1>
+        <p class="subtitle">Alpha 1.3 • Body Sync Update</p>
+      </div>
+      <button id="systemButton" class="icon-button" type="button" title="Ajuda do sistema">?</button>
+    </header>
+
+    <section id="dashboardScreen" class="screen active">
+      <section class="player-grid">
+        <article class="panel player-card">
+          <div class="player-heading">
+            <div>
+              <p class="eyebrow">PLAYER</p>
+              <h2 id="playerName">VITANHOO</h2>
+              <button id="equippedTitleButton" class="title-badge" type="button">[ THE AWAKENED ]</button>
+            </div>
+            <div class="rank-box">
+              <span>RANK</span>
+              <strong id="rankValue">E-</strong>
+            </div>
+          </div>
+
+          <div class="level-row">
+            <div>
+              <span class="label">LEVEL</span>
+              <strong id="levelValue">1</strong>
+            </div>
+            <div class="xp-readout"><span id="xpText">0 / 100 XP</span></div>
+          </div>
+          <div class="progress-track xp-track"><div id="xpBar" class="progress-fill"></div></div>
+
+          <div class="resource-grid">
+            <div><span class="label">ESSENCE</span><strong id="essenceValue">0</strong></div>
+            <div><span class="label">QUEST ATUAL</span><strong id="dailyProgress">0/4</strong></div>
+            <div><span class="label">STREAK</span><strong id="streakValue">🔥 0</strong><small id="streakBonusText">Bônus +0%</small></div>
+            <div><span class="label">PROTEÇÃO</span><strong id="streakGuardValue">0</strong><small>máx. 1</small></div>
+          </div>
+        </article>
+
+        <article class="panel body-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">BODY DEVELOPMENT</p>
+              <h2>Evolução corporal</h2>
+            </div>
+            <button id="openStatusButton" class="ghost-button" type="button">DETALHES</button>
+          </div>
+          <div id="bodyPreview" class="body-preview"></div>
+        </article>
+      </section>
+
+      <section class="panel training-cta">
+        <div>
+          <div class="routine-line">
+            <p class="eyebrow">SYSTEM TRAINING</p>
+            <span id="routineChip" class="routine-chip">TREINO A</span>
+          </div>
+          <h2 id="routineTitle">Treino atual</h2>
+          <p id="dailyMessage">Complete as missões no seu ritmo.</p>
+          <div id="cooldownInfo" class="cooldown-info" aria-live="polite"></div>
+        </div>
+        <button id="startTrainingButton" class="primary-button" type="button">⚔ INICIAR TREINO</button>
+      </section>
+
+      <section class="missions-section">
+        <div class="section-heading missions-heading">
+          <div>
+            <p class="eyebrow">SYSTEM QUESTS</p>
+            <h2>Missões</h2>
+          </div>
+          <span id="dailyDate" class="date-chip"></span>
+        </div>
+        <div id="missionsGrid" class="missions-grid"></div>
+      </section>
+
+      <section class="panel navigation-panel">
+        <button id="historyButton" class="menu-button" type="button">📜 HISTÓRICO</button>
+        <button id="statusButton" class="menu-button" type="button">🧬 CORPO</button>
+        <button id="progressionButton" class="menu-button" type="button">⚔ PROGRESSÃO</button>
+        <button id="achievementsButton" class="menu-button" type="button">🏆 CONQUISTAS</button>
+        <button id="titlesButton" class="menu-button" type="button">🏷 TÍTULOS</button>
+        <button id="shopButton" class="menu-button" type="button">💠 LOJA</button>
+        <button id="settingsButton" class="menu-button" type="button">⚙ SISTEMA</button>
+      </section>
+    </section>
+
+    <section id="trainingScreen" class="screen">
+      <div class="screen-toolbar">
+        <button id="exitTrainingButton" class="ghost-button" type="button">← SAIR</button>
+        <div class="training-counter"><span id="trainingStepText">1 / 4</span></div>
+      </div>
+
+      <article class="panel training-card">
+        <div class="training-kicker">
+          <p class="eyebrow">TRAINING SESSION</p>
+          <span id="trainingCategoryChip" class="category-chip">PUSH</span>
+        </div>
+        <h2 id="trainingExerciseName">Flexão</h2>
+        <p id="trainingVariationName" class="variation-name">Variação: Flexão padrão</p>
+        <p id="trainingExerciseDescription" class="training-description"></p>
+        <div id="trainingBodyTargets" class="body-targets"></div>
+
+        <div class="target-box">
+          <span>OBJETIVO ATUAL</span>
+          <strong id="trainingTarget">3 × 2</strong>
+          <small id="skillLevelText">Proficiência Lv. 1</small>
+        </div>
+
+        <div id="setInputs" class="set-inputs"></div>
+
+        <fieldset class="difficulty-fieldset">
+          <legend>Como esse exercício pareceu?</legend>
+          <div class="difficulty-grid">
+            <label><input type="radio" name="difficulty" value="easy" /><span>Fácil</span></label>
+            <label><input type="radio" name="difficulty" value="normal" checked /><span>Normal</span></label>
+            <label><input type="radio" name="difficulty" value="hard" /><span>Difícil</span></label>
+            <label><input type="radio" name="difficulty" value="extreme" /><span>Muito difícil</span></label>
+          </div>
+        </fieldset>
+
+        <p id="trainingSafetyNote" class="safety-note">Registre apenas o que você fez com técnica aceitável. Não precisa chegar à falha para progredir.</p>
+
+        <div class="training-actions">
+          <button id="skipExerciseButton" class="ghost-button" type="button">PULAR</button>
+          <button id="saveExerciseButton" class="primary-button" type="button">REGISTRAR →</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="statusScreen" class="screen">
+      <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel body-sync-panel">
+        <p class="eyebrow">BODY SYNC</p>
+        <h2>Mapa corporal interativo</h2>
+        <p class="detail-intro">Toque numa região do corpo ou em um status abaixo. O mapa destaca onde seu treino está gerando progresso. Fôlego é uma capacidade, então aparece como uma aura no tórax.</p>
+
+        <div class="body-sync-layout">
+          <div class="body-map-stage" aria-label="Mapa corporal interativo">
+            <div class="body-view-labels"><span>FRENTE</span><span>COSTAS</span></div>
+            <svg id="bodyMapSvg" class="body-map-svg" viewBox="0 0 520 620" role="img" aria-label="Silhuetas frontal e traseira com regiões corporais selecionáveis">
+              <defs>
+                <filter id="zoneGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+
+              <g class="figure-base" transform="translate(48 22)">
+                <circle cx="95" cy="55" r="34"/>
+                <path d="M67 92 Q95 108 123 92 L145 132 Q157 164 149 213 L138 293 Q131 334 137 381 L128 486 Q124 535 111 574 L82 574 Q72 530 70 486 L66 384 Q69 340 60 294 L43 215 Q34 166 46 132 Z"/>
+                <path d="M47 130 Q20 159 16 207 L5 320 Q3 348 17 360 Q30 357 31 333 L46 244 L58 178 Z"/>
+                <path d="M143 130 Q170 159 174 207 L185 320 Q187 348 173 360 Q160 357 159 333 L144 244 L132 178 Z"/>
+              </g>
+              <g class="figure-base" transform="translate(282 22)">
+                <circle cx="95" cy="55" r="34"/>
+                <path d="M67 92 Q95 108 123 92 L145 132 Q157 164 149 213 L138 293 Q131 334 137 381 L128 486 Q124 535 111 574 L82 574 Q72 530 70 486 L66 384 Q69 340 60 294 L43 215 Q34 166 46 132 Z"/>
+                <path d="M47 130 Q20 159 16 207 L5 320 Q3 348 17 360 Q30 357 31 333 L46 244 L58 178 Z"/>
+                <path d="M143 130 Q170 159 174 207 L185 320 Q187 348 173 360 Q160 357 159 333 L144 244 L132 178 Z"/>
+              </g>
+
+              <!-- Frente -->
+              <g class="body-zone" data-body-zone="chest" tabindex="0" role="button" aria-label="Peito" transform="translate(48 22)">
+                <path d="M53 129 Q95 111 137 129 L132 203 Q95 222 58 203 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="core" tabindex="0" role="button" aria-label="Core" transform="translate(48 22)">
+                <path d="M59 205 Q95 220 131 205 L126 296 Q95 313 64 296 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="arms" tabindex="0" role="button" aria-label="Braços e pegada" transform="translate(48 22)">
+                <path d="M46 134 Q23 158 18 207 L8 316 Q7 335 21 341 L35 246 L56 178 Z"/>
+                <path d="M144 134 Q167 158 172 207 L182 316 Q183 335 169 341 L155 246 L134 178 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="legs" tabindex="0" role="button" aria-label="Pernas" transform="translate(48 22)">
+                <path d="M65 299 Q95 314 125 299 L134 383 L119 475 L98 475 L95 365 L92 475 L71 475 L57 383 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="calves" tabindex="0" role="button" aria-label="Panturrilhas" transform="translate(48 22)">
+                <path d="M71 468 L92 468 L91 563 L80 570 Q69 531 71 468 Z"/>
+                <path d="M98 468 L119 468 Q121 531 110 570 L99 563 Z"/>
+              </g>
+              <g class="body-zone breath-zone" data-body-zone="breath" tabindex="0" role="button" aria-label="Fôlego" transform="translate(48 22)">
+                <ellipse cx="95" cy="177" rx="54" ry="72"/>
+                <path d="M72 156 Q82 136 94 156 L94 205 Q78 214 72 193 Z M118 156 Q108 136 96 156 L96 205 Q112 214 118 193 Z"/>
+              </g>
+
+              <!-- Costas -->
+              <g class="body-zone" data-body-zone="back" tabindex="0" role="button" aria-label="Costas" transform="translate(282 22)">
+                <path d="M50 126 Q95 108 140 126 L132 230 Q95 250 58 230 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="arms" tabindex="0" role="button" aria-label="Braços e pegada" transform="translate(282 22)">
+                <path d="M46 134 Q23 158 18 207 L8 316 Q7 335 21 341 L35 246 L56 178 Z"/>
+                <path d="M144 134 Q167 158 172 207 L182 316 Q183 335 169 341 L155 246 L134 178 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="core" tabindex="0" role="button" aria-label="Core" transform="translate(282 22)">
+                <path d="M60 229 Q95 244 130 229 L126 297 Q95 312 64 297 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="legs" tabindex="0" role="button" aria-label="Pernas" transform="translate(282 22)">
+                <path d="M65 299 Q95 314 125 299 L134 383 L119 475 L98 475 L95 365 L92 475 L71 475 L57 383 Z"/>
+              </g>
+              <g class="body-zone" data-body-zone="calves" tabindex="0" role="button" aria-label="Panturrilhas" transform="translate(282 22)">
+                <path d="M71 468 L92 468 L91 563 L80 570 Q69 531 71 468 Z"/>
+                <path d="M98 468 L119 468 Q121 531 110 570 L99 563 Z"/>
+              </g>
+            </svg>
+          </div>
+
+          <div id="bodyMapDetail" class="body-map-detail"></div>
+        </div>
+
+        <div id="bodyStatusList" class="status-attributes body-status-buttons"></div>
+      </article>
+
+      <article class="panel detail-panel">
+        <p class="eyebrow">MASTERY</p>
+        <h2>Domínio de treino</h2>
+        <div id="masteryList" class="mastery-list"></div>
+      </article>
+
+      <article class="panel detail-panel">
+        <p class="eyebrow">PROFICIENCY</p>
+        <h2>Exercícios</h2>
+        <div id="skillsList" class="skills-list"></div>
+      </article>
+    </section>
+
+    <section id="progressionScreen" class="screen">
+      <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">EVOLUTION PATHS</p>
+        <h2>Progressões</h2>
+        <p class="detail-intro">Subir a proficiência desbloqueia variações. Desbloquear não obriga você a usá-las: equipe uma nova variação apenas quando a técnica da atual estiver confortável.</p>
+        <div id="progressionList" class="progression-list"></div>
+      </article>
+    </section>
+
+    <section id="achievementsScreen" class="screen">
+      <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">ACHIEVEMENTS</p>
+        <h2>Conquistas</h2>
+        <p id="achievementSummary" class="detail-intro"></p>
+        <div id="achievementsList" class="achievements-grid"></div>
+      </article>
+    </section>
+
+    <section id="titlesScreen" class="screen">
+      <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">TITLES</p>
+        <h2>Títulos</h2>
+        <p class="detail-intro">Títulos são cosméticos e representam marcos. As referências ficam no clima — sem transformar o Project Arise numa colagem de nomes de anime.</p>
+        <div id="titlesList" class="titles-grid"></div>
+      </article>
+    </section>
+
+    <section id="shopScreen" class="screen">
+      <div class="screen-toolbar">
+        <button class="ghost-button back-dashboard" type="button">← VOLTAR</button>
+        <div class="shop-balance">ESSENCE <strong id="shopEssenceValue">0</strong></div>
+      </div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">ESSENCE STORE</p>
+        <h2>Cosméticos</h2>
+        <p class="detail-intro">Nada aqui aumenta seu desempenho físico. A loja serve apenas para personalizar a interface e os efeitos do sistema.</p>
+        <div id="shopList" class="shop-grid"></div>
+      </article>
+    </section>
+
+
+    <section id="settingsScreen" class="screen">
+      <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">SYSTEM CONTROL</p>
+        <h2>Configurações & Save</h2>
+        <p class="detail-intro">A Alpha existe para testar. Aqui você pode zerar tudo, criar um backup do save ou importar um backup anterior.</p>
+        <div class="settings-grid">
+          <div class="setting-card">
+            <div><strong>Backup do progresso</strong><p>Baixa um arquivo JSON com seu save atual.</p></div>
+            <button id="exportSaveButton" class="ghost-button" type="button">EXPORTAR SAVE</button>
+          </div>
+          <div class="setting-card">
+            <div><strong>Restaurar backup</strong><p>Importe um save exportado pelo Project Arise.</p></div>
+            <button id="importSaveButton" class="ghost-button" type="button">IMPORTAR SAVE</button>
+          </div>
+          <div class="setting-card">
+            <div><strong>Instalar no celular</strong><p>Quando hospedado em HTTPS, o Project Arise pode ser instalado como PWA e abrir em tela cheia.</p></div>
+            <button id="installPwaButton" class="ghost-button" type="button">INSTALAR APP</button>
+          </div>
+          <div class="setting-card danger-zone">
+            <div><strong>Reset total</strong><p>Apaga level, XP, Essence, histórico, corpo, streak, loja e desbloqueios deste navegador.</p></div>
+            <button id="resetProgressButton" class="danger-button" type="button">RESETAR PROGRESSO</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel detail-panel">
+        <p class="eyebrow">BODY SYNC RULES</p>
+        <h2>Janela de treino</h2>
+        <div class="timing-rules">
+          <div><span>COOLDOWN MÍNIMO</span><strong>12 horas</strong><p>Após concluir a quest inteira, a próxima fica bloqueada por 12h.</p></div>
+          <div><span>JANELA DO STREAK</span><strong>36 horas</strong><p>Conclua a próxima quest dentro de 36h da anterior para manter a corrente.</p></div>
+          <div><span>STREAK GUARD</span><strong>1 proteção</strong><p>A cada 7 de streak você recebe uma proteção; ela cobre um atraso moderado automaticamente.</p></div>
+        </div>
+        <p class="safety-note">12 horas é apenas o bloqueio técnico do sistema, não uma obrigação de treinar assim que liberar. Se estiver dolorido, muito cansado ou sem recuperar bem, espere mais.</p>
+      </article>
+    </section>
+
+    <section id="historyScreen" class="screen">
+      <div class="screen-toolbar">
+        <button class="ghost-button back-dashboard" type="button">← VOLTAR</button>
+        <button id="clearHistoryButton" class="danger-button" type="button">LIMPAR HISTÓRICO</button>
+      </div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">TRAINING LOG</p>
+        <h2>Histórico</h2>
+        <div id="historyHighlights" class="history-highlights"></div>
+        <div id="historyList" class="history-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <div id="notification" class="notification" aria-live="polite"></div>
+
+  <div id="modalOverlay" class="modal-overlay" hidden>
+    <div class="modal panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <p class="eyebrow">[ SYSTEM ]</p>
+      <h2 id="modalTitle">Informação</h2>
+      <div id="modalContent" class="modal-content"></div>
+      <button id="closeModalButton" class="primary-button" type="button">FECHAR</button>
+    </div>
+  </div>
+
+  <input id="saveImportInput" type="file" accept="application/json,.json" hidden />
+  <script src="app.js"></script>
+</body>
+</html>

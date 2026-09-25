@@ -1,7 +1,7 @@
 {
-  "name": "Project Arise — Body Sync",
+  "name": "Project Arise — Ascension Update",
   "short_name": "Project Arise",
-  "description": "Sistema gamificado de treino e progressão pessoal.",
+  "description": "Sistema gamificado de treino, Body Sync, progressão, recordes e cosméticos.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

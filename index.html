@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>Project Arise — Alpha 1.3 • Body Sync Update</title>
+  <title>Project Arise — Alpha 1.4 • Ascension Update</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -23,14 +23,15 @@
       <div>
         <p class="eyebrow">[ SYSTEM ]</p>
         <h1>PROJECT <span>ARISE</span></h1>
-        <p class="subtitle">Alpha 1.3 • Body Sync Update</p>
+        <p class="subtitle">Alpha 1.4 • Ascension Update</p>
       </div>
       <button id="systemButton" class="icon-button" type="button" title="Ajuda do sistema">?</button>
     </header>
 
     <section id="dashboardScreen" class="screen active">
       <section class="player-grid">
-        <article class="panel player-card">
+        <article id="playerCard" class="panel player-card">
+          <div id="profileAura" class="profile-aura" aria-hidden="true"></div>
           <div class="player-heading">
             <div>
               <p class="eyebrow">PLAYER</p>
@@ -40,6 +41,7 @@
             <div class="rank-box">
               <span>RANK</span>
               <strong id="rankValue">E-</strong>
+              <small id="rankProgressText">Próxima ascensão no Lv. 4</small>
             </div>
           </div>
 
@@ -72,6 +74,19 @@
         </article>
       </section>
 
+      <section class="panel recovery-panel">
+        <div>
+          <p class="eyebrow">RECOVERY CHECK</p>
+          <h2>Como seu corpo está hoje?</h2>
+          <p id="recoveryHint">Isso não reduz suas recompensas. Serve para impedir progressões agressivas quando você ainda não recuperou bem.</p>
+        </div>
+        <div class="recovery-options" role="group" aria-label="Estado de recuperação">
+          <button class="recovery-button" data-recovery="good" type="button">◆ BEM</button>
+          <button class="recovery-button" data-recovery="tired" type="button">◈ CANSADO</button>
+          <button class="recovery-button" data-recovery="sore" type="button">◇ MUITO DOLORIDO</button>
+        </div>
+      </section>
+
       <section class="panel training-cta">
         <div>
           <div class="routine-line">
@@ -83,6 +98,19 @@
           <div id="cooldownInfo" class="cooldown-info" aria-live="polite"></div>
         </div>
         <button id="startTrainingButton" class="primary-button" type="button">⚔ INICIAR TREINO</button>
+      </section>
+
+      <section id="weeklyCard" class="panel weekly-card">
+        <div class="weekly-head">
+          <div>
+            <p class="eyebrow">WEEKLY CHALLENGE</p>
+            <h2 id="weeklyTitle">Contrato semanal</h2>
+            <p id="weeklyDescription">Carregando desafio...</p>
+          </div>
+          <div class="weekly-reward" id="weeklyReward">+120 XP • +80 Essence</div>
+        </div>
+        <div class="progress-track weekly-progress"><div id="weeklyProgressBar" class="progress-fill"></div></div>
+        <div class="weekly-footer"><span id="weeklyProgressText">0 / 0</span><button id="claimWeeklyButton" class="ghost-button" type="button" disabled>EM PROGRESSO</button></div>
       </section>
 
       <section class="missions-section">
@@ -98,6 +126,7 @@
 
       <section class="panel navigation-panel">
         <button id="historyButton" class="menu-button" type="button">📜 HISTÓRICO</button>
+        <button id="recordsButton" class="menu-button" type="button">📈 RECORDES</button>
         <button id="statusButton" class="menu-button" type="button">🧬 CORPO</button>
         <button id="progressionButton" class="menu-button" type="button">⚔ PROGRESSÃO</button>
         <button id="achievementsButton" class="menu-button" type="button">🏆 CONQUISTAS</button>
@@ -155,69 +184,71 @@
       <article class="panel detail-panel body-sync-panel">
         <p class="eyebrow">BODY SYNC</p>
         <h2>Mapa corporal interativo</h2>
-        <p class="detail-intro">Toque numa região do corpo ou em um status abaixo. O mapa destaca onde seu treino está gerando progresso. Fôlego é uma capacidade, então aparece como uma aura no tórax.</p>
+        <p class="detail-intro">Body Sync 2.0 usa um modelo humano mais anatômico. Toque numa região para ver o que está evoluindo, quais exercícios contribuem e quanto falta para o próximo nível corporal.</p>
 
         <div class="body-sync-layout">
           <div class="body-map-stage" aria-label="Mapa corporal interativo">
             <div class="body-view-labels"><span>FRENTE</span><span>COSTAS</span></div>
-            <svg id="bodyMapSvg" class="body-map-svg" viewBox="0 0 520 620" role="img" aria-label="Silhuetas frontal e traseira com regiões corporais selecionáveis">
+            <svg id="bodyMapSvg" class="body-map-svg body-map-v2" viewBox="0 0 660 760" role="img" aria-label="Modelo humano frontal e traseiro com regiões corporais selecionáveis">
               <defs>
-                <filter id="zoneGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="zoneGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="7" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <linearGradient id="humanBase" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cb4c6" stop-opacity=".2"/><stop offset="1" stop-color="#496275" stop-opacity=".1"/></linearGradient>
               </defs>
 
-              <g class="figure-base" transform="translate(48 22)">
-                <circle cx="95" cy="55" r="34"/>
-                <path d="M67 92 Q95 108 123 92 L145 132 Q157 164 149 213 L138 293 Q131 334 137 381 L128 486 Q124 535 111 574 L82 574 Q72 530 70 486 L66 384 Q69 340 60 294 L43 215 Q34 166 46 132 Z"/>
-                <path d="M47 130 Q20 159 16 207 L5 320 Q3 348 17 360 Q30 357 31 333 L46 244 L58 178 Z"/>
-                <path d="M143 130 Q170 159 174 207 L185 320 Q187 348 173 360 Q160 357 159 333 L144 244 L132 178 Z"/>
-              </g>
-              <g class="figure-base" transform="translate(282 22)">
-                <circle cx="95" cy="55" r="34"/>
-                <path d="M67 92 Q95 108 123 92 L145 132 Q157 164 149 213 L138 293 Q131 334 137 381 L128 486 Q124 535 111 574 L82 574 Q72 530 70 486 L66 384 Q69 340 60 294 L43 215 Q34 166 46 132 Z"/>
-                <path d="M47 130 Q20 159 16 207 L5 320 Q3 348 17 360 Q30 357 31 333 L46 244 L58 178 Z"/>
-                <path d="M143 130 Q170 159 174 207 L185 320 Q187 348 173 360 Q160 357 159 333 L144 244 L132 178 Z"/>
-              </g>
-
-              <!-- Frente -->
-              <g class="body-zone" data-body-zone="chest" tabindex="0" role="button" aria-label="Peito" transform="translate(48 22)">
-                <path d="M53 129 Q95 111 137 129 L132 203 Q95 222 58 203 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="core" tabindex="0" role="button" aria-label="Core" transform="translate(48 22)">
-                <path d="M59 205 Q95 220 131 205 L126 296 Q95 313 64 296 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="arms" tabindex="0" role="button" aria-label="Braços e pegada" transform="translate(48 22)">
-                <path d="M46 134 Q23 158 18 207 L8 316 Q7 335 21 341 L35 246 L56 178 Z"/>
-                <path d="M144 134 Q167 158 172 207 L182 316 Q183 335 169 341 L155 246 L134 178 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="legs" tabindex="0" role="button" aria-label="Pernas" transform="translate(48 22)">
-                <path d="M65 299 Q95 314 125 299 L134 383 L119 475 L98 475 L95 365 L92 475 L71 475 L57 383 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="calves" tabindex="0" role="button" aria-label="Panturrilhas" transform="translate(48 22)">
-                <path d="M71 468 L92 468 L91 563 L80 570 Q69 531 71 468 Z"/>
-                <path d="M98 468 L119 468 Q121 531 110 570 L99 563 Z"/>
-              </g>
-              <g class="body-zone breath-zone" data-body-zone="breath" tabindex="0" role="button" aria-label="Fôlego" transform="translate(48 22)">
-                <ellipse cx="95" cy="177" rx="54" ry="72"/>
-                <path d="M72 156 Q82 136 94 156 L94 205 Q78 214 72 193 Z M118 156 Q108 136 96 156 L96 205 Q112 214 118 193 Z"/>
+              <!-- FRONT HUMAN -->
+              <g transform="translate(52 32)">
+                <g class="human-outline">
+                  <ellipse cx="126" cy="55" rx="34" ry="43"/>
+                  <path d="M108 94 L105 117 Q84 122 63 136 Q43 151 35 178 L22 284 Q18 318 29 354 L45 349 L54 280 L62 211 L72 175 Q83 163 91 160 L84 220 Q80 265 89 311 L76 388 Q72 435 86 477 L92 600 Q91 648 77 700 L102 711 Q121 660 125 605 L126 470 L129 470 L130 605 Q134 660 153 711 L178 700 Q164 648 163 600 L169 477 Q183 435 179 388 L166 311 Q175 265 171 220 L164 160 Q172 163 183 175 L193 211 L201 280 L210 349 L226 354 Q237 318 233 284 L220 178 Q212 151 192 136 Q171 122 150 117 L147 94 Q128 105 108 94 Z"/>
+                </g>
+                <g class="body-zone" data-body-zone="chest" tabindex="0" role="button" aria-label="Peito">
+                  <path d="M88 139 Q106 126 126 135 Q146 126 165 139 L160 214 Q144 226 127 219 Q109 226 92 214 Z"/>
+                </g>
+                <g class="body-zone muscle-lines" data-body-zone="core" tabindex="0" role="button" aria-label="Core e abdômen">
+                  <path d="M93 218 Q126 229 159 218 L157 321 Q142 335 128 334 Q111 335 96 321 Z"/>
+                  <path d="M126 228 L126 320 M102 249 Q126 256 150 249 M101 278 Q126 285 151 278"/>
+                </g>
+                <g class="body-zone" data-body-zone="arms" tabindex="0" role="button" aria-label="Braços e pegada">
+                  <path d="M72 151 Q48 166 41 194 L31 284 Q27 318 35 342 L52 337 L60 278 L68 215 L88 160 Z"/>
+                  <path d="M180 151 Q204 166 211 194 L221 284 Q225 318 217 342 L200 337 L192 278 L184 215 L164 160 Z"/>
+                </g>
+                <g class="body-zone" data-body-zone="legs" tabindex="0" role="button" aria-label="Pernas">
+                  <path d="M89 319 Q106 334 126 334 Q146 334 163 319 L171 392 L158 475 L132 475 L127 366 L123 475 L97 475 L81 392 Z"/>
+                </g>
+                <g class="body-zone" data-body-zone="calves" tabindex="0" role="button" aria-label="Panturrilhas">
+                  <path d="M96 466 L122 466 L119 598 Q116 651 99 694 L79 686 Q91 642 90 598 Z"/>
+                  <path d="M132 466 L158 466 L164 598 Q163 642 175 686 L155 694 Q138 651 135 598 Z"/>
+                </g>
+                <g class="body-zone breath-zone" data-body-zone="breath" tabindex="0" role="button" aria-label="Fôlego">
+                  <ellipse cx="126" cy="187" rx="66" ry="88"/>
+                  <path d="M103 163 Q113 143 123 160 L123 211 Q106 219 99 198 Z M149 163 Q139 143 129 160 L129 211 Q146 219 153 198 Z"/>
+                </g>
               </g>
 
-              <!-- Costas -->
-              <g class="body-zone" data-body-zone="back" tabindex="0" role="button" aria-label="Costas" transform="translate(282 22)">
-                <path d="M50 126 Q95 108 140 126 L132 230 Q95 250 58 230 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="arms" tabindex="0" role="button" aria-label="Braços e pegada" transform="translate(282 22)">
-                <path d="M46 134 Q23 158 18 207 L8 316 Q7 335 21 341 L35 246 L56 178 Z"/>
-                <path d="M144 134 Q167 158 172 207 L182 316 Q183 335 169 341 L155 246 L134 178 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="core" tabindex="0" role="button" aria-label="Core" transform="translate(282 22)">
-                <path d="M60 229 Q95 244 130 229 L126 297 Q95 312 64 297 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="legs" tabindex="0" role="button" aria-label="Pernas" transform="translate(282 22)">
-                <path d="M65 299 Q95 314 125 299 L134 383 L119 475 L98 475 L95 365 L92 475 L71 475 L57 383 Z"/>
-              </g>
-              <g class="body-zone" data-body-zone="calves" tabindex="0" role="button" aria-label="Panturrilhas" transform="translate(282 22)">
-                <path d="M71 468 L92 468 L91 563 L80 570 Q69 531 71 468 Z"/>
-                <path d="M98 468 L119 468 Q121 531 110 570 L99 563 Z"/>
+              <!-- BACK HUMAN -->
+              <g transform="translate(380 32)">
+                <g class="human-outline">
+                  <ellipse cx="126" cy="55" rx="34" ry="43"/>
+                  <path d="M108 94 L105 117 Q84 122 63 136 Q43 151 35 178 L22 284 Q18 318 29 354 L45 349 L54 280 L62 211 L72 175 Q83 163 91 160 L84 220 Q80 265 89 311 L76 388 Q72 435 86 477 L92 600 Q91 648 77 700 L102 711 Q121 660 125 605 L126 470 L129 470 L130 605 Q134 660 153 711 L178 700 Q164 648 163 600 L169 477 Q183 435 179 388 L166 311 Q175 265 171 220 L164 160 Q172 163 183 175 L193 211 L201 280 L210 349 L226 354 Q237 318 233 284 L220 178 Q212 151 192 136 Q171 122 150 117 L147 94 Q128 105 108 94 Z"/>
+                </g>
+                <g class="body-zone muscle-lines" data-body-zone="back" tabindex="0" role="button" aria-label="Costas">
+                  <path d="M83 137 Q104 122 126 130 Q149 122 170 137 L164 245 Q146 266 127 258 Q108 266 89 245 Z"/>
+                  <path d="M126 135 L126 249 M94 159 Q126 180 158 159 M91 205 Q126 224 161 205"/>
+                </g>
+                <g class="body-zone" data-body-zone="arms" tabindex="0" role="button" aria-label="Braços e pegada">
+                  <path d="M72 151 Q48 166 41 194 L31 284 Q27 318 35 342 L52 337 L60 278 L68 215 L88 160 Z"/>
+                  <path d="M180 151 Q204 166 211 194 L221 284 Q225 318 217 342 L200 337 L192 278 L184 215 L164 160 Z"/>
+                </g>
+                <g class="body-zone" data-body-zone="core" tabindex="0" role="button" aria-label="Core e lombar">
+                  <path d="M91 242 Q126 260 161 242 L158 323 Q142 336 127 334 Q111 336 94 323 Z"/>
+                </g>
+                <g class="body-zone" data-body-zone="legs" tabindex="0" role="button" aria-label="Pernas">
+                  <path d="M89 319 Q106 334 126 334 Q146 334 163 319 L171 392 L158 475 L132 475 L127 366 L123 475 L97 475 L81 392 Z"/>
+                </g>
+                <g class="body-zone" data-body-zone="calves" tabindex="0" role="button" aria-label="Panturrilhas">
+                  <path d="M96 466 L122 466 L119 598 Q116 651 99 694 L79 686 Q91 642 90 598 Z"/>
+                  <path d="M132 466 L158 466 L164 598 Q163 642 175 686 L155 694 Q138 651 135 598 Z"/>
+                </g>
               </g>
             </svg>
           </div>
@@ -279,11 +310,37 @@
       <article class="panel detail-panel">
         <p class="eyebrow">ESSENCE STORE</p>
         <h2>Cosméticos</h2>
-        <p class="detail-intro">Nada aqui aumenta seu desempenho físico. A loja serve apenas para personalizar a interface e os efeitos do sistema.</p>
+        <p class="detail-intro">Nada aqui aumenta seu desempenho físico. Na Ascension Update, os cosméticos têm raridades e os mais caros realmente transformam a experiência visual.</p>
+        <div id="cosmeticLoadout" class="cosmetic-loadout"></div>
+        <div id="shopFilters" class="shop-filters"></div>
         <div id="shopList" class="shop-grid"></div>
       </article>
     </section>
 
+
+    <section id="recordsScreen" class="screen">
+      <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel">
+        <p class="eyebrow">PERSONAL RECORDS</p>
+        <h2>Seus melhores resultados</h2>
+        <p class="detail-intro">Recordes são calculados a partir do seu histórico. Quando uma série supera seu melhor anterior, o sistema marca um NEW RECORD.</p>
+        <div id="recordsGrid" class="records-grid"></div>
+      </article>
+      <article class="panel detail-panel">
+        <p class="eyebrow">PHYSICAL MILESTONES</p>
+        <h2>Marcos físicos</h2>
+        <div id="milestonesList" class="milestones-list"></div>
+      </article>
+    </section>
+
+    <section id="exerciseDetailScreen" class="screen">
+      <div class="screen-toolbar"><button id="exerciseDetailBackButton" class="ghost-button" type="button">← VOLTAR</button></div>
+      <article class="panel detail-panel exercise-detail-card">
+        <p class="eyebrow">EXERCISE DATA</p>
+        <div id="exerciseDetailContent"></div>
+        <button id="trainDetailExerciseButton" class="primary-button" type="button">TREINAR ESTE EXERCÍCIO</button>
+      </article>
+    </section>
 
     <section id="settingsScreen" class="screen">
       <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>

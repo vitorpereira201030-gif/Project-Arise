@@ -1,8 +1,8 @@
 "use strict";
 
-const SAVE_KEY = "projectAriseAlpha15";
-const LEGACY_SAVE_KEYS = ["projectAriseAlpha14", "projectAriseAlpha13", "projectAriseAlpha12", "projectAriseAlpha11", "projectAriseSave", "projectAscensionSave"];
-const VERSION = "1.5.0";
+const SAVE_KEY = "projectAriseAlpha16";
+const LEGACY_SAVE_KEYS = ["projectAriseAlpha15", "projectAriseAlpha14", "projectAriseAlpha13", "projectAriseAlpha12", "projectAriseAlpha11", "projectAriseSave", "projectAscensionSave"];
+const VERSION = "1.6.0";
 const COOLDOWN_MS = 12 * 60 * 60 * 1000;
 const STREAK_WINDOW_MS = 36 * 60 * 60 * 1000;
 const GUARD_WINDOW_MS = 60 * 60 * 60 * 1000;
@@ -632,7 +632,7 @@ function loadGame() {
       if (!raw) continue;
       const migrated = sanitizePlayer(JSON.parse(raw), true);
       localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
-      pendingSystemMessages.push("SAVE ANTERIOR MIGRADO PARA A ALPHA 1.5. Level, XP, Essence, corpo, proficiências, cosméticos e histórico foram preservados.");
+      pendingSystemMessages.push("SAVE ANTERIOR MIGRADO PARA A ALPHA 1.6. Level, XP, Essence, corpo, proficiências, cosméticos e histórico foram preservados.");
       return migrated;
     }
 
@@ -644,7 +644,7 @@ function loadGame() {
         if (candidate && typeof candidate.level === "number" && typeof candidate.xp === "number") {
           const migrated = sanitizePlayer(candidate, true);
           localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
-          pendingSystemMessages.push("SAVE ANTIGO MIGRADO PARA A ALPHA 1.5.");
+          pendingSystemMessages.push("SAVE ANTIGO MIGRADO PARA A ALPHA 1.6.");
           return migrated;
         }
       } catch (_) {
@@ -1207,8 +1207,24 @@ function relatedExercisesForBody(bodyKey) {
 function selectBodyZone(key, scroll = false) {
   if (!bodyInfo[key]) return;
   selectedBodyZone = key;
+  bodyView = zonePreferredView(key);
   renderBodyMap();
   if (scroll && $("bodyMapDetail")) $("bodyMapDetail").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function musclePreferredView(muscleId) {
+  const backMuscles = new Set(["traps","rear-delts","lats","triceps","forearms-back","erectors","glutes","hamstrings","gastrocnemius"]);
+  return backMuscles.has(muscleId) ? "back" : "front";
+}
+
+function zonePreferredView(zone) {
+  const backZones = new Set(["back","calves"]);
+  return backZones.has(zone) ? "back" : "front";
+}
+
+function setBodyView(view) {
+  bodyView = view === "back" ? "back" : "front";
+  renderBodyMap();
 }
 
 function renderBodyMap() {
@@ -1645,7 +1661,7 @@ async function importSaveFile(file) {
 function resetProgress() {
   const confirmed = window.confirm("RESET TOTAL: apagar Level, XP, Essence, corpo, streak, histórico, loja e desbloqueios deste navegador? Esta ação não pode ser desfeita sem um backup.");
   if (!confirmed) return;
-  const confirmedAgain = window.confirm("Última confirmação: deseja realmente voltar ao início da Alpha 1.5?");
+  const confirmedAgain = window.confirm("Última confirmação: deseja realmente voltar ao início da Alpha 1.6?");
   if (!confirmedAgain) return;
 
   [SAVE_KEY, ...LEGACY_SAVE_KEYS].forEach((key) => localStorage.removeItem(key));
@@ -1675,7 +1691,7 @@ async function installPwa() {
     return;
   }
 
-  openModal("Instalar no celular", `<p>Para instalar como app, o Project Arise precisa estar aberto por um endereço <strong>HTTPS</strong> (não apenas pelo arquivo <code>index.html</code>).</p><p>Quando estiver hospedado, abra no Chrome/Edge do celular e use <strong>Adicionar à tela inicial</strong> ou <strong>Instalar app</strong>. A Alpha 1.5 inclui manifest, ícones, cache offline e controles de apresentação para isso.</p>`);
+  openModal("Instalar no celular", `<p>Para instalar como app, o Project Arise precisa estar aberto por um endereço <strong>HTTPS</strong> (não apenas pelo arquivo <code>index.html</code>).</p><p>Quando estiver hospedado, abra no Chrome/Edge do celular e use <strong>Adicionar à tela inicial</strong> ou <strong>Instalar app</strong>. A Alpha 1.6 inclui manifest, ícones, cache offline e controles de apresentação para isso.</p>`);
 }
 
 function startTraining() {
@@ -1819,17 +1835,17 @@ function bindEvents() {
   });
 
   $("systemButton").addEventListener("click", () => {
-    openModal("Project Arise — Alpha 1.5 • Manifestation", `
+    openModal("Project Arise — Alpha 1.6 • Reforged", `
       <ul>
-        <li><strong>Body Sync 3.0:</strong> anatomia muscular detalhada, clique por músculo, heatmap por exercício e pulmões separados.</li>
+        <li><strong>Body Sync 4.0:</strong> silhueta anatômica reconstruída, músculos clipados dentro do corpo, visão frente/costas e sistema respiratório separado.</li>
         <li><strong>Abdômen:</strong> Reverse Crunch e progressões agora fazem parte do Treino A.</li>
         <li><strong>Recovery Check:</strong> marcar Cansado ou Muito dolorido impede aumentos agressivos de meta sem reduzir recompensas.</li>
         <li><strong>Personal Records:</strong> seus melhores resultados recebem NEW RECORD e alimentam marcos físicos.</li>
         <li><strong>Weekly Challenge:</strong> desafio semanal usa o treino normal; ele não exige sessões extras para farmar recompensa.</li>
         <li><strong>Event Director:</strong> Level Up, NEW RECORD e Rank Ascension entram numa fila e nunca mais disputam a tela.</li>
-        <li><strong>Manifestation FX:</strong> cada raridade ganhou identidade própria; Mythic vira uma mini-cutscene e os efeitos menores continuam reconhecíveis.</li>
+        <li><strong>Reforged FX:</strong> efeitos agora são desenhados proceduralmente em Canvas/SVG, com movimentos próprios para serras, cortes, água/fogo, sombras, relâmpagos e convergências.</li>
         <li><strong>Cooldown/Streak:</strong> quest bloqueada por 12h; a próxima precisa ser concluída em até 36h para manter a corrente.</li>
-        <li><strong>Save:</strong> exporte um backup antes de cada atualização. A Alpha 1.5 migra saves da 1.4 automaticamente.</li>
+        <li><strong>Save:</strong> exporte um backup antes de cada atualização. A Alpha 1.6 migra saves da 1.5 e anteriores automaticamente.</li>
       </ul>
     `);
   });
@@ -1843,8 +1859,8 @@ function bindEvents() {
 
 
 /* ============================================================
-   PROJECT ARISE ALPHA 1.5 — MANIFESTATION UPDATE
-   Presentation director, Body Sync 3.0 and cinematic cosmetics.
+   PROJECT ARISE ALPHA 1.6 — REFORGED UPDATE
+   Body Sync 4.0 and procedural cinematic FX engine.
    ============================================================ */
 
 const muscleCatalog = {
@@ -1894,6 +1910,7 @@ const exerciseMuscleMap = {
 
 let selectedExerciseHeatmap = null;
 let selectedMuscleId = null;
+let bodyView = "front";
 const manifestationQueue = [];
 let manifestationBusy = false;
 let audioContext = null;
@@ -2125,6 +2142,7 @@ function selectBodyZone(key, scroll = false) {
   selectedExerciseHeatmap = null;
   selectedMuscleId = null;
   selectedBodyZone = key;
+  bodyView = zonePreferredView(key);
   renderBodyMap();
   if (scroll && $("bodyMapDetail")) $("bodyMapDetail").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
@@ -2135,6 +2153,7 @@ function selectMuscle(muscleId) {
   selectedExerciseHeatmap = null;
   selectedMuscleId = muscleId;
   selectedBodyZone = muscle.zone;
+  bodyView = musclePreferredView(muscleId);
   renderBodyMap();
 }
 
@@ -2164,7 +2183,13 @@ function renderBodyMap() {
   const svg = $("bodyMapSvg");
   if (!svg) return;
   const tier = currentRankTier();
-  svg.className.baseVal = `body-map-svg body-map-v3 rank-tier-${tier}`;
+  svg.className.baseVal = `body-map-svg body-map-reforged rank-tier-${tier} view-${bodyView}`;
+  svg.setAttribute("viewBox", "0 0 360 780");
+  const front = $("frontAnatomy");
+  const back = $("backAnatomy");
+  if (front) front.classList.toggle("active", bodyView === "front");
+  if (back) back.classList.toggle("active", bodyView === "back");
+  document.querySelectorAll("[data-body-view]").forEach((button) => button.classList.toggle("selected", button.dataset.bodyView === bodyView));
   if ($("avatarRankBadge")) $("avatarRankBadge").textContent = `AVATAR • ${tier} RANK`;
 
   document.querySelectorAll("[data-muscle]").forEach((shape) => {
@@ -2211,6 +2236,7 @@ function bindBodyMapEvents() {
   document.querySelectorAll("[data-muscle-detail]").forEach((button) => button.onclick = () => selectMuscle(button.dataset.muscleDetail));
   document.querySelectorAll("[data-heatmap-exercise]").forEach((button) => button.onclick = () => setExerciseHeatmap(button.dataset.heatmapExercise));
   if ($("clearExerciseHeatmap")) $("clearExerciseHeatmap").onclick = clearExerciseHeatmap;
+  document.querySelectorAll("[data-body-view]").forEach((button) => button.onclick = () => setBodyView(button.dataset.bodyView));
 }
 
 function renderStatus() {
@@ -2339,4 +2365,97 @@ if ("serviceWorker" in navigator && ["http:", "https:"].includes(location.protoc
 
 if (pendingSystemMessages.length) {
   setTimeout(() => openModal("SYSTEM UPDATE", pendingSystemMessages.map((message) => `<p>${message}</p>`).join("")), 250);
+}
+
+
+/* ===== Alpha 1.6 Reforged FX Engine ===== */
+const FX16 = (() => {
+  const TAU = Math.PI * 2;
+  const rand = (a,b) => a + Math.random() * (b-a);
+  const clamp = (v,a,b) => Math.max(a, Math.min(b,v));
+  const ease = t => t < .5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+  const rgba = (hex, a=1) => {
+    const n = parseInt(hex.replace('#',''),16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+  };
+
+  function specialMarkup(effectId, oldLevel, newLevel) {
+    if (effectId === 'effectInfiniteHorizon') { const left=Math.floor(newLevel/2), right=newLevel-left; return `<div class="fx16-special infinite-special"><div class="term blue-term"><small>BLUE</small><b>${left}</b></div><div class="plus">+</div><div class="term red-term"><small>RED</small><b>${right}</b></div><div class="purple-result">${newLevel}</div></div>`; }
+    if (effectId === 'effectMonarchAscension' || effectId === 'effectShadowRise') return `<div class="fx16-special monarch-special"><span>ARISE</span></div>`;
+    if (effectId === 'effectKingCleave' || effectId === 'effectAbsoluteDomain') return `<div class="fx16-special king-special"><span class="king-old-number">${oldLevel}</span><span class="king-new-number">${newLevel}</span></div>`;
+    if (effectId === 'effectCrimsonDawn') return `<div class="fx16-special crimson-special"><span>FLOW</span><span>IGNITION</span></div>`;
+    if (effectId === 'effectDevilEngine' || effectId === 'effectChainBurst') return `<div class="fx16-special engine-special"><span>ENGINE IGNITION</span></div>`;
+    if (effectId === 'effectThunderStep') return `<div class="fx16-special thunder-special"><span>FLASH STEP</span></div>`;
+    return '';
+  }
+
+  function setup(layer, effectId, oldLevel, newLevel, duration) {
+    layer.className = `level-effect-layer fx16-overlay fx16-${effectId}`;
+    layer.innerHTML = `<canvas class="fx16-canvas"></canvas><div class="fx16-vignette"></div>${specialMarkup(effectId,oldLevel,newLevel)}<div class="fx16-copy"><div class="fx16-kicker">SYSTEM MANIFESTATION</div><div class="fx16-old">LV. ${oldLevel}</div><div class="fx16-new">LV. ${newLevel}</div></div>`;
+    const canvas = layer.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const resize = () => { canvas.width = innerWidth*dpr; canvas.height = innerHeight*dpr; canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px'; ctx.setTransform(dpr,0,0,dpr,0,0); };
+    resize();
+    const particles = Array.from({length:72},()=>({x:Math.random(),y:Math.random(),s:rand(.6,2.2),v:rand(.1,.7),a:rand(.2,.9),r:rand(0,TAU)}));
+    return {canvas,ctx,resize,particles,w:()=>innerWidth,h:()=>innerHeight,old:layer.querySelector('.fx16-old'),next:layer.querySelector('.fx16-new'),copy:layer.querySelector('.fx16-copy')};
+  }
+
+  function saw(ctx,cx,cy,r,ang,color,alpha=1) {
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(ang); ctx.globalAlpha=alpha; ctx.strokeStyle=color; ctx.fillStyle='rgba(20,20,22,.78)'; ctx.lineWidth=4;
+    ctx.beginPath();
+    const teeth=34;
+    for(let i=0;i<teeth*2;i++){ const a=i/(teeth*2)*TAU; const rr=i%2===0?r:r*1.18; const x=Math.cos(a)*rr,y=Math.sin(a)*rr; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,r*.56,0,TAU); ctx.strokeStyle='rgba(255,90,30,.85)'; ctx.lineWidth=3; ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,r*.18,0,TAU); ctx.fillStyle='rgba(255,150,70,.9)'; ctx.fill(); ctx.restore();
+  }
+
+  function lightning(ctx,x1,y1,x2,y2,color,alpha=1,segments=10){ ctx.save(); ctx.strokeStyle=color; ctx.globalAlpha=alpha; ctx.lineWidth=rand(2,5); ctx.shadowColor=color; ctx.shadowBlur=18; ctx.beginPath(); ctx.moveTo(x1,y1); for(let i=1;i<segments;i++){const t=i/segments;ctx.lineTo(x1+(x2-x1)*t+rand(-28,28),y1+(y2-y1)*t+rand(-18,18));} ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore(); }
+
+  function slash(ctx,w,h,p,color='#ff3150',count=7){ ctx.save(); ctx.globalCompositeOperation='screen'; for(let i=0;i<count;i++){ const delay=i*.045; const q=clamp((p-delay)/.22,0,1); if(!q) continue; const y=h*(.22+i*.09); const x0=-w*.1; const x1=w*1.1; ctx.globalAlpha=(1-q)*.9; ctx.strokeStyle=color; ctx.shadowColor=color; ctx.shadowBlur=22; ctx.lineWidth=rand(2,6); ctx.beginPath(); ctx.moveTo(x0+w*q,y+80*Math.sin(i)); ctx.lineTo(x0+w*q+180,y-30); ctx.stroke(); } ctx.restore(); }
+
+  function flames(ctx,w,h,p,base='#08020f',edge='#2d7dff',count=32){ ctx.save(); ctx.globalCompositeOperation='screen'; for(let i=0;i<count;i++){ const x=(i+.5)/count*w + Math.sin(i*1.7+p*8)*16; const rise=(p*1.25 + (i%5)*.06)%1; const y=h*(1.08-rise*.95); const height=rand(70,150)*(0.35+.65*p); ctx.globalAlpha=.18+.55*(1-rise); const grad=ctx.createLinearGradient(x,y,x,y-height); grad.addColorStop(0,rgba(base,.02)); grad.addColorStop(.38,rgba(edge,.42)); grad.addColorStop(1,rgba(edge,0)); ctx.strokeStyle=grad; ctx.lineWidth=rand(3,10); ctx.beginPath(); ctx.moveTo(x,y); ctx.bezierCurveTo(x+Math.sin(i)*22,y-height*.25,x-24,y-height*.62,x+Math.sin(i*.8)*12,y-height); ctx.stroke(); } ctx.restore(); }
+
+  function waterRibbon(ctx,w,h,p,color='#31a9ff',flame=false){ ctx.save(); ctx.globalCompositeOperation='screen'; for(let k=0;k<4;k++){ const y=h*(.35+k*.09); const phase=p*TAU*1.1+k; ctx.beginPath(); for(let x=-40;x<w+40;x+=18){ const yy=y+Math.sin(x*.012+phase)*55 + Math.sin(x*.026-phase)*18; x===-40?ctx.moveTo(x,yy):ctx.lineTo(x,yy); } ctx.strokeStyle=flame?`rgba(255,${Math.floor(80+90*p)},35,${.45+.35*p})`:rgba(color,.42+.3*p); ctx.lineWidth=10-k*1.5; ctx.shadowBlur=22; ctx.shadowColor=flame?'#ff4d1f':color; ctx.stroke(); } ctx.restore(); }
+
+  function crescent(ctx,cx,cy,r,ang,color,alpha){ ctx.save(); ctx.translate(cx,cy);ctx.rotate(ang);ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.shadowColor=color;ctx.shadowBlur=20;ctx.lineWidth=6;ctx.beginPath();ctx.arc(0,0,r,-1.1,1.1);ctx.stroke();ctx.restore(); }
+
+  function steam(ctx,w,h,p,particles){ ctx.save(); for(const s of particles){ const y=(s.y-p*s.v)%1; const yy=(y<0?y+1:y)*h; const xx=s.x*w+Math.sin(p*8+s.r)*35; ctx.fillStyle=`rgba(235,245,255,${s.a*.18})`; ctx.beginPath();ctx.arc(xx,yy,18+s.s*16,0,TAU);ctx.fill(); } ctx.restore(); }
+
+  function draw(effectId, state, p, t){ const {ctx,w:wf,h:hf,particles}=state; const w=wf(),h=hf(); ctx.clearRect(0,0,w,h); ctx.fillStyle='rgba(1,3,8,.92)';ctx.fillRect(0,0,w,h);
+    if(effectId==='effectWaterPulse'){waterRibbon(ctx,w,h,p,'#32aaff',false);}
+    else if(effectId==='effectScoutRush'){ctx.fillStyle='rgba(5,24,20,.55)';ctx.fillRect(0,0,w,h);for(let i=0;i<5;i++){ctx.strokeStyle='rgba(102,255,189,.65)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-100,h*(.2+i*.14));ctx.lineTo(w*p*1.3,h*(.1+i*.17));ctx.stroke();}steam(ctx,w,h,p,particles);}
+    else if(effectId==='effectCursedSpark'||effectId==='effectDarkImpact'){ctx.fillStyle='rgba(48,0,12,.3)';ctx.fillRect(0,0,w,h);for(let i=0;i<18;i++) lightning(ctx,w/2,h/2,w/2+Math.cos(i/18*TAU)*w*.48,h/2+Math.sin(i/18*TAU)*h*.46,'#ff2147',.25+.5*p,5);}
+    else if(effectId==='effectShadowRise'||effectId==='effectMonarchAscension'){flames(ctx,w,h,p,'#030108','#407cff',38);flames(ctx,w,h,p,'#020106','#9b4dff',24);}
+    else if(effectId==='effectGroundTremor'||effectId==='effectTitanSteam'){steam(ctx,w,h,p,particles);ctx.fillStyle=`rgba(255,92,25,${.12*Math.sin(p*Math.PI)})`;ctx.fillRect(0,0,w,h);for(let i=0;i<3;i++){ctx.strokeStyle=`rgba(255,190,100,${.5*(1-p)})`;ctx.lineWidth=5;ctx.beginPath();ctx.arc(w/2,h*.72,80+i*140*p,0,TAU);ctx.stroke();}}
+    else if(effectId==='effectChainBurst'||effectId==='effectDevilEngine'){const n=effectId==='effectDevilEngine'?4:2;for(let i=0;i<n;i++){const a=t*.002*(i%2?1:-1)+i*TAU/n;const rr=Math.min(w,h)*(.22+(i%2)*.07);const cx=w/2+Math.cos(a)*w*.28,cy=h/2+Math.sin(a)*h*.21;saw(ctx,cx,cy,rr*.28,t*.008*(i%2?1:-1),'#ff5a2a',.95);}for(const s of particles){ctx.fillStyle=`rgba(255,146,55,${s.a})`;ctx.fillRect(s.x*w,(s.y+p*s.v)%1*h,2+s.s,2+s.s);}}
+    else if(effectId==='effectKingCleave'||effectId==='effectAbsoluteDomain'){slash(ctx,w,h,p,'#ff234a',effectId==='effectAbsoluteDomain'?12:8);if(effectId==='effectAbsoluteDomain'){for(let i=0;i<4;i++){ctx.strokeStyle=`rgba(150,25,55,${.18+.22*(1-p)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,80+i*95*(.4+p),0,TAU);ctx.stroke();}}}
+    else if(effectId==='effectCrimsonDawn'){if(p<.48)waterRibbon(ctx,w,h,p/.48,'#34aaff',false);else{waterRibbon(ctx,w,h,1,'#34aaff',false);waterRibbon(ctx,w,h,(p-.48)/.52,'#ff4f21',true);}}
+    else if(effectId==='effectMoonlitFlow'){ctx.fillStyle='rgba(8,20,45,.6)';ctx.fillRect(0,0,w,h);for(let i=0;i<9;i++){const a=t*.0014+i*TAU/9;const r=Math.min(w,h)*(.15+(i%3)*.08);crescent(ctx,w/2+Math.cos(a)*w*.28,h/2+Math.sin(a)*h*.24,r,a+1.2,'#a9d7ff',.75);}}
+    else if(effectId==='effectThunderStep'){for(let i=0;i<8;i++){const x=(i+.5)/8*w;lightning(ctx,x,-20,w/2+rand(-w*.25,w*.25),h*.72,'#ffe45a',.3+.5*Math.sin(p*Math.PI),12);} if(Math.sin(t*.02)>0.75){ctx.fillStyle='rgba(255,245,180,.15)';ctx.fillRect(0,0,w,h);}}
+    else if(effectId==='effectFlameHeart'){ctx.fillStyle='rgba(40,0,0,.38)';ctx.fillRect(0,0,w,h);for(let i=0;i<16;i++){const a=i/16*TAU+p*2;const r=Math.min(w,h)*(.18+.18*p);ctx.strokeStyle=`rgba(255,${70+i*5},30,.55)`;ctx.lineWidth=6;ctx.beginPath();ctx.arc(w/2,h/2,r+i*4,a,a+1.0);ctx.stroke();}}
+    else if(effectId==='effectInfiniteHorizon'){const q=ease(clamp(p/.68,0,1));const lx=w*.18+(w*.32)*q,rx=w*.82-(w*.32)*q;for(const [x,c] of [[lx,'#2688ff'],[rx,'#ff2c3f']]){const g=ctx.createRadialGradient(x,h/2,0,x,h/2,90);g.addColorStop(0,'#fff');g.addColorStop(.2,c);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,h/2,100,0,TAU);ctx.fill();} if(p>.65){const r=(p-.65)/.35*Math.min(w,h)*.45;const g=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,r);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.22,'rgba(177,67,255,.75)');g.addColorStop(1,'rgba(130,0,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(w/2,h/2,r,0,TAU);ctx.fill();}}
+    else{for(const s of particles){ctx.fillStyle=`rgba(67,174,255,${s.a*.5})`;ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.s*2,0,TAU);ctx.fill();}}
+  }
+
+  function labelFor(effectId){ const labels={effectDevilEngine:'DEVIL ENGINE',effectChainBurst:'CHAIN BURST',effectKingCleave:'KING\'S CLEAVE',effectAbsoluteDomain:'ABSOLUTE DOMAIN',effectCrimsonDawn:'CRIMSON DAWN',effectMoonlitFlow:'MOONLIT FLOW',effectThunderStep:'THUNDER STEP',effectFlameHeart:'FLAME HEART',effectInfiniteHorizon:'INFINITE HORIZON',effectMonarchAscension:'MONARCH ASCENSION',effectTitanSteam:'COLOSSAL STEAM',effectScoutRush:'SCOUT RUSH',effectWaterPulse:'WATER PULSE',effectCursedSpark:'CURSED SPARK',effectShadowRise:'SHADOW RISE'};return labels[effectId]||'SYSTEM LEVEL UP'; }
+
+  function run(effectId,payload={}){ return new Promise(resolve=>{ const layer=$('levelEffectLayer'); const effect=shopItems[effectId]||{}; const rarity=effect.rarity||'RARE'; const duration=manifestationDuration(rarity,payload.kind||'level'); const oldLevel=Number(payload.oldLevel??Math.max(1,player.level-1)); const newLevel=Number(payload.newLevel??player.level); const st=setup(layer,effectId,oldLevel,newLevel,duration); st.copy.querySelector('.fx16-kicker').textContent=labelFor(effectId); const start=performance.now(); let raf=0; const frame=now=>{const p=clamp((now-start)/duration,0,1); draw(effectId,st,p,now); st.old.style.opacity=p<.42?String(1-clamp((p-.18)/.24,0,1)):'0'; st.old.style.transform=`translate(-50%,-50%) scale(${1+p*.35})`; st.next.style.opacity=String(clamp((p-.62)/.16,0,1)); st.next.style.transform=`translate(-50%,-50%) scale(${.72+clamp((p-.62)/.18,0,1)*.28})`; if(p<1)raf=requestAnimationFrame(frame);else{cancelAnimationFrame(raf);layer.className='level-effect-layer';layer.innerHTML='';resolve();}}; raf=requestAnimationFrame(frame); }); }
+  return {run};
+})();
+
+function runCinematic(effectId, payload = {}) {
+  return FX16.run(effectId, payload);
+}
+
+function playRankAscension(rank, meta = {}) {
+  queueManifestation(() => new Promise((resolve) => {
+    const layer = $("levelEffectLayer");
+    const duration = manifestationDuration("MYTHIC", "rank") + 900;
+    const oldRank = meta.oldRank || "—";
+    layer.className = "level-effect-layer fx16-overlay fx16-rank";
+    layer.innerHTML = `<canvas class="fx16-canvas"></canvas><div class="fx16-vignette"></div><div class="fx16-rank-copy"><small>SYSTEM RANK ASCENSION</small><span class="old-rank">${oldRank}</span><b>→</b><strong>${rank}</strong><em>LIMIT RECALIBRATED</em></div>`;
+    const canvas=layer.querySelector('canvas'),ctx=canvas.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1); canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
+    const start=performance.now(); const loop=now=>{const p=Math.min(1,(now-start)/duration),w=innerWidth,h=innerHeight;ctx.clearRect(0,0,w,h);ctx.fillStyle='rgba(0,3,9,.96)';ctx.fillRect(0,0,w,h);for(let i=0;i<28;i++){const a=i/28*Math.PI*2+now*.00025;const r=(.12+.42*p)*Math.min(w,h);ctx.strokeStyle=`rgba(${60+i*3},${150+i*2},255,${.08+.18*(1-p)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,r+i*5,a,a+1.4);ctx.stroke();}for(let i=0;i<7;i++){lightning(ctx,w/2,h/2,w/2+Math.cos(i/7*TAU)*w*.55,h/2+Math.sin(i/7*TAU)*h*.48,'#5ac8ff',.18+.35*Math.sin(p*Math.PI),8);}if(p<1)requestAnimationFrame(loop);else{layer.className='level-effect-layer';layer.innerHTML='';resolve();}}; requestAnimationFrame(loop); vibratePattern([40,35,70,45,120]); synthCue('rank');
+  }));
 }

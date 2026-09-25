@@ -1,0 +1,12 @@
+PROJECT ARISE ALPHA 1.6 — REFORGED UPDATE
+
+- Body Sync 4.0 reconstruído com visão única frente/costas.
+- Músculos agora ficam clipados dentro da silhueta humana, eliminando sobreposição fora do corpo.
+- Layout mobile reorganizado para reduzir informação simultânea.
+- Stimulus Map virou painel recolhível.
+- Sistema respiratório permanece separado.
+- FX Engine procedural novo usando Canvas + SVG/CSS; sem imagens externas.
+- Identidade visual específica por efeito: serras/correntes, cortes, água→fogo, sombras azuis, relâmpagos, luas, vapor e convergência azul/vermelho→roxo.
+- Durações aumentadas e revelação do novo nível mais tardia.
+- Rank Ascension continua em fila separada do Level Up.
+- Save migra automaticamente da Alpha 1.5.

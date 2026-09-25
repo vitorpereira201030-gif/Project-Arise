@@ -1,50 +1,34 @@
-PROJECT ARISE — ALPHA 1.5 • MANIFESTATION UPDATE
-GUIA RÁPIDO DE ATUALIZAÇÃO NO GITHUB PAGES
+PROJECT ARISE — ALPHA 1.6 • REFORGED UPDATE
+GUIA DE ATUALIZAÇÃO NO GITHUB PAGES
 
-ANTES DE QUALQUER COISA
-1. Abra sua Alpha 1.4 atual no CELULAR.
-2. Entre em ⚙ SISTEMA.
-3. Toque em EXPORTAR SAVE.
-4. Confirme que um arquivo project-arise-save-AAAA-MM-DD.json foi salvo.
-5. Guarde uma segunda cópia, se possível.
+ANTES DE ATUALIZAR
+1. Abra o Project Arise atual no celular.
+2. Vá em SISTEMA > EXPORTAR SAVE.
+3. Confirme que o arquivo JSON foi salvo em Downloads/Arquivos.
+4. Não limpe dados do navegador e não desinstale a PWA antes de confirmar a migração.
 
-SUBSTITUINDO A ALPHA 1.4 NO GITHUB
-1. No PC, extraia Project-Arise-Alpha-1.5-Manifestation-Update.zip.
-2. Abra a pasta Project-Arise-Alpha-1.5.
-3. Entre no MESMO repositório do GitHub que hospeda seu Project Arise.
-4. Na raiz do repositório, use Add file > Upload files.
-5. Envie/substitua:
+ATUALIZANDO O REPOSITÓRIO
+1. No PC, extraia Project-Arise-Alpha-1.6-Reforged-Update.zip.
+2. Entre na pasta Project-Arise-Alpha-1.6-Reforged.
+3. Abra o mesmo repositório GitHub que já hospeda seu Project Arise.
+4. Use Add file > Upload files.
+5. Envie/substitua na RAIZ do repositório:
    - index.html
    - style.css
    - app.js
    - manifest.json
    - service-worker.js
-   - README-INSTALL.txt
-   - GITHUB-UPDATE-GUIDE.txt
-   - CHANGELOG-1.5.txt
-   - pasta icons/
-6. Confirme o commit no branch que o GitHub Pages já publica (normalmente main).
-7. Não crie uma pasta Project-Arise-Alpha-1.5 dentro do repositório se hoje index.html fica na raiz.
-8. Aguarde o GitHub Pages publicar a alteração.
-9. Abra o endereço normal do seu Project Arise no navegador e confira o cabeçalho:
-   Alpha 1.5 • Manifestation Update
+   - pasta icons
+6. Faça o commit, por exemplo: Project Arise Alpha 1.6 - Reforged Update.
+7. Não crie uma pasta extra se seu index.html atual já fica na raiz.
+8. O GitHub Pages deve republicar automaticamente se já estiver configurado em main /(root).
+9. Aguarde alguns minutos e abra seu endereço normal.
+10. Confirme no cabeçalho: Alpha 1.6 • Reforged Update.
 
-NO CELULAR / PWA
-1. Não desinstale nem limpe os dados do app antes de confirmar seu backup.
-2. Abra primeiro o endereço do GitHub Pages no navegador.
-3. Atualize a página.
-4. Feche completamente a PWA Project Arise.
-5. Abra novamente pelo ícone da tela inicial.
-6. A versão nova usa um cache diferente do service worker e deve substituir a anterior.
-
-SAVE
-- Mantendo o MESMO endereço do GitHub Pages, o navegador continua na mesma origem.
-- A Alpha 1.5 procura automaticamente o save projectAriseAlpha14 e cria projectAriseAlpha15.
-- Level, XP, Essence, Body Sync, Streak, histórico, proficiências, títulos e cosméticos compatíveis são preservados.
-- Se aparecer zerado, NÃO comece um novo progresso: vá em SISTEMA > IMPORTAR SAVE e selecione seu JSON.
-
-NÃO FAÇA
-- Não delete o repositório para recriá-lo.
-- Não mude o nome/endereço do site sem necessidade se quiser preservar o save local automaticamente.
-- Não use "Limpar dados do site" como primeira tentativa de atualizar a PWA.
-- Não apague seu JSON de backup até conferir que a Alpha 1.5 está com todo seu progresso.
+NO CELULAR
+1. Abra primeiro o link do GitHub Pages no navegador e atualize a página.
+2. Feche completamente a PWA instalada e abra novamente.
+3. Não use Limpar dados do site como primeira tentativa: isso pode apagar o save local.
+4. A Alpha 1.6 procura projectAriseAlpha15 e saves anteriores, migra e cria projectAriseAlpha16.
+5. Confira Level, XP, Essence, Streak, histórico e cosméticos.
+6. Se algo estiver zerado, use SISTEMA > IMPORTAR SAVE e selecione o JSON exportado antes da atualização.

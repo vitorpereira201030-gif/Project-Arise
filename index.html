@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>Project Arise — Alpha 1.5 • Manifestation Update</title>
+  <title>Project Arise — Alpha 1.6 • Reforged Update</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -23,7 +23,7 @@
       <div>
         <p class="eyebrow">[ SYSTEM ]</p>
         <h1>PROJECT <span>ARISE</span></h1>
-        <p class="subtitle">Alpha 1.5 • Manifestation Update</p>
+        <p class="subtitle">Alpha 1.6 • Reforged Update</p>
       </div>
       <button id="systemButton" class="icon-button" type="button" title="Ajuda do sistema">?</button>
     </header>
@@ -181,79 +181,134 @@
 
     <section id="statusScreen" class="screen">
       <div class="screen-toolbar"><button class="ghost-button back-dashboard" type="button">← VOLTAR</button></div>
-      <article class="panel detail-panel body-sync-panel body-sync-v3-panel">
-        <div class="section-heading manifestation-heading">
+
+      <article class="panel detail-panel body-sync-reforged-panel">
+        <div class="section-heading body-sync-reforged-heading">
           <div>
-            <p class="eyebrow">BODY SYNC 3.0</p>
-            <h2>Anatomia de evolução</h2>
+            <p class="eyebrow">BODY SYNC 4.0</p>
+            <h2>Anatomia funcional</h2>
+            <p class="detail-intro compact-intro">Mapa muscular reconstruído para leitura humana real: uma visão por vez, músculos presos à silhueta e informações apenas quando você pede.</p>
           </div>
           <div id="avatarRankBadge" class="avatar-rank-badge">AVATAR • E RANK</div>
         </div>
-        <p class="detail-intro">O mapa muscular agora é separado do sistema respiratório. Toque diretamente em um músculo, use os botões de região ou escolha um exercício para visualizar a intensidade de estímulo. O avatar fica mais definido conforme o Rank, mas é uma representação do sistema — não uma previsão literal do seu corpo.</p>
 
-        <div class="body-sync-v3-grid">
-          <div class="body-anatomy-column">
-            <div class="body-view-labels"><span>FRENTE</span><span>COSTAS</span></div>
-            <div class="body-map-stage body-map-v3-stage" aria-label="Mapa anatômico muscular interativo">
-              <svg id="bodyMapSvg" class="body-map-svg body-map-v3" viewBox="0 0 760 780" role="img" aria-label="Modelo anatômico frontal e traseiro com músculos selecionáveis">
+        <div class="body-sync-reforged-layout">
+          <section class="body-sync-visual-card">
+            <div class="body-sync-toolbar">
+              <div id="bodyViewToggle" class="segmented-control body-view-toggle">
+                <button data-body-view="front" type="button" class="selected">FRENTE</button>
+                <button data-body-view="back" type="button">COSTAS</button>
+              </div>
+              <span class="body-sync-rank-note">O avatar ganha definição visual conforme seu Rank.</span>
+            </div>
+
+            <div class="body-map-stage reforged-body-stage" aria-label="Mapa anatômico muscular interativo">
+              <svg id="bodyMapSvg" class="body-map-svg body-map-reforged" viewBox="0 0 360 780" role="img" aria-label="Modelo anatômico humano estilizado com músculos selecionáveis">
                 <defs>
-                  <filter id="zoneGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                  <linearGradient id="skinGhost" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8e9f2" stop-opacity=".15"/><stop offset="1" stop-color="#6b8496" stop-opacity=".07"/></linearGradient>
-                  <linearGradient id="muscleBase" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ea8b8" stop-opacity=".22"/><stop offset="1" stop-color="#567183" stop-opacity=".12"/></linearGradient>
+                  <filter id="softGlow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <linearGradient id="bodySkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#adbed0" stop-opacity=".22"/><stop offset=".5" stop-color="#6c839a" stop-opacity=".14"/><stop offset="1" stop-color="#32465b" stop-opacity=".2"/></linearGradient>
+                  <linearGradient id="muscleIdle" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fb9c9" stop-opacity=".36"/><stop offset="1" stop-color="#5e7484" stop-opacity=".2"/></linearGradient>
+
+                  <clipPath id="frontBodyClip">
+                    <ellipse cx="180" cy="62" rx="33" ry="42"/>
+                    <path d="M160 99 L200 99 L204 121 L156 121Z"/>
+                    <path d="M154 116 C129 119 109 132 98 151 C91 171 96 199 106 220 C116 244 119 281 119 323 C119 344 126 360 141 370 C156 378 204 378 219 370 C234 360 241 344 241 323 C241 281 244 244 254 220 C264 199 269 171 262 151 C251 132 231 119 206 116 C194 130 166 130 154 116Z"/>
+                    <path d="M101 149 C83 154 72 169 69 191 L63 245 C62 258 71 266 82 260 L93 216 L107 176Z"/>
+                    <path d="M259 149 C277 154 288 169 291 191 L297 245 C298 258 289 266 278 260 L267 216 L253 176Z"/>
+                    <path d="M65 242 C56 269 47 309 43 338 C41 352 48 363 59 361 C67 346 72 326 77 306 L86 257Z"/>
+                    <path d="M295 242 C304 269 313 309 317 338 C319 352 312 363 301 361 C293 346 288 326 283 306 L274 257Z"/>
+                    <path d="M42 337 C38 351 39 366 49 371 C58 375 66 368 67 357 L59 339Z"/>
+                    <path d="M318 337 C322 351 321 366 311 371 C302 375 294 368 293 357 L301 339Z"/>
+                    <path d="M128 364 C111 374 102 394 103 421 L105 509 C106 531 116 543 128 537 C137 518 144 486 147 450 L152 376Z"/>
+                    <path d="M232 364 C249 374 258 394 257 421 L255 509 C254 531 244 543 232 537 C223 518 216 486 213 450 L208 376Z"/>
+                    <path d="M108 520 C104 562 100 622 103 690 C104 719 112 744 125 744 C138 744 143 717 143 690 L139 548 C134 529 121 517 108 520Z"/>
+                    <path d="M252 520 C256 562 260 622 257 690 C256 719 248 744 235 744 C222 744 217 717 217 690 L221 548 C226 529 239 517 252 520Z"/>
+                  </clipPath>
+                  <clipPath id="backBodyClip">
+                    <ellipse cx="180" cy="62" rx="33" ry="42"/>
+                    <path d="M160 99 L200 99 L204 121 L156 121Z"/>
+                    <path d="M154 116 C129 119 109 132 98 151 C91 171 96 199 106 220 C116 244 119 281 119 323 C119 344 126 360 141 370 C156 378 204 378 219 370 C234 360 241 344 241 323 C241 281 244 244 254 220 C264 199 269 171 262 151 C251 132 231 119 206 116 C194 130 166 130 154 116Z"/>
+                    <path d="M101 149 C83 154 72 169 69 191 L63 245 C62 258 71 266 82 260 L93 216 L107 176Z"/>
+                    <path d="M259 149 C277 154 288 169 291 191 L297 245 C298 258 289 266 278 260 L267 216 L253 176Z"/>
+                    <path d="M65 242 C56 269 47 309 43 338 C41 352 48 363 59 361 C67 346 72 326 77 306 L86 257Z"/>
+                    <path d="M295 242 C304 269 313 309 317 338 C319 352 312 363 301 361 C293 346 288 326 283 306 L274 257Z"/>
+                    <path d="M42 337 C38 351 39 366 49 371 C58 375 66 368 67 357 L59 339Z"/>
+                    <path d="M318 337 C322 351 321 366 311 371 C302 375 294 368 293 357 L301 339Z"/>
+                    <path d="M128 364 C111 374 102 394 103 421 L105 509 C106 531 116 543 128 537 C137 518 144 486 147 450 L152 376Z"/>
+                    <path d="M232 364 C249 374 258 394 257 421 L255 509 C254 531 244 543 232 537 C223 518 216 486 213 450 L208 376Z"/>
+                    <path d="M108 520 C104 562 100 622 103 690 C104 719 112 744 125 744 C138 744 143 717 143 690 L139 548 C134 529 121 517 108 520Z"/>
+                    <path d="M252 520 C256 562 260 622 257 690 C256 719 248 744 235 744 C222 744 217 717 217 690 L221 548 C226 529 239 517 252 520Z"/>
+                  </clipPath>
                 </defs>
 
-                <!-- FRONT -->
-                <g class="anatomy-person anatomy-front" transform="translate(55 18)">
-                  <ellipse class="avatar-shell" cx="175" cy="55" rx="35" ry="43"/>
-                  <path class="avatar-shell" d="M151 91 Q175 106 199 91 L206 118 Q245 129 264 162 L287 257 L304 347 Q306 372 290 385 L273 377 L254 291 L239 216 L226 182 L218 183 L223 275 L212 357 L225 432 L217 513 L209 635 L198 730 L164 730 L157 612 L154 477 L148 477 L145 612 L138 730 L104 730 L93 635 L85 513 L77 432 L90 357 L79 275 L84 183 L76 182 L63 216 L48 291 L29 377 L12 385 Q-4 372 -2 347 L15 257 L38 162 Q57 129 96 118 L103 91 Q127 106 151 91Z"/>
-                  <path class="avatar-line" d="M175 102 L175 712 M102 119 Q175 145 248 119 M96 350 Q175 371 254 350 M91 430 Q175 448 259 430"/>
-
-                  <path class="muscle-shape" data-muscle="front-delts" d="M91 126 Q73 133 67 151 Q73 166 89 169 L112 145 Q108 130 91 126Z M259 126 Q277 133 283 151 Q277 166 261 169 L238 145 Q242 130 259 126Z"/>
-                  <path class="muscle-shape" data-muscle="pectorals" d="M111 135 Q143 121 171 139 L169 202 Q139 214 105 196 L96 160Z M179 139 Q207 121 239 135 L254 160 L245 196 Q211 214 181 202Z"/>
-                  <path class="muscle-shape" data-muscle="serratus" d="M103 198 Q116 204 125 215 L115 267 L96 250Z M247 198 Q234 204 225 215 L235 267 L254 250Z"/>
-                  <path class="muscle-shape" data-muscle="biceps" d="M63 169 Q50 190 50 228 L43 280 Q52 294 65 280 L78 213 Q82 185 78 166Z M287 169 Q300 190 300 228 L307 280 Q298 294 285 280 L272 213 Q268 185 272 166Z"/>
-                  <path class="muscle-shape" data-muscle="forearms-front" d="M43 279 L29 355 Q29 374 43 377 L57 362 L68 285 Q55 275 43 279Z M307 279 L321 355 Q321 374 307 377 L293 362 L282 285 Q295 275 307 279Z"/>
-                  <path class="muscle-shape" data-muscle="upper-abs" d="M142 209 Q157 202 171 210 L170 244 Q155 249 140 244Z M179 210 Q193 202 208 209 L210 244 Q195 249 180 244Z"/>
-                  <path class="muscle-shape" data-muscle="mid-abs" d="M139 249 Q155 244 170 249 L168 286 Q153 292 137 286Z M180 249 Q195 244 211 249 L213 286 Q197 292 182 286Z"/>
-                  <path class="muscle-shape" data-muscle="lower-abs" d="M137 291 Q153 287 168 292 L164 333 Q150 340 136 331Z M182 292 Q197 287 213 291 L214 331 Q200 340 186 333Z"/>
-                  <path class="muscle-shape" data-muscle="obliques" d="M105 246 Q124 260 137 289 L134 341 L111 320 L94 279Z M245 246 Q226 260 213 289 L216 341 L239 320 L256 279Z"/>
-                  <path class="muscle-shape" data-muscle="quads" d="M96 356 Q120 343 145 360 L144 474 L130 559 L103 548 L88 462Z M205 360 Q230 343 254 356 L262 462 L247 548 L220 559 L206 474Z"/>
-                  <path class="muscle-shape" data-muscle="adductors" d="M145 362 L171 376 L159 492 L145 474Z M205 362 L179 376 L191 492 L205 474Z"/>
-                  <path class="muscle-shape" data-muscle="tibialis" d="M108 548 Q123 553 132 566 L128 678 Q117 696 106 675 L98 597Z M242 548 Q227 553 218 566 L222 678 Q233 696 244 675 L252 597Z"/>
-                  <path class="muscle-shape" data-muscle="calves-front" d="M92 551 Q106 548 116 566 L108 649 Q101 673 91 653 L82 590Z M258 551 Q244 548 234 566 L242 649 Q249 673 259 653 L268 590Z"/>
+                <g id="frontAnatomy" class="anatomy-view active">
+                  <ellipse class="human-shell" cx="180" cy="62" rx="33" ry="42"/>
+                  <path class="human-shell" d="M160 99 L200 99 L204 121 L156 121Z"/>
+                  <path class="human-shell" d="M154 116 C129 119 109 132 98 151 C91 171 96 199 106 220 C116 244 119 281 119 323 C119 344 126 360 141 370 C156 378 204 378 219 370 C234 360 241 344 241 323 C241 281 244 244 254 220 C264 199 269 171 262 151 C251 132 231 119 206 116 C194 130 166 130 154 116Z"/>
+                  <path class="human-shell" d="M101 149 C83 154 72 169 69 191 L63 245 C62 258 71 266 82 260 L93 216 L107 176Z M259 149 C277 154 288 169 291 191 L297 245 C298 258 289 266 278 260 L267 216 L253 176Z"/>
+                  <path class="human-shell" d="M65 242 C56 269 47 309 43 338 C41 352 48 363 59 361 C67 346 72 326 77 306 L86 257Z M295 242 C304 269 313 309 317 338 C319 352 312 363 301 361 C293 346 288 326 283 306 L274 257Z"/>
+                  <path class="human-shell" d="M42 337 C38 351 39 366 49 371 C58 375 66 368 67 357 L59 339Z M318 337 C322 351 321 366 311 371 C302 375 294 368 293 357 L301 339Z"/>
+                  <path class="human-shell" d="M128 364 C111 374 102 394 103 421 L105 509 C106 531 116 543 128 537 C137 518 144 486 147 450 L152 376Z M232 364 C249 374 258 394 257 421 L255 509 C254 531 244 543 232 537 C223 518 216 486 213 450 L208 376Z"/>
+                  <path class="human-shell" d="M108 520 C104 562 100 622 103 690 C104 719 112 744 125 744 C138 744 143 717 143 690 L139 548 C134 529 121 517 108 520Z M252 520 C256 562 260 622 257 690 C256 719 248 744 235 744 C222 744 217 717 217 690 L221 548 C226 529 239 517 252 520Z"/>
+                  <path class="anatomy-seam" d="M180 110 L180 349 M106 134 Q180 157 254 134 M96 350 Q180 371 264 350"/>
+                  <g clip-path="url(#frontBodyClip)">
+                    <path class="muscle-shape" data-muscle="front-delts" d="M100 129 Q76 135 66 156 Q72 178 97 180 Q114 166 119 147 Q115 133 100 129Z M260 129 Q284 135 294 156 Q288 178 263 180 Q246 166 241 147 Q245 133 260 129Z"/>
+                    <path class="muscle-shape" data-muscle="pectorals" d="M112 139 Q145 125 176 143 L175 207 Q145 219 108 198 L99 164Z M184 143 Q215 125 248 139 L261 164 L252 198 Q215 219 185 207Z"/>
+                    <path class="muscle-shape" data-muscle="serratus" d="M108 203 Q126 208 139 223 L129 272 L105 253Z M252 203 Q234 208 221 223 L231 272 L255 253Z"/>
+                    <path class="muscle-shape" data-muscle="biceps" d="M69 173 Q53 196 55 235 L48 285 Q59 300 72 282 L84 214 Q86 188 82 170Z M291 173 Q307 196 305 235 L312 285 Q301 300 288 282 L276 214 Q274 188 278 170Z"/>
+                    <path class="muscle-shape" data-muscle="forearms-front" d="M49 284 L36 347 Q36 367 49 374 L63 359 L72 287 Q60 278 49 284Z M311 284 L324 347 Q324 367 311 374 L297 359 L288 287 Q300 278 311 284Z"/>
+                    <path class="muscle-shape" data-muscle="upper-abs" d="M147 211 Q162 205 176 211 L175 247 Q160 252 145 247Z M184 211 Q198 205 213 211 L215 247 Q200 252 185 247Z"/>
+                    <path class="muscle-shape" data-muscle="mid-abs" d="M144 252 Q160 247 175 252 L173 289 Q158 296 142 289Z M185 252 Q200 247 216 252 L218 289 Q202 296 187 289Z"/>
+                    <path class="muscle-shape" data-muscle="lower-abs" d="M142 294 Q158 290 173 295 L169 335 Q155 344 141 333Z M187 295 Q202 290 218 294 L219 333 Q205 344 191 335Z"/>
+                    <path class="muscle-shape" data-muscle="obliques" d="M111 247 Q130 260 142 289 L139 339 L116 320 L99 280Z M249 247 Q230 260 218 289 L221 339 L244 320 L261 280Z"/>
+                    <path class="muscle-shape" data-muscle="quads" d="M97 360 Q122 347 148 365 L147 479 L133 558 L106 548 L90 465Z M212 365 Q238 347 263 360 L270 465 L254 548 L227 558 L213 479Z"/>
+                    <path class="muscle-shape" data-muscle="adductors" d="M148 365 L176 380 L162 494 L147 479Z M212 365 L184 380 L198 494 L213 479Z"/>
+                    <path class="muscle-shape" data-muscle="tibialis" d="M111 551 Q127 556 136 570 L131 681 Q120 698 108 679 L100 600Z M249 551 Q233 556 224 570 L229 681 Q240 698 252 679 L260 600Z"/>
+                    <path class="muscle-shape" data-muscle="calves-front" d="M95 554 Q108 550 119 570 L111 652 Q104 675 94 655 L85 593Z M265 554 Q252 550 241 570 L249 652 Q256 675 266 655 L275 593Z"/>
+                  </g>
                 </g>
 
-                <!-- BACK -->
-                <g class="anatomy-person anatomy-back" transform="translate(405 18)">
-                  <ellipse class="avatar-shell" cx="175" cy="55" rx="35" ry="43"/>
-                  <path class="avatar-shell" d="M151 91 Q175 106 199 91 L206 118 Q245 129 264 162 L287 257 L304 347 Q306 372 290 385 L273 377 L254 291 L239 216 L226 182 L218 183 L223 275 L212 357 L225 432 L217 513 L209 635 L198 730 L164 730 L157 612 L154 477 L148 477 L145 612 L138 730 L104 730 L93 635 L85 513 L77 432 L90 357 L79 275 L84 183 L76 182 L63 216 L48 291 L29 377 L12 385 Q-4 372 -2 347 L15 257 L38 162 Q57 129 96 118 L103 91 Q127 106 151 91Z"/>
-                  <path class="avatar-line" d="M175 102 L175 712 M102 119 Q175 145 248 119 M96 350 Q175 371 254 350"/>
-
-                  <path class="muscle-shape" data-muscle="traps" d="M121 112 Q175 132 229 112 L210 183 L175 203 L140 183Z"/>
-                  <path class="muscle-shape" data-muscle="rear-delts" d="M91 128 Q73 136 68 154 Q75 169 92 172 L116 146 Q108 131 91 128Z M259 128 Q277 136 282 154 Q275 169 258 172 L234 146 Q242 131 259 128Z"/>
-                  <path class="muscle-shape" data-muscle="lats" d="M115 164 Q139 181 169 190 L164 294 L125 319 L98 274 L101 198Z M235 164 Q211 181 181 190 L186 294 L225 319 L252 274 L249 198Z"/>
-                  <path class="muscle-shape" data-muscle="triceps" d="M62 169 Q49 194 50 232 L43 279 Q53 292 66 277 L79 211 Q82 184 77 166Z M288 169 Q301 194 300 232 L307 279 Q297 292 284 277 L271 211 Q268 184 273 166Z"/>
-                  <path class="muscle-shape" data-muscle="forearms-back" d="M43 279 L29 355 Q29 374 43 377 L57 362 L68 285 Q55 275 43 279Z M307 279 L321 355 Q321 374 307 377 L293 362 L282 285 Q295 275 307 279Z"/>
-                  <path class="muscle-shape" data-muscle="erectors" d="M157 193 Q168 187 173 199 L169 337 L150 347 L145 314Z M193 193 Q182 187 177 199 L181 337 L200 347 L205 314Z"/>
-                  <path class="muscle-shape" data-muscle="glutes" d="M98 348 Q135 334 171 362 L166 426 Q136 449 96 425 L84 389Z M179 362 Q215 334 252 348 L266 389 L254 425 Q214 449 184 426Z"/>
-                  <path class="muscle-shape" data-muscle="hamstrings" d="M96 427 Q124 442 148 432 L143 554 L111 556 L91 480Z M202 432 Q226 442 254 427 L259 480 L239 556 L207 554Z"/>
-                  <path class="muscle-shape" data-muscle="gastrocnemius" d="M105 551 Q126 548 139 579 L128 664 Q120 694 103 672 L88 594Z M245 551 Q224 548 211 579 L222 664 Q230 694 247 672 L262 594Z"/>
+                <g id="backAnatomy" class="anatomy-view">
+                  <ellipse class="human-shell" cx="180" cy="62" rx="33" ry="42"/>
+                  <path class="human-shell" d="M160 99 L200 99 L204 121 L156 121Z"/>
+                  <path class="human-shell" d="M154 116 C129 119 109 132 98 151 C91 171 96 199 106 220 C116 244 119 281 119 323 C119 344 126 360 141 370 C156 378 204 378 219 370 C234 360 241 344 241 323 C241 281 244 244 254 220 C264 199 269 171 262 151 C251 132 231 119 206 116 C194 130 166 130 154 116Z"/>
+                  <path class="human-shell" d="M101 149 C83 154 72 169 69 191 L63 245 C62 258 71 266 82 260 L93 216 L107 176Z M259 149 C277 154 288 169 291 191 L297 245 C298 258 289 266 278 260 L267 216 L253 176Z"/>
+                  <path class="human-shell" d="M65 242 C56 269 47 309 43 338 C41 352 48 363 59 361 C67 346 72 326 77 306 L86 257Z M295 242 C304 269 313 309 317 338 C319 352 312 363 301 361 C293 346 288 326 283 306 L274 257Z"/>
+                  <path class="human-shell" d="M42 337 C38 351 39 366 49 371 C58 375 66 368 67 357 L59 339Z M318 337 C322 351 321 366 311 371 C302 375 294 368 293 357 L301 339Z"/>
+                  <path class="human-shell" d="M128 364 C111 374 102 394 103 421 L105 509 C106 531 116 543 128 537 C137 518 144 486 147 450 L152 376Z M232 364 C249 374 258 394 257 421 L255 509 C254 531 244 543 232 537 C223 518 216 486 213 450 L208 376Z"/>
+                  <path class="human-shell" d="M108 520 C104 562 100 622 103 690 C104 719 112 744 125 744 C138 744 143 717 143 690 L139 548 C134 529 121 517 108 520Z M252 520 C256 562 260 622 257 690 C256 719 248 744 235 744 C222 744 217 717 217 690 L221 548 C226 529 239 517 252 520Z"/>
+                  <path class="anatomy-seam" d="M180 111 L180 348 M104 134 Q180 156 256 134 M96 349 Q180 371 264 349"/>
+                  <g clip-path="url(#backBodyClip)">
+                    <path class="muscle-shape" data-muscle="traps" d="M118 116 Q180 138 242 116 L219 189 L180 210 L141 189Z"/>
+                    <path class="muscle-shape" data-muscle="rear-delts" d="M99 130 Q76 137 68 157 Q75 178 98 181 L122 149 Q115 134 99 130Z M261 130 Q284 137 292 157 Q285 178 262 181 L238 149 Q245 134 261 130Z"/>
+                    <path class="muscle-shape" data-muscle="lats" d="M116 166 Q142 184 174 193 L168 298 L128 322 L100 276 L104 198Z M244 166 Q218 184 186 193 L192 298 L232 322 L260 276 L256 198Z"/>
+                    <path class="muscle-shape" data-muscle="triceps" d="M68 174 Q53 197 55 236 L48 283 Q59 297 72 280 L85 212 Q87 188 82 170Z M292 174 Q307 197 305 236 L312 283 Q301 297 288 280 L275 212 Q273 188 278 170Z"/>
+                    <path class="muscle-shape" data-muscle="forearms-back" d="M49 284 L36 347 Q36 367 49 374 L63 359 L72 287 Q60 278 49 284Z M311 284 L324 347 Q324 367 311 374 L297 359 L288 287 Q300 278 311 284Z"/>
+                    <path class="muscle-shape" data-muscle="erectors" d="M158 198 Q170 191 176 202 L171 338 L151 348 L146 314Z M202 198 Q190 191 184 202 L189 338 L209 348 L214 314Z"/>
+                    <path class="muscle-shape" data-muscle="glutes" d="M99 350 Q137 337 176 365 L171 428 Q139 451 97 426 L84 389Z M184 365 Q223 337 261 350 L276 389 L263 426 Q221 451 189 428Z"/>
+                    <path class="muscle-shape" data-muscle="hamstrings" d="M97 429 Q126 444 151 434 L146 556 L113 558 L92 481Z M209 434 Q234 444 263 429 L268 481 L247 558 L214 556Z"/>
+                    <path class="muscle-shape" data-muscle="gastrocnemius" d="M108 552 Q129 549 142 582 L131 666 Q123 696 106 674 L91 596Z M252 552 Q231 549 218 582 L229 666 Q237 696 254 674 L269 596Z"/>
+                  </g>
                 </g>
               </svg>
             </div>
-            <div id="bodyRegionButtons" class="body-region-buttons"></div>
-          </div>
 
-          <aside class="body-intelligence-column">
-            <div id="bodyMapDetail" class="body-map-detail manifestation-card"></div>
-            <div class="manifestation-card exercise-heatmap-card">
-              <div class="section-heading compact"><div><p class="eyebrow">STIMULUS MAP</p><h3>Visualizar exercício</h3></div><button id="clearExerciseHeatmap" class="tiny-button" type="button">LIMPAR</button></div>
-              <p>Veja músculos principais, secundários e estabilizadores antes de treinar.</p>
-              <div id="exerciseHeatmapButtons" class="exercise-heatmap-buttons"></div>
-              <div class="stimulus-legend"><span><i class="stimulus-dot primary"></i>Principal</span><span><i class="stimulus-dot secondary"></i>Secundário</span><span><i class="stimulus-dot stabilizer"></i>Estabilização</span></div>
-            </div>
+            <div id="bodyRegionButtons" class="body-region-buttons reforged-region-buttons"></div>
+          </section>
 
-            <div class="manifestation-card respiratory-card">
+          <aside class="body-sync-info-stack">
+            <div id="bodyMapDetail" class="manifestation-card reforged-body-detail"></div>
+
+            <details class="manifestation-card stimulus-details-card">
+              <summary><span><b>STIMULUS MAP</b><small>Ver músculos ativados por exercício</small></span><span>⌄</span></summary>
+              <div class="stimulus-details-content">
+                <div class="section-heading compact"><div><h3>Mapa de estímulo</h3></div><button id="clearExerciseHeatmap" class="tiny-button" type="button">LIMPAR</button></div>
+                <div id="exerciseHeatmapButtons" class="exercise-heatmap-buttons"></div>
+                <div class="stimulus-legend"><span><i class="stimulus-dot primary"></i>Principal</span><span><i class="stimulus-dot secondary"></i>Secundário</span><span><i class="stimulus-dot stabilizer"></i>Estabilização</span></div>
+              </div>
+            </details>
+
+            <section class="manifestation-card respiratory-card respiratory-reforged-card">
               <div class="respiratory-visual">
                 <svg class="lungs-svg" viewBox="0 0 220 190" role="img" aria-label="Sistema respiratório estilizado">
                   <path class="trachea" d="M106 18 L106 72 M114 18 L114 72 M110 70 L83 94 M110 70 L137 94"/>
@@ -263,32 +318,21 @@
                 </svg>
               </div>
               <div class="respiratory-data">
-                <p class="eyebrow">RESPIRATORY SYSTEM</p>
-                <h3>Capacidade respiratória</h3>
-                <div class="resp-level"><span>FÔLEGO</span><strong id="breathLevelText">Lv. 1</strong></div>
+                <p class="eyebrow">RESPIRATORY SYSTEM</p><h3>Fôlego</h3>
+                <div class="resp-level"><span>CAPACIDADE</span><strong id="breathLevelText">Lv. 1</strong></div>
                 <div class="progress-track"><div id="breathProgressBar" class="progress-fill"></div></div>
                 <p id="breathProgressText">0/100 para o próximo nível.</p>
                 <div class="resp-stats"><div><span>CARDIO TOTAL</span><strong id="breathTotalTime">0 min</strong></div><div><span>MELHOR RODADA</span><strong id="breathBestSet">0s</strong></div></div>
-                <p class="resp-note">O progresso representa sua tolerância ao esforço e condicionamento no sistema; não significa que seus pulmões estejam literalmente aumentando de tamanho.</p>
               </div>
-            </div>
+            </section>
           </aside>
         </div>
 
         <div id="bodyStatusList" class="status-attributes body-status-buttons body-status-v3"></div>
       </article>
 
-      <article class="panel detail-panel">
-        <p class="eyebrow">MASTERY</p>
-        <h2>Domínio de treino</h2>
-        <div id="masteryList" class="mastery-list"></div>
-      </article>
-
-      <article class="panel detail-panel">
-        <p class="eyebrow">PROFICIENCY</p>
-        <h2>Exercícios</h2>
-        <div id="skillsList" class="skills-list"></div>
-      </article>
+      <article class="panel detail-panel compact-data-panel"><p class="eyebrow">MASTERY</p><h2>Domínio de treino</h2><div id="masteryList" class="mastery-list"></div></article>
+      <article class="panel detail-panel compact-data-panel"><p class="eyebrow">PROFICIENCY</p><h2>Exercícios</h2><div id="skillsList" class="skills-list"></div></article>
     </section>
 
     <section id="progressionScreen" class="screen">

@@ -1,0 +1,47 @@
+PROJECT ARISE — ALPHA 1.5 • MANIFESTATION UPDATE
+
+BODY SYNC 3.0
+- Novo modelo anatômico frontal e traseiro.
+- 22 áreas musculares visuais/clicáveis.
+- Peitoral, deltoides, serrátil, bíceps, tríceps, antebraços, trapézio, dorsais, eretores da coluna, abdômen, oblíquos, glúteos, quadríceps, adutores, posteriores, tibial e panturrilhas.
+- Botões de região para facilitar o uso no celular.
+- Fôlego saiu do tórax: agora existe um painel respiratório independente com pulmões.
+- Heatmap por exercício: principal / secundário / estabilização.
+- Avatar ganha definição visual progressiva de E a S Rank. É uma representação gamificada, não uma previsão física.
+
+MANIFESTATION DIRECTOR
+- Level Up, Rank Ascension e New Record entram numa fila.
+- Eventos cinematográficos não se sobrepõem mais.
+- Rank Ascension é uma sequência própria e mais longa.
+- Opções: animação Completa / Rápida / Reduzida.
+- Feedback tátil opcional.
+- Som sintetizado original e opcional.
+
+COSMÉTICOS
+- Efeitos de todas as raridades receberam identidade visual clara.
+- Water Pulse: corrente de água.
+- Scout Rush: cabos, verde e vapor.
+- Cursed Spark: energia negra/vermelha.
+- Shadow Rise: sombras ascendentes.
+- Dark Impact: impacto negro/vermelho.
+- Ground Tremor: choque e vapor.
+- Chain Burst / Devil Engine: correntes dentadas girando ao redor da interface.
+- King's Cleave: o Level antigo é literalmente fatiado.
+- Crimson Dawn: água se transforma em fogo antes da revelação.
+- Moonlit Flow: cortes em lua crescente.
+- Colossal Steam: vapor e impacto pesado.
+- Thunder Step: sequência de relâmpagos.
+- Flame Heart: arcos de fogo.
+- Infinite Horizon: azul + vermelho convergem em roxo e formam o novo Level.
+- Monarch Ascension: sombras/chamas negras com detalhes azul-violeta e revelação ARISE.
+- Absolute Domain: domínio, anéis e múltiplos cortes.
+- Novas auras, molduras e títulos nas quatro raridades.
+- Galeria Cinemática para testar Level Up FX antes de comprar.
+
+HISTÓRICO
+- Evolution Timeline registra novos Level Ups, Rank Ascensions, Records e Achievements da 1.5 em diante.
+
+SAVE/PWA
+- SAVE_KEY: projectAriseAlpha15.
+- Migração automática da Alpha 1.4 e versões anteriores.
+- Novo cache project-arise-alpha15-v1.

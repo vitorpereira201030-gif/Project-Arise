@@ -1,8 +1,8 @@
 "use strict";
 
-const SAVE_KEY = "projectAriseAlpha14";
-const LEGACY_SAVE_KEYS = ["projectAriseAlpha13", "projectAriseAlpha12", "projectAriseAlpha11", "projectAriseSave", "projectAscensionSave"];
-const VERSION = "1.4.0";
+const SAVE_KEY = "projectAriseAlpha15";
+const LEGACY_SAVE_KEYS = ["projectAriseAlpha14", "projectAriseAlpha13", "projectAriseAlpha12", "projectAriseAlpha11", "projectAriseSave", "projectAscensionSave"];
+const VERSION = "1.5.0";
 const COOLDOWN_MS = 12 * 60 * 60 * 1000;
 const STREAK_WINDOW_MS = 36 * 60 * 60 * 1000;
 const GUARD_WINDOW_MS = 60 * 60 * 60 * 1000;
@@ -160,7 +160,12 @@ const titles = {
   moonWalker: { name: "MOON WALKER", description: "Um título de presença silenciosa e noturna.", test: () => player.shop?.owned?.includes("titleMoonWalker") },
   thunderborn: { name: "THUNDERBORN", description: "Velocidade antes do som.", test: () => player.shop?.owned?.includes("titleThunderborn") },
   flameHeart: { name: "FLAME HEART", description: "Uma chama que cresce quando o corpo pede para parar.", test: () => player.shop?.owned?.includes("titleFlameHeart") },
-  bladeDawn: { name: "BLADE OF DAWN", description: "A primeira luz depois da noite.", test: () => player.shop?.owned?.includes("titleBladeDawn") }
+  bladeDawn: { name: "BLADE OF DAWN", description: "A primeira luz depois da noite.", test: () => player.shop?.owned?.includes("titleBladeDawn") },
+  shadowSovereign: { name: "SHADOW SOVEREIGN", description: "Uma presença que cresce de dentro da escuridão.", test: () => player.shop?.owned?.includes("titleShadowSovereign") },
+  theCleaver: { name: "THE CLEAVER", description: "Precisão cruel, presença de rei e cortes impossíveis de ignorar.", test: () => player.shop?.owned?.includes("titleTheCleaver") },
+  wallbreaker: { name: "WALLBREAKER", description: "Para quem continua avançando mesmo quando o caminho parece fechado.", test: () => player.shop?.owned?.includes("titleWallbreaker") },
+  sunBreather: { name: "SUN BREATHER", description: "Disciplina que começa fluida e termina em chama.", test: () => player.shop?.owned?.includes("titleSunBreather") },
+  devilEngine: { name: "DEVIL ENGINE", description: "Barulho, faísca e movimento sem freio.", test: () => player.shop?.owned?.includes("titleDevilEngine") }
 };
 
 const shopItems = {
@@ -195,7 +200,31 @@ const shopItems = {
   titleMoonWalker: { name: "[ MOON WALKER ]", type: "title", typeLabel: "TÍTULO", rarity: "EPIC", price: 500, unlockTitle: "moonWalker", description: "Desbloqueia o título MOON WALKER." },
   titleThunderborn: { name: "[ THUNDERBORN ]", type: "title", typeLabel: "TÍTULO", rarity: "LEGENDARY", price: 650, unlockTitle: "thunderborn", description: "Desbloqueia o título THUNDERBORN." },
   titleFlameHeart: { name: "[ FLAME HEART ]", type: "title", typeLabel: "TÍTULO", rarity: "LEGENDARY", price: 750, unlockTitle: "flameHeart", description: "Desbloqueia o título FLAME HEART." },
-  titleBladeDawn: { name: "[ BLADE OF DAWN ]", type: "title", typeLabel: "TÍTULO", rarity: "LEGENDARY", price: 650, unlockTitle: "bladeDawn", description: "Desbloqueia o título BLADE OF DAWN." }
+  titleBladeDawn: { name: "[ BLADE OF DAWN ]", type: "title", typeLabel: "TÍTULO", rarity: "LEGENDARY", price: 650, unlockTitle: "bladeDawn", description: "Desbloqueia o título BLADE OF DAWN." },
+
+  effectWaterPulse: { name: "Water Pulse", type: "effect", typeLabel: "LEVEL UP", rarity: "RARE", price: 260, effectClass: "effect-water-pulse", duration: 2600, description: "Uma corrente azul corta a interface em arcos fluidos antes de revelar o novo Level." },
+  effectScoutRush: { name: "Scout Rush", type: "effect", typeLabel: "LEVEL UP", rarity: "RARE", price: 280, effectClass: "effect-scout-rush", duration: 2600, description: "Cabos verdes atravessam a tela, vapor explode nas laterais e o Level surge como uma investida além das muralhas." },
+  effectCursedSpark: { name: "Cursed Spark", type: "effect", typeLabel: "LEVEL UP", rarity: "RARE", price: 300, effectClass: "effect-cursed-spark", duration: 2700, description: "Energia negra e vermelha comprime no centro e estoura em um impacto seco." },
+  effectDevilEngine: { name: "Devil Engine", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 520, effectClass: "effect-devil-engine", duration: 3600, description: "Correntes dentadas giram ao redor do layout, faíscas riscam a tela e o Level antigo é serrado antes do novo aparecer." },
+  effectKingCleave: { name: "King's Cleave", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 560, effectClass: "effect-king-cleave", duration: 3500, description: "Uma sequência de cortes cruza o número antigo, fatia suas camadas e abre espaço para o novo Level." },
+  effectTitanSteam: { name: "Colossal Steam", type: "effect", typeLabel: "LEVEL UP", rarity: "LEGENDARY", price: 760, effectClass: "effect-titan-steam", duration: 4200, description: "Vapor branco domina a tela, o HUD treme e um clarão quente revela a ascensão por trás da névoa." },
+  effectAbsoluteDomain: { name: "Absolute Domain", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1450, effectClass: "effect-absolute-domain", duration: 5600, description: "O espaço escurece, linhas de domínio fecham ao redor do HUD e múltiplos cortes apagam o Level antigo antes de uma revelação real." },
+
+  auraWaterBreath: { name: "Water Breathing", type: "aura", typeLabel: "AURA", rarity: "RARE", price: 300, className: "aura-water-breath", description: "Ondas azuis orbitam o perfil em fluxo contínuo." },
+  auraScoutSteam: { name: "Scout Steam", type: "aura", typeLabel: "AURA", rarity: "EPIC", price: 420, className: "aura-scout-steam", description: "Vapor e linhas verdes curtas lembram uma arrancada de equipamento de mobilidade." },
+  auraKingMarks: { name: "King Marks", type: "aura", typeLabel: "AURA", rarity: "LEGENDARY", price: 620, className: "aura-king-marks", description: "Traços vermelhos surgem e desaparecem como marcas e cortes ao redor do perfil." },
+  auraDevilSparks: { name: "Devil Sparks", type: "aura", typeLabel: "AURA", rarity: "LEGENDARY", price: 650, className: "aura-devil-sparks", description: "Faíscas quentes, metal e uma vibração de motor acompanham o perfil." },
+  auraMonarchFlame: { name: "Monarch Flame", type: "aura", typeLabel: "AURA", rarity: "MYTHIC", price: 900, className: "aura-monarch-flame", description: "Chamas negras com bordas azul-violeta sobem ao redor do perfil em ciclos lentos." },
+
+  frameThunderEdge: { name: "Thunder Edge", type: "frame", typeLabel: "MOLDURA", rarity: "RARE", price: 320, className: "frame-thunder-edge", description: "Moldura escura com impulsos dourados nas quinas." },
+  frameMoonCrescent: { name: "Moon Crescent", type: "frame", typeLabel: "MOLDURA", rarity: "EPIC", price: 460, className: "frame-moon-crescent", description: "Arcos prateados e azuis percorrem as bordas como luas finas." },
+  frameScoutWing: { name: "Scout Wing", type: "frame", typeLabel: "MOLDURA", rarity: "EPIC", price: 440, className: "frame-scout-wing", description: "Aço, verde militar e traços diagonais de movimento." },
+
+  titleShadowSovereign: { name: "[ SHADOW SOVEREIGN ]", type: "title", typeLabel: "TÍTULO", rarity: "MYTHIC", price: 950, unlockTitle: "shadowSovereign", description: "Desbloqueia o título SHADOW SOVEREIGN." },
+  titleTheCleaver: { name: "[ THE CLEAVER ]", type: "title", typeLabel: "TÍTULO", rarity: "LEGENDARY", price: 780, unlockTitle: "theCleaver", description: "Desbloqueia o título THE CLEAVER." },
+  titleWallbreaker: { name: "[ WALLBREAKER ]", type: "title", typeLabel: "TÍTULO", rarity: "EPIC", price: 560, unlockTitle: "wallbreaker", description: "Desbloqueia o título WALLBREAKER." },
+  titleSunBreather: { name: "[ SUN BREATHER ]", type: "title", typeLabel: "TÍTULO", rarity: "LEGENDARY", price: 760, unlockTitle: "sunBreather", description: "Desbloqueia o título SUN BREATHER." },
+  titleDevilEngine: { name: "[ DEVIL ENGINE ]", type: "title", typeLabel: "TÍTULO", rarity: "EPIC", price: 620, unlockTitle: "devilEngine", description: "Desbloqueia o título DEVIL ENGINE." }
 };
 
 const weeklyChallenges = [
@@ -254,6 +283,8 @@ const defaultPlayer = () => ({
   achievements: [],
   equippedTitle: "awakened",
   shop: { owned: [], equippedTheme: "default", equippedEffect: "default", equippedAura: "default", equippedFrame: "default" },
+  preferences: { animationMode: "full", haptics: true, sound: false },
+  timeline: [],
   history: []
 });
 
@@ -575,6 +606,8 @@ function sanitizePlayer(data, fromLegacy = false) {
       equippedAura: data.shop?.equippedAura || "default",
       equippedFrame: data.shop?.equippedFrame || "default"
     },
+    preferences: { ...base.preferences, ...(data.preferences || {}) },
+    timeline: Array.isArray(data.timeline) ? data.timeline.slice(-150) : [],
     history
   };
 
@@ -599,7 +632,7 @@ function loadGame() {
       if (!raw) continue;
       const migrated = sanitizePlayer(JSON.parse(raw), true);
       localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
-      pendingSystemMessages.push("SAVE ANTERIOR MIGRADO PARA A ALPHA 1.4. Level, XP, Essence, corpo, proficiências, cosméticos e histórico foram preservados.");
+      pendingSystemMessages.push("SAVE ANTERIOR MIGRADO PARA A ALPHA 1.5. Level, XP, Essence, corpo, proficiências, cosméticos e histórico foram preservados.");
       return migrated;
     }
 
@@ -611,7 +644,7 @@ function loadGame() {
         if (candidate && typeof candidate.level === "number" && typeof candidate.xp === "number") {
           const migrated = sanitizePlayer(candidate, true);
           localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
-          pendingSystemMessages.push("SAVE ANTIGO MIGRADO PARA A ALPHA 1.4.");
+          pendingSystemMessages.push("SAVE ANTIGO MIGRADO PARA A ALPHA 1.5.");
           return migrated;
         }
       } catch (_) {
@@ -897,6 +930,7 @@ function evaluateAchievements(showToast = false) {
   Object.entries(achievements).forEach(([id, achievement]) => {
     if (player.achievements.includes(id) || !achievement.test()) return;
     player.achievements.push(id);
+    if (typeof recordTimelineEvent === "function") recordTimelineEvent("achievement", "ACHIEVEMENT", achievement.name);
     player.essence += achievement.essence;
     addXP(achievement.xp);
     newlyUnlocked.push(id);
@@ -1124,6 +1158,7 @@ function updateUI(runAchievementCheck = true) {
   renderShop();
   renderHistory();
   renderRecords();
+  if (typeof renderManifestationSettings === "function") renderManifestationSettings();
   if ($("exerciseDetailScreen")?.classList.contains("active")) renderExerciseDetail(selectedExerciseKey);
 }
 
@@ -1610,12 +1645,14 @@ async function importSaveFile(file) {
 function resetProgress() {
   const confirmed = window.confirm("RESET TOTAL: apagar Level, XP, Essence, corpo, streak, histórico, loja e desbloqueios deste navegador? Esta ação não pode ser desfeita sem um backup.");
   if (!confirmed) return;
-  const confirmedAgain = window.confirm("Última confirmação: deseja realmente voltar ao início da Alpha 1.4?");
+  const confirmedAgain = window.confirm("Última confirmação: deseja realmente voltar ao início da Alpha 1.5?");
   if (!confirmedAgain) return;
 
   [SAVE_KEY, ...LEGACY_SAVE_KEYS].forEach((key) => localStorage.removeItem(key));
   player = defaultPlayer();
   selectedBodyZone = "chest";
+  selectedExerciseHeatmap = null;
+  selectedMuscleId = null;
   selectedExerciseKey = "pushup";
   shopFilter = "all";
   saveGame();
@@ -1638,7 +1675,7 @@ async function installPwa() {
     return;
   }
 
-  openModal("Instalar no celular", `<p>Para instalar como app, o Project Arise precisa estar aberto por um endereço <strong>HTTPS</strong> (não apenas pelo arquivo <code>index.html</code>).</p><p>Quando estiver hospedado, abra no Chrome/Edge do celular e use <strong>Adicionar à tela inicial</strong> ou <strong>Instalar app</strong>. A Alpha 1.4 já inclui manifest, ícones e modo offline para isso.</p>`);
+  openModal("Instalar no celular", `<p>Para instalar como app, o Project Arise precisa estar aberto por um endereço <strong>HTTPS</strong> (não apenas pelo arquivo <code>index.html</code>).</p><p>Quando estiver hospedado, abra no Chrome/Edge do celular e use <strong>Adicionar à tela inicial</strong> ou <strong>Instalar app</strong>. A Alpha 1.5 inclui manifest, ícones, cache offline e controles de apresentação para isso.</p>`);
 }
 
 function startTraining() {
@@ -1782,17 +1819,17 @@ function bindEvents() {
   });
 
   $("systemButton").addEventListener("click", () => {
-    openModal("Project Arise — Alpha 1.4 • Ascension", `
+    openModal("Project Arise — Alpha 1.5 • Manifestation", `
       <ul>
-        <li><strong>Body Sync 2.0:</strong> modelo corporal redesenhado com regiões humanas mais claras e detalhes de estímulo.</li>
+        <li><strong>Body Sync 3.0:</strong> anatomia muscular detalhada, clique por músculo, heatmap por exercício e pulmões separados.</li>
         <li><strong>Abdômen:</strong> Reverse Crunch e progressões agora fazem parte do Treino A.</li>
         <li><strong>Recovery Check:</strong> marcar Cansado ou Muito dolorido impede aumentos agressivos de meta sem reduzir recompensas.</li>
         <li><strong>Personal Records:</strong> seus melhores resultados recebem NEW RECORD e alimentam marcos físicos.</li>
         <li><strong>Weekly Challenge:</strong> desafio semanal usa o treino normal; ele não exige sessões extras para farmar recompensa.</li>
-        <li><strong>Rank Ascension:</strong> mudanças de Rank agora recebem uma animação exclusiva além do Level Up.</li>
-        <li><strong>Cosmetic Loadout:</strong> equipe Tema + Aura + Level Up FX + Moldura + Título de forma independente.</li>
+        <li><strong>Event Director:</strong> Level Up, NEW RECORD e Rank Ascension entram numa fila e nunca mais disputam a tela.</li>
+        <li><strong>Manifestation FX:</strong> cada raridade ganhou identidade própria; Mythic vira uma mini-cutscene e os efeitos menores continuam reconhecíveis.</li>
         <li><strong>Cooldown/Streak:</strong> quest bloqueada por 12h; a próxima precisa ser concluída em até 36h para manter a corrente.</li>
-        <li><strong>Save:</strong> exporte um backup antes de cada atualização. A Alpha 1.4 migra saves da 1.3 automaticamente.</li>
+        <li><strong>Save:</strong> exporte um backup antes de cada atualização. A Alpha 1.5 migra saves da 1.4 automaticamente.</li>
       </ul>
     `);
   });
@@ -1803,11 +1840,480 @@ function bindEvents() {
   });
 }
 
+
+
+/* ============================================================
+   PROJECT ARISE ALPHA 1.5 — MANIFESTATION UPDATE
+   Presentation director, Body Sync 3.0 and cinematic cosmetics.
+   ============================================================ */
+
+const muscleCatalog = {
+  pectorals: { name: "Peitoral maior", zone: "chest", role: "Principal nos movimentos de empurrar." },
+  "front-delts": { name: "Deltoide anterior", zone: "chest", role: "Ajuda a elevar e estabilizar o braço durante flexões." },
+  serratus: { name: "Serrátil anterior", zone: "chest", role: "Estabiliza a escápula durante empurradas." },
+  traps: { name: "Trapézio", zone: "back", role: "Controle escapular e sustentação da parte superior das costas." },
+  "rear-delts": { name: "Deltoide posterior", zone: "back", role: "Auxilia movimentos de puxada e estabilidade do ombro." },
+  lats: { name: "Latíssimo do dorso", zone: "back", role: "Grande motor das puxadas verticais." },
+  erectors: { name: "Eretores da coluna", zone: "core", role: "Mantêm o tronco estável e resistente à flexão." },
+  biceps: { name: "Bíceps", zone: "arms", role: "Flexão do cotovelo, principalmente nas barras." },
+  triceps: { name: "Tríceps", zone: "arms", role: "Extensão do cotovelo, principalmente nas flexões." },
+  "forearms-front": { name: "Antebraços / flexores", zone: "arms", role: "Pegada e controle do punho." },
+  "forearms-back": { name: "Antebraços / extensores", zone: "arms", role: "Pegada e estabilidade do punho." },
+  "upper-abs": { name: "Reto abdominal superior", zone: "core", role: "Flexão e rigidez do tronco." },
+  "mid-abs": { name: "Reto abdominal médio", zone: "core", role: "Controle do tronco em flexão e anti-extensão." },
+  "lower-abs": { name: "Reto abdominal inferior", zone: "core", role: "Controle pélvico nas progressões de abdômen." },
+  obliques: { name: "Oblíquos", zone: "core", role: "Resistem à rotação e estabilizam o tronco." },
+  quads: { name: "Quadríceps", zone: "legs", role: "Principal responsável por estender o joelho nos agachamentos." },
+  adductors: { name: "Adutores", zone: "legs", role: "Estabilizam quadril e joelho durante agachamentos." },
+  hamstrings: { name: "Posteriores da coxa", zone: "legs", role: "Ajudam no controle do quadril e da descida." },
+  glutes: { name: "Glúteos", zone: "legs", role: "Extensão e estabilidade do quadril." },
+  tibialis: { name: "Tibial anterior", zone: "legs", role: "Controle do tornozelo e do pé durante deslocamentos." },
+  "calves-front": { name: "Sóleo / complexo da panturrilha", zone: "calves", role: "Suporte ao tornozelo e flexão plantar." },
+  gastrocnemius: { name: "Gastrocnêmio", zone: "calves", role: "Grande parte visível da panturrilha e impulso do pé." }
+};
+
+const musclesByZone = {
+  chest: ["pectorals", "front-delts", "serratus"],
+  back: ["lats", "traps", "rear-delts", "erectors"],
+  arms: ["biceps", "triceps", "forearms-front", "forearms-back", "front-delts", "rear-delts"],
+  core: ["upper-abs", "mid-abs", "lower-abs", "obliques", "erectors"],
+  legs: ["quads", "adductors", "hamstrings", "glutes", "tibialis"],
+  calves: ["calves-front", "gastrocnemius"]
+};
+
+const exerciseMuscleMap = {
+  pushup: { primary: ["pectorals", "triceps", "front-delts"], secondary: ["serratus"], stabilizer: ["upper-abs", "mid-abs", "lower-abs", "obliques"] },
+  pullup: { primary: ["lats", "biceps", "forearms-front", "forearms-back"], secondary: ["traps", "rear-delts"], stabilizer: ["upper-abs", "mid-abs", "obliques", "erectors"] },
+  squat: { primary: ["quads", "glutes"], secondary: ["adductors", "hamstrings"], stabilizer: ["upper-abs", "mid-abs", "obliques", "erectors", "gastrocnemius"] },
+  plank: { primary: ["upper-abs", "mid-abs", "lower-abs", "obliques"], secondary: ["front-delts", "serratus"], stabilizer: ["erectors", "glutes"] },
+  abs: { primary: ["upper-abs", "mid-abs", "lower-abs"], secondary: ["obliques"], stabilizer: ["quads"] },
+  calfRaise: { primary: ["gastrocnemius", "calves-front"], secondary: ["tibialis"], stabilizer: ["quads", "glutes"] },
+  deadHang: { primary: ["forearms-front", "forearms-back"], secondary: ["lats", "traps", "biceps"], stabilizer: ["upper-abs", "mid-abs", "obliques"] },
+  cardio: { primary: ["quads", "gastrocnemius", "calves-front"], secondary: ["glutes", "hamstrings", "tibialis"], stabilizer: ["upper-abs", "mid-abs", "obliques"] }
+};
+
+let selectedExerciseHeatmap = null;
+let selectedMuscleId = null;
+const manifestationQueue = [];
+let manifestationBusy = false;
+let audioContext = null;
+
+function currentRankTier() {
+  const raw = getRank();
+  return ["E", "D", "C", "B", "A", "S"].find((letter) => raw.startsWith(letter)) || "E";
+}
+
+function recordTimelineEvent(type, title, detail) {
+  if (!player) return;
+  if (!Array.isArray(player.timeline)) player.timeline = [];
+  player.timeline.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2,7)}`, timestamp: new Date().toISOString(), type, title, detail });
+  player.timeline = player.timeline.slice(-150);
+}
+
+function animationMode() {
+  const mode = player?.preferences?.animationMode;
+  return ["full", "fast", "reduced"].includes(mode) ? mode : "full";
+}
+
+function manifestationDuration(rarity = "RARE", kind = "level") {
+  if (kind === "rank") {
+    if (animationMode() === "reduced") return 1200;
+    if (animationMode() === "fast") return 3300;
+    return 6200;
+  }
+  if (kind === "record") {
+    if (animationMode() === "reduced") return 900;
+    if (animationMode() === "fast") return 1700;
+    return 2900;
+  }
+  const base = { RARE: 3000, EPIC: 3800, LEGENDARY: 4700, MYTHIC: 5700 }[rarity] || 3000;
+  if (animationMode() === "reduced") return 950;
+  if (animationMode() === "fast") return Math.round(base * 0.62);
+  return base;
+}
+
+function queueManifestation(job) {
+  manifestationQueue.push(job);
+  runManifestationQueue();
+}
+
+async function runManifestationQueue() {
+  if (manifestationBusy || !manifestationQueue.length) return;
+  manifestationBusy = true;
+  while (manifestationQueue.length) {
+    const job = manifestationQueue.shift();
+    try { await job(); } catch (error) { console.warn("Manifestation event:", error); }
+    await new Promise((resolve) => setTimeout(resolve, animationMode() === "full" ? 260 : 90));
+  }
+  manifestationBusy = false;
+}
+
+function vibratePattern(pattern) {
+  if (!player?.preferences?.haptics || !navigator.vibrate) return;
+  try { navigator.vibrate(pattern); } catch (_) {}
+}
+
+function synthCue(kind) {
+  if (!player?.preferences?.sound) return;
+  try {
+    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioContext.currentTime;
+    const cues = {
+      level: [[220,0,.08],[330,.11,.08],[440,.22,.16]],
+      rank: [[110,0,.2],[220,.22,.18],[440,.46,.22],[660,.72,.35]],
+      slash: [[175,0,.06],[95,.09,.08],[260,.17,.12]],
+      thunder: [[90,0,.08],[640,.06,.12],[880,.18,.16]],
+      record: [[392,0,.1],[523,.12,.12],[659,.26,.18]]
+    };
+    (cues[kind] || cues.level).forEach(([frequency, offset, duration]) => {
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = kind === "rank" ? "sawtooth" : "sine";
+      osc.frequency.setValueAtTime(frequency, now + offset);
+      gain.gain.setValueAtTime(.0001, now + offset);
+      gain.gain.exponentialRampToValueAtTime(.055, now + offset + .02);
+      gain.gain.exponentialRampToValueAtTime(.0001, now + offset + duration);
+      osc.connect(gain); gain.connect(audioContext.destination);
+      osc.start(now + offset); osc.stop(now + offset + duration + .03);
+    });
+  } catch (_) {}
+}
+
+function levelTextMarkup(oldLevel, newLevel, label = "SYSTEM LEVEL UP") {
+  return `<div class="manifest-level-copy"><small>${label}</small><div class="manifest-number-row"><span class="old-level">LV. ${oldLevel}</span><b>→</b><strong>LV. ${newLevel}</strong></div></div>`;
+}
+
+function shadowWisps(count = 12) {
+  return Array.from({ length: count }, (_, i) => `<i class="shadow-wisp" style="--i:${i};--x:${(i * 41) % 100}%"></i>`).join("");
+}
+
+function sparkField(count = 16) {
+  return Array.from({ length: count }, (_, i) => `<i class="manifest-spark" style="--i:${i};--x:${(i * 31) % 100}%;--y:${(i * 47) % 100}%"></i>`).join("");
+}
+
+function cinematicMarkup(effectId, oldLevel, newLevel) {
+  const basic = levelTextMarkup(oldLevel, newLevel);
+  switch (effectId) {
+    case "effectWaterPulse":
+      return `<div class="water-ribbon ribbon-a"></div><div class="water-ribbon ribbon-b"></div><div class="water-ribbon ribbon-c"></div>${basic}`;
+    case "effectScoutRush":
+      return `<i class="scout-cable cable-a"></i><i class="scout-cable cable-b"></i><i class="scout-cable cable-c"></i><div class="steam-bank left"></div><div class="steam-bank right"></div>${basic}`;
+    case "effectCursedSpark":
+      return `<div class="cursed-core"></div><i class="curse-crack c1"></i><i class="curse-crack c2"></i><i class="curse-crack c3"></i>${basic}`;
+    case "effectShadowRise":
+      return `${shadowWisps(14)}<div class="shadow-gate-ring"></div>${basic}`;
+    case "effectDarkImpact":
+      return `<div class="black-flash-core"></div><i class="black-flash-line l1"></i><i class="black-flash-line l2"></i><i class="black-flash-line l3"></i>${basic}`;
+    case "effectGroundTremor":
+      return `<div class="impact-floor"></div><div class="steam-bank left"></div><div class="steam-bank right"></div><i class="shock-ring r1"></i><i class="shock-ring r2"></i>${basic}`;
+    case "effectChainBurst":
+      return `<div class="saw-orbit saw-a"><i></i></div><div class="saw-orbit saw-b"><i></i></div>${sparkField(12)}${basic}`;
+    case "effectDevilEngine":
+      return `<div class="saw-orbit saw-a"><i></i></div><div class="saw-orbit saw-b"><i></i></div><div class="saw-orbit saw-c"><i></i></div><div class="saw-orbit saw-d"><i></i></div>${sparkField(26)}<div class="engine-cut"></div>${basic}`;
+    case "effectKingCleave":
+      return `<div class="cleave-old"><span class="slice s1">${oldLevel}</span><span class="slice s2">${oldLevel}</span><span class="slice s3">${oldLevel}</span></div>${Array.from({length:7},(_,i)=>`<i class="king-slash ks${i+1}"></i>`).join("")}<div class="king-new"><small>THE KING HAS SPOKEN</small><strong>LV. ${newLevel}</strong></div>`;
+    case "effectCrimsonDawn":
+      return `<div class="water-ribbon tanjiro-water"></div><div class="flame-ribbon tanjiro-flame"></div>${sparkField(20)}<div class="late-reveal">${basic}</div>`;
+    case "effectMoonlitFlow":
+      return `${Array.from({length:8},(_,i)=>`<i class="moon-blade mb${i+1}"></i>`).join("")}<div class="moon-disc"></div>${basic}`;
+    case "effectTitanSteam":
+      return `<div class="titan-heat"></div><div class="steam-wall"></div><div class="steam-bank left"></div><div class="steam-bank right"></div><i class="shock-ring r1"></i>${basic}`;
+    case "effectThunderStep":
+      return `${Array.from({length:6},(_,i)=>`<i class="lightning-bolt lb${i+1}"></i>`).join("")}<div class="thunder-center"></div>${basic}`;
+    case "effectFlameHeart":
+      return `<div class="flame-arc fa1"></div><div class="flame-arc fa2"></div><div class="flame-arc fa3"></div>${sparkField(24)}${basic}`;
+    case "effectInfiniteHorizon": {
+      const left = Math.floor(newLevel / 2), right = newLevel - left;
+      return `<div class="infinity-orb blue"><small>BLUE</small><strong>${left}</strong></div><div class="infinity-orb red"><small>RED</small><strong>${right}</strong></div><div class="purple-collapse"></div><div class="infinity-result"><small>CONVERGENCE</small><strong>${newLevel}</strong></div>`;
+    }
+    case "effectMonarchAscension":
+      return `${shadowWisps(24)}<div class="monarch-flames"></div><div class="arise-word">ARISE</div><div class="monarch-result"><small>SHADOW ASCENSION</small><strong>LV. ${newLevel}</strong></div>`;
+    case "effectAbsoluteDomain":
+      return `<div class="domain-ring d1"></div><div class="domain-ring d2"></div>${Array.from({length:10},(_,i)=>`<i class="king-slash domain-slash ds${i+1}"></i>`).join("")}<div class="domain-old">${oldLevel}</div><div class="domain-new"><small>ABSOLUTE DOMAIN</small><strong>LV. ${newLevel}</strong></div>`;
+    default:
+      return `<div class="system-ring sr1"></div><div class="system-ring sr2"></div>${basic}`;
+  }
+}
+
+function runCinematic(effectId, payload = {}) {
+  return new Promise((resolve) => {
+    const layer = $("levelEffectLayer");
+    const effect = shopItems[effectId] || null;
+    const rarity = effect?.rarity || "RARE";
+    const duration = manifestationDuration(rarity, payload.kind || "level");
+    const oldLevel = Number(payload.oldLevel ?? Math.max(1, player.level - 1));
+    const newLevel = Number(payload.newLevel ?? player.level);
+    const effectClass = animationMode() === "reduced" ? "effect-system-pulse" : (effect?.effectClass || "effect-system-pulse");
+    layer.className = "level-effect-layer manifestation-cinematic";
+    layer.innerHTML = `<div class="manifest-vignette"></div>${cinematicMarkup(effectId, oldLevel, newLevel)}`;
+    layer.style.setProperty("--manifest-duration", `${duration}ms`);
+    void layer.offsetWidth;
+    layer.classList.add(effectClass, `animation-${animationMode()}`, `rarity-${rarity.toLowerCase()}`);
+    vibratePattern(rarity === "MYTHIC" ? [30,35,55,45,90] : rarity === "LEGENDARY" ? [25,30,55] : [20,25,35]);
+    synthCue(effectId === "effectThunderStep" ? "thunder" : effectId === "effectKingCleave" || effectId === "effectAbsoluteDomain" ? "slash" : "level");
+    setTimeout(() => {
+      layer.className = "level-effect-layer";
+      layer.innerHTML = "";
+      layer.removeAttribute("style");
+      resolve();
+    }, duration);
+  });
+}
+
+function playLevelEffect(effectId = player.shop.equippedEffect, meta = {}) {
+  const resolved = effectId && effectId !== "default" ? effectId : "default";
+  queueManifestation(() => runCinematic(resolved, { kind: "level", oldLevel: meta.oldLevel, newLevel: meta.newLevel }));
+}
+
+function playRankAscension(rank, meta = {}) {
+  queueManifestation(() => new Promise((resolve) => {
+    const layer = $("levelEffectLayer");
+    const duration = manifestationDuration("MYTHIC", "rank");
+    const oldRank = meta.oldRank || "—";
+    layer.className = "level-effect-layer manifestation-cinematic effect-rank-manifestation";
+    layer.style.setProperty("--manifest-duration", `${duration}ms`);
+    layer.innerHTML = `<div class="rank-darken"></div><div class="rank-sigil"></div><div class="rank-columns"></div><div class="rank-old">${oldRank}</div><div class="rank-shatter"></div><div class="rank-new"><small>SYSTEM RANK ASCENSION</small><strong>${rank}</strong><span>LIMIT RECALIBRATED</span></div>${shadowWisps(18)}`;
+    void layer.offsetWidth;
+    layer.classList.add(`animation-${animationMode()}`);
+    vibratePattern([45,35,70,45,120]); synthCue("rank");
+    setTimeout(() => { layer.className = "level-effect-layer"; layer.innerHTML = ""; layer.removeAttribute("style"); resolve(); }, duration);
+  }));
+}
+
+function playRecordEffect(exerciseKey, value) {
+  const exercise = exercises[exerciseKey];
+  recordTimelineEvent("record", "NEW RECORD", `${exercise.short}: ${value}${exercise.unit === "seconds" ? "s" : " reps"}`);
+  saveGame();
+  queueManifestation(() => new Promise((resolve) => {
+    const layer = $("levelEffectLayer");
+    const duration = manifestationDuration("EPIC", "record");
+    layer.className = "level-effect-layer manifestation-cinematic effect-record-manifestation";
+    layer.style.setProperty("--manifest-duration", `${duration}ms`);
+    layer.innerHTML = `<div class="record-laser"></div><div class="record-trophy">◆</div><div class="record-manifest-copy"><small>PERSONAL RECORD</small><strong>NEW RECORD</strong><span>${exercise.short} • ${value}${exercise.unit === "seconds" ? "s" : " reps"}</span></div>`;
+    void layer.offsetWidth;
+    layer.classList.add(`animation-${animationMode()}`);
+    vibratePattern([20,25,45]); synthCue("record");
+    setTimeout(() => { layer.className = "level-effect-layer"; layer.innerHTML = ""; layer.removeAttribute("style"); resolve(); }, duration);
+  }));
+}
+
+function addXP(amount) {
+  const oldLevel = player.level;
+  const oldRank = getRankForLevel(oldLevel);
+  player.xp += Math.max(0, Math.round(amount));
+  let levels = 0;
+  while (player.xp >= xpRequired()) {
+    player.xp -= xpRequired();
+    player.level += 1;
+    levels += 1;
+  }
+  if (levels > 0) {
+    const newRank = getRankForLevel(player.level);
+    playLevelEffect(player.shop.equippedEffect, { oldLevel, newLevel: player.level });
+    recordTimelineEvent("level", "LEVEL UP", `Lv. ${oldLevel} → ${player.level}`);
+    showNotification(`LEVEL UP. Você alcançou o nível ${player.level}.`);
+    if (newRank !== oldRank) {
+      recordTimelineEvent("rank", "RANK ASCENSION", `${oldRank} → ${newRank}`);
+      playRankAscension(newRank, { oldRank, newRank });
+    }
+  }
+  return levels;
+}
+
+function selectBodyZone(key, scroll = false) {
+  if (!bodyInfo[key] || key === "breath") return;
+  selectedExerciseHeatmap = null;
+  selectedMuscleId = null;
+  selectedBodyZone = key;
+  renderBodyMap();
+  if (scroll && $("bodyMapDetail")) $("bodyMapDetail").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function selectMuscle(muscleId) {
+  const muscle = muscleCatalog[muscleId];
+  if (!muscle) return;
+  selectedExerciseHeatmap = null;
+  selectedMuscleId = muscleId;
+  selectedBodyZone = muscle.zone;
+  renderBodyMap();
+}
+
+function setExerciseHeatmap(key) {
+  if (!exerciseMuscleMap[key]) return;
+  selectedExerciseHeatmap = key;
+  selectedMuscleId = null;
+  renderBodyMap();
+}
+
+function clearExerciseHeatmap() {
+  selectedExerciseHeatmap = null;
+  selectedMuscleId = null;
+  renderBodyMap();
+}
+
+function muscleRoleMarkup(zone) {
+  return (musclesByZone[zone] || []).map((id, index) => {
+    const muscle = muscleCatalog[id];
+    const label = index === 0 ? "PRINCIPAL" : index < 3 ? "SECUNDÁRIO" : "ESTABILIZAÇÃO";
+    const roleClass = index === 0 ? "principal" : index < 3 ? "secundario" : "estabilizacao";
+    return `<button class="muscle-detail-line" data-muscle-detail="${id}" type="button"><span class="muscle-rank-dot ${roleClass}"></span><div><strong>${muscle.name}</strong><small>${muscle.role}</small></div></button>`;
+  }).join("");
+}
+
+function renderBodyMap() {
+  const svg = $("bodyMapSvg");
+  if (!svg) return;
+  const tier = currentRankTier();
+  svg.className.baseVal = `body-map-svg body-map-v3 rank-tier-${tier}`;
+  if ($("avatarRankBadge")) $("avatarRankBadge").textContent = `AVATAR • ${tier} RANK`;
+
+  document.querySelectorAll("[data-muscle]").forEach((shape) => {
+    shape.classList.remove("active", "stimulus-primary", "stimulus-secondary", "stimulus-stabilizer", "muted");
+    const id = shape.dataset.muscle;
+    if (selectedExerciseHeatmap) {
+      const map = exerciseMuscleMap[selectedExerciseHeatmap];
+      if (map.primary.includes(id)) shape.classList.add("stimulus-primary");
+      else if (map.secondary.includes(id)) shape.classList.add("stimulus-secondary");
+      else if (map.stabilizer.includes(id)) shape.classList.add("stimulus-stabilizer");
+      else shape.classList.add("muted");
+    } else {
+      if ((musclesByZone[selectedBodyZone] || []).includes(id)) shape.classList.add("active");
+      else shape.classList.add("muted");
+      if (selectedMuscleId === id) shape.classList.add("muscle-selected");
+    }
+  });
+
+  document.querySelectorAll("[data-body-status]").forEach((card) => card.classList.toggle("selected", card.dataset.bodyStatus === selectedBodyZone && !selectedExerciseHeatmap));
+  document.querySelectorAll("[data-body-region]").forEach((button) => button.classList.toggle("selected", button.dataset.bodyRegion === selectedBodyZone && !selectedExerciseHeatmap));
+  document.querySelectorAll("[data-heatmap-exercise]").forEach((button) => button.classList.toggle("selected", button.dataset.heatmapExercise === selectedExerciseHeatmap));
+
+  if ($("bodyMapDetail")) {
+    if (selectedExerciseHeatmap) {
+      const exercise = exercises[selectedExerciseHeatmap];
+      const map = exerciseMuscleMap[selectedExerciseHeatmap];
+      const row = (ids, role) => ids.map((id) => `<div class="stimulus-row"><span class="stimulus-dot ${role}"></span><div><strong>${muscleCatalog[id]?.name || id}</strong><small>${role === "primary" ? "Estímulo principal" : role === "secondary" ? "Estímulo secundário" : "Estabilização"}</small></div></div>`).join("");
+      $("bodyMapDetail").innerHTML = `<div class="sync-code">EXERCISE STIMULUS</div><h3>${exercise.name}</h3><div class="map-level">${currentVariation(selectedExerciseHeatmap).name}</div><p>Mapa aproximado dos músculos mais exigidos por este movimento. Intensidade visual representa função no exercício, não crescimento garantido.</p><div class="stimulus-detail-list">${row(map.primary,"primary")}${row(map.secondary,"secondary")}${row(map.stabilizer,"stabilizer")}</div>`;
+    } else {
+      const info = bodyInfo[selectedBodyZone];
+      const selected = selectedMuscleId ? muscleCatalog[selectedMuscleId] : null;
+      $("bodyMapDetail").innerHTML = `<div class="sync-code">${info.code}</div><h3>${selected ? selected.name : info.name}</h3><div class="map-level">${info.name} • Lv. ${bodyLevel(selectedBodyZone)}</div><div class="progress-track"><div class="progress-fill" style="width:${bodyProgress(selectedBodyZone)}%"></div></div><div class="map-xp">${bodyProgress(selectedBodyZone)}/100 para o próximo nível</div><p>${selected ? selected.role : info.description}</p><div class="muscle-detail-list">${muscleRoleMarkup(selectedBodyZone)}</div><p><strong>Como evolui:</strong> ${info.focus}</p>`;
+    }
+  }
+}
+
+function bindBodyMapEvents() {
+  document.querySelectorAll("[data-muscle]").forEach((shape) => {
+    shape.onclick = () => selectMuscle(shape.dataset.muscle);
+    shape.style.cursor = "pointer";
+  });
+  document.querySelectorAll("[data-body-status]").forEach((card) => card.onclick = () => selectBodyZone(card.dataset.bodyStatus, true));
+  document.querySelectorAll("[data-body-region]").forEach((button) => button.onclick = () => selectBodyZone(button.dataset.bodyRegion));
+  document.querySelectorAll("[data-muscle-detail]").forEach((button) => button.onclick = () => selectMuscle(button.dataset.muscleDetail));
+  document.querySelectorAll("[data-heatmap-exercise]").forEach((button) => button.onclick = () => setExerciseHeatmap(button.dataset.heatmapExercise));
+  if ($("clearExerciseHeatmap")) $("clearExerciseHeatmap").onclick = clearExerciseHeatmap;
+}
+
+function renderStatus() {
+  const muscleZones = Object.entries(bodyInfo).filter(([key]) => key !== "breath");
+  if ($("bodyRegionButtons")) $("bodyRegionButtons").innerHTML = muscleZones.map(([key, info]) => `<button class="body-region-chip" data-body-region="${key}" type="button">${info.name}</button>`).join("");
+  if ($("exerciseHeatmapButtons")) $("exerciseHeatmapButtons").innerHTML = Object.entries(exercises).map(([key, exercise]) => `<button class="heatmap-chip" data-heatmap-exercise="${key}" type="button">${exercise.short}</button>`).join("");
+  $("bodyStatusList").innerHTML = muscleZones.map(([key, info]) => `<div class="attribute-detail ${selectedBodyZone === key && !selectedExerciseHeatmap ? "selected" : ""}" data-body-status="${key}" role="button" tabindex="0"><div class="attribute-detail-head"><strong>${info.name}</strong><strong>Lv. ${bodyLevel(key)}</strong></div><div class="progress-track"><div class="progress-fill" style="width:${bodyProgress(key)}%"></div></div><p>${bodyProgress(key)}/100 • ${info.focus}</p></div>`).join("");
+
+  if ($("breathLevelText")) $("breathLevelText").textContent = `Lv. ${bodyLevel("breath")}`;
+  if ($("breathProgressBar")) $("breathProgressBar").style.width = `${bodyProgress("breath")}%`;
+  if ($("breathProgressText")) $("breathProgressText").textContent = `${bodyProgress("breath")}/100 para o próximo nível.`;
+  if ($("breathTotalTime")) $("breathTotalTime").textContent = `${Math.floor(player.stats.totalCardioSeconds / 60)} min`;
+  if ($("breathBestSet")) $("breathBestSet").textContent = `${bestSetForExercise("cardio") || 0}s`;
+
+  $("masteryList").innerHTML = Object.values(masteryGroups).map((group) => {
+    const level = masteryLevel(group); const names = group.exercises.map((key) => exercises[key].short).join(" + ");
+    return `<div class="mastery-row"><div class="mastery-head"><span class="mastery-name">${group.name}</span><span class="mastery-level">Lv. ${level}</span></div><div class="mastery-meta">${group.label} • ${names}</div></div>`;
+  }).join("");
+  $("skillsList").innerHTML = Object.entries(exercises).map(([key, exercise]) => {
+    const required = skillXPRequired(player.skills[key]); const progress = player.skillXP[key]; const best = bestSetForExercise(key);
+    return `<div class="skill-row"><div class="skill-head"><strong>${exercise.name}</strong><strong>Lv. ${player.skills[key]}</strong></div><div class="skill-meta">${currentVariation(key).name} • Meta ${targetText(key)} • Melhor série ${best || "—"}${exercise.unit === "seconds" && best ? "s" : ""}</div><div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,(progress/required)*100)}%"></div></div><div class="skill-footer"><p>${progress}/${required} XP de proficiência</p><button class="equip-button" data-exercise-detail="${key}" type="button">VER FICHA</button></div></div>`;
+  }).join("");
+  renderBodyMap(); bindBodyMapEvents(); bindExerciseDetailButtons();
+}
+
+function renderBodyPreview() {
+  if (!$("bodyPreview")) return;
+  const muscleZones = Object.entries(bodyInfo).filter(([key]) => key !== "breath");
+  $("bodyPreview").innerHTML = `${muscleZones.map(([key, info]) => `<div class="body-mini"><span>${info.name}</span><div class="progress-track"><div class="progress-fill" style="width:${bodyProgress(key)}%"></div></div><strong>${bodyLevel(key)}</strong></div>`).join("")}<div class="body-mini breath-mini"><span>🫁 Fôlego</span><div class="progress-track"><div class="progress-fill" style="width:${bodyProgress("breath")}%"></div></div><strong>${bodyLevel("breath")}</strong></div>`;
+}
+
+function previewShopItem(id) {
+  const item = shopItems[id];
+  if (!item) return;
+  if (item.type === "effect") { playLevelEffect(id, { oldLevel: Math.max(1, player.level - 1), newLevel: player.level }); return; }
+  if (item.type === "title") { showNotification(`PREVIEW: ${item.name}`); return; }
+  if (item.type === "theme") {
+    const classes = Object.values(shopItems).filter((entry) => entry.type === "theme").map((entry) => entry.className).filter(Boolean);
+    document.body.classList.remove(...classes); document.body.classList.add(item.className);
+  }
+  if (item.type === "aura") {
+    const classes = Object.values(shopItems).filter((entry) => entry.type === "aura").map((entry) => entry.className).filter(Boolean);
+    document.body.classList.remove(...classes); document.body.classList.add(item.className);
+  }
+  if (item.type === "frame") {
+    const classes = Object.values(shopItems).filter((entry) => entry.type === "frame").map((entry) => entry.className).filter(Boolean);
+    $("playerCard").classList.remove(...classes); $("playerCard").classList.add(item.className);
+  }
+  showNotification(`PREVIEW: ${item.name}`); setTimeout(applyEquippedTheme, 2600);
+}
+
+function openFxGallery() {
+  const effects = Object.entries(shopItems).filter(([, item]) => item.type === "effect");
+  openModal("GALERIA CINEMÁTICA", `<p>Os efeitos abaixo usam a mesma animação que aparece num Level Up real. Rare e Epic mantêm referências claras; Legendary e Mythic recebem sequências maiores.</p><div class="fx-gallery-grid">${effects.map(([id,item])=>`<button class="fx-gallery-card rarity-${item.rarity.toLowerCase()}" data-gallery-preview="${id}" type="button"><span>${item.rarity}</span><strong>${item.name}</strong><small>${item.description}</small></button>`).join("")}</div>`);
+  setTimeout(() => document.querySelectorAll("[data-gallery-preview]").forEach((button) => button.onclick = () => playLevelEffect(button.dataset.galleryPreview, { oldLevel: Math.max(1,player.level-1), newLevel: player.level })), 0);
+}
+
+function renderManifestationSettings() {
+  const prefs = player.preferences ||= { animationMode: "full", haptics: true, sound: false };
+  document.querySelectorAll("[data-animation-mode]").forEach((button) => button.classList.toggle("selected", button.dataset.animationMode === prefs.animationMode));
+  if ($("hapticsToggleButton")) $("hapticsToggleButton").textContent = prefs.haptics ? "ATIVADO" : "DESATIVADO";
+  if ($("soundToggleButton")) $("soundToggleButton").textContent = prefs.sound ? "ATIVADO" : "DESATIVADO";
+}
+
+function renderEvolutionTimeline() {
+  if (!$("evolutionTimeline")) return;
+  const events = Array.isArray(player.timeline) ? [...player.timeline].reverse().slice(0, 20) : [];
+  if (!events.length) {
+    $("evolutionTimeline").innerHTML = `<div class="empty-state">A partir da Manifestation Update, Rank Ups, Level Ups, recordes e conquistas importantes aparecerão aqui.</div>`;
+    return;
+  }
+  $("evolutionTimeline").innerHTML = events.map((event) => {
+    const date = new Date(event.timestamp); const when = Number.isNaN(date.getTime()) ? "" : new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).format(date);
+    return `<div class="timeline-event type-${event.type}"><i></i><div><span>${when}</span><strong>${event.title}</strong><p>${event.detail || ""}</p></div></div>`;
+  }).join("");
+}
+
+function renderHistory() {
+  const list = $("historyList"); const cardioMinutes = Math.floor(player.stats.totalCardioSeconds / 60);
+  $("historyHighlights").innerHTML = `<div class="history-highlight"><span>EXERCÍCIOS</span><strong>${player.stats.totalExercises}</strong></div><div class="history-highlight"><span>DAILIES</span><strong>${player.stats.totalDailyCompletions}</strong></div><div class="history-highlight"><span>BEST STREAK</span><strong>🔥 ${player.streak.best}</strong></div><div class="history-highlight"><span>CARDIO TOTAL</span><strong>${cardioMinutes} min</strong></div>`;
+  renderEvolutionTimeline();
+  if (!player.history.length) { list.innerHTML = `<div class="empty-state">Nenhum treino registrado ainda. Seu primeiro resultado aparecerá aqui.</div>`; return; }
+  list.innerHTML = [...player.history].reverse().map((entry) => {
+    const date = new Date(entry.timestamp); const formatted = Number.isNaN(date.getTime()) ? "Data desconhecida" : new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}).format(date);
+    const bodyGains = entry.bodyGains || legacyHistoryBodyGains(entry); const gains = Object.entries(bodyGains).filter(([key,value])=>value>0&&Boolean(bodyInfo[key])).map(([key,value])=>`+${value} ${bodyInfo[key].name}`).join(" • ");
+    return `<div class="history-item"><div class="history-head"><strong>${entry.exercise || exercises[entry.exerciseKey]?.name || "Exercício"}</strong><span>${formatted}</span></div><p>${entry.variation ? `${entry.variation} • ` : ""}${Math.round((entry.performance||0)*100)}% do objetivo • +${entry.xp||0} XP • +${entry.essence||0} Essence</p><div class="history-gains">${gains || "Registro anterior preservado"}</div></div>`;
+  }).join("");
+}
+
+function bindManifestationEvents() {
+  if ($("openFxGalleryButton")) $("openFxGalleryButton").addEventListener("click", openFxGallery);
+  document.querySelectorAll("[data-animation-mode]").forEach((button) => button.addEventListener("click", () => { player.preferences.animationMode = button.dataset.animationMode; saveGame(); renderManifestationSettings(); showNotification(`ANIMAÇÕES: ${button.textContent}.`); }));
+  if ($("hapticsToggleButton")) $("hapticsToggleButton").addEventListener("click", () => { player.preferences.haptics = !player.preferences.haptics; saveGame(); renderManifestationSettings(); if (player.preferences.haptics) vibratePattern([25,30,45]); });
+  if ($("soundToggleButton")) $("soundToggleButton").addEventListener("click", () => { player.preferences.sound = !player.preferences.sound; saveGame(); renderManifestationSettings(); if (player.preferences.sound) synthCue("level"); });
+}
+
 player = loadGame();
 processStreakGap();
 resetDailyIfNeeded();
 bindEvents();
+bindManifestationEvents();
 updateUI();
+renderManifestationSettings();
 saveGame();
 startTimers();
 

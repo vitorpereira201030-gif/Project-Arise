@@ -1,34 +1,36 @@
-PROJECT ARISE — ALPHA 1.6 • REFORGED UPDATE
-GUIA DE ATUALIZAÇÃO NO GITHUB PAGES
+PROJECT ARISE 2.0 — AWAKENING SYSTEM
 
-ANTES DE ATUALIZAR
-1. Abra o Project Arise atual no celular.
+PROJECT ARISE ALPHA 1.7 — COMO ATUALIZAR NO GITHUB PAGES
+
+ANTES DE TUDO
+1. Abra sua versão atual do Project Arise.
 2. Vá em SISTEMA > EXPORTAR SAVE.
-3. Confirme que o arquivo JSON foi salvo em Downloads/Arquivos.
-4. Não limpe dados do navegador e não desinstale a PWA antes de confirmar a migração.
+3. Confirme que o arquivo .json foi salvo em Downloads.
+4. Guarde uma cópia. Não limpe cache/dados do site antes da atualização.
 
-ATUALIZANDO O REPOSITÓRIO
-1. No PC, extraia Project-Arise-Alpha-1.6-Reforged-Update.zip.
-2. Entre na pasta Project-Arise-Alpha-1.6-Reforged.
-3. Abra o mesmo repositório GitHub que já hospeda seu Project Arise.
-4. Use Add file > Upload files.
-5. Envie/substitua na RAIZ do repositório:
-   - index.html
-   - style.css
-   - app.js
-   - manifest.json
-   - service-worker.js
-   - pasta icons
-6. Faça o commit, por exemplo: Project Arise Alpha 1.6 - Reforged Update.
-7. Não crie uma pasta extra se seu index.html atual já fica na raiz.
-8. O GitHub Pages deve republicar automaticamente se já estiver configurado em main /(root).
-9. Aguarde alguns minutos e abra seu endereço normal.
-10. Confirme no cabeçalho: Alpha 1.6 • Reforged Update.
+ATUALIZAÇÃO
+1. Extraia o ZIP da Alpha 1.7 no PC.
+2. Abra o MESMO repositório do GitHub que já publica seu Project Arise.
+3. Na raiz do repositório use Add file > Upload files.
+4. Substitua:
+   index.html
+   style.css
+   app.js
+   manifest.json
+   service-worker.js
+   icons/
+5. Faça o commit. Sugestão: Project Arise Alpha 1.7 - Cinematic Identity Update
+6. Não altere Settings > Pages se já estiver funcionando em main /(root).
+7. Aguarde a publicação.
+8. Abra o endereço do GitHub Pages pelo navegador e atualize.
+9. Feche completamente a PWA instalada e abra novamente.
+10. O topo deve mostrar Alpha 1.7 • Cinematic Identity Update.
 
-NO CELULAR
-1. Abra primeiro o link do GitHub Pages no navegador e atualize a página.
-2. Feche completamente a PWA instalada e abra novamente.
-3. Não use Limpar dados do site como primeira tentativa: isso pode apagar o save local.
-4. A Alpha 1.6 procura projectAriseAlpha15 e saves anteriores, migra e cria projectAriseAlpha16.
-5. Confira Level, XP, Essence, Streak, histórico e cosméticos.
-6. Se algo estiver zerado, use SISTEMA > IMPORTAR SAVE e selecione o JSON exportado antes da atualização.
+SAVE
+- A Alpha 1.7 procura projectAriseAlpha16 e versões anteriores e migra automaticamente.
+- Se aparecer Level 1 ou algo faltar: NÃO resete.
+- Vá em SISTEMA > IMPORTAR SAVE e selecione o JSON exportado antes da atualização.
+
+CACHE
+- O service worker usa um cache novo para a 1.7.
+- Evite usar "Limpar dados do site" como primeira tentativa, pois isso pode apagar o save local.

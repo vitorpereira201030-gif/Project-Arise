@@ -1,4 +1,4 @@
-const CACHE_NAME = "project-arise-alpha15-v1";
+const CACHE_NAME = "project-arise-20-v1";
 const ASSETS = [
   "./",
   "./index.html",

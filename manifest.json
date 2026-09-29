@@ -1,7 +1,7 @@
 {
-  "name": "Project Arise — Alpha 1.6 Reforged",
+  "name": "Project Arise — 2.0 Awakening System",
   "short_name": "Project Arise",
-  "description": "Sistema gamificado de treino com Body Sync 3.0, progressão, recordes e cosméticos cinematográficos.",
+  "description": "Sistema gamificado de treino com Arise Core adaptativo, plano semanal coerente, timers inteligentes e streak protegido em dias de descanso.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

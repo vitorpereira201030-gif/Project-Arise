@@ -1,8 +1,8 @@
 "use strict";
 
-const SAVE_KEY = "projectAriseAlpha16";
-const LEGACY_SAVE_KEYS = ["projectAriseAlpha15", "projectAriseAlpha14", "projectAriseAlpha13", "projectAriseAlpha12", "projectAriseAlpha11", "projectAriseSave", "projectAscensionSave"];
-const VERSION = "1.6.0";
+const SAVE_KEY = "projectArise20";
+const LEGACY_SAVE_KEYS = ["projectAriseAlpha17", "projectAriseAlpha16", "projectAriseAlpha15", "projectAriseAlpha14", "projectAriseAlpha13", "projectAriseAlpha12", "projectAriseAlpha11", "projectAriseSave", "projectAscensionSave"];
+const VERSION = "2.0.0";
 const COOLDOWN_MS = 12 * 60 * 60 * 1000;
 const STREAK_WINDOW_MS = 36 * 60 * 60 * 1000;
 const GUARD_WINDOW_MS = 60 * 60 * 60 * 1000;
@@ -103,6 +103,40 @@ const exercises = {
       { name: "Scapular Hold", unlock: 8, baseTarget: 6 }
     ]
   },
+
+  pikePushup: {
+    name: "Pike Push-up", short: "Ombros", category: "PUSH",
+    description: "Empurre o chão em diagonal mantendo quadris elevados. Pense em levar a cabeça em direção ao chão entre as mãos.",
+    unit: "reps", sets: 3, minTarget: 2, maxTarget: 16, step: 1, xp: 22, essence: 4,
+    body: { chest: 5, arms: 9, core: 3 },
+    variations: [
+      { name: "Pike inclinada", unlock: 1, baseTarget: 4 },
+      { name: "Pike padrão", unlock: 4, baseTarget: 4 },
+      { name: "Pike com pausa", unlock: 8, baseTarget: 3 }
+    ]
+  },
+  gluteBridge: {
+    name: "Glute Bridge", short: "Glúteos", category: "LEGS",
+    description: "Empurre o chão com os pés e eleve o quadril, apertando glúteos no topo sem exagerar na lombar.",
+    unit: "reps", sets: 3, minTarget: 6, maxTarget: 25, step: 2, xp: 18, essence: 4,
+    body: { legs: 10, core: 4 },
+    variations: [
+      { name: "Bridge padrão", unlock: 1, baseTarget: 10 },
+      { name: "Bridge com pausa", unlock: 4, baseTarget: 8 },
+      { name: "Bridge unilateral assistida", unlock: 8, baseTarget: 6 }
+    ]
+  },
+  lunge: {
+    name: "Afundo", short: "Afundo", category: "LEGS",
+    description: "Dê um passo e desça com controle, mantendo estabilidade. Pode fazer parado se tiver pouco espaço.",
+    unit: "reps", sets: 3, minTarget: 4, maxTarget: 20, step: 2, xp: 20, essence: 4,
+    body: { legs: 11, calves: 2, core: 2 },
+    variations: [
+      { name: "Afundo reverso alternado", unlock: 1, baseTarget: 6 },
+      { name: "Split squat", unlock: 4, baseTarget: 6 },
+      { name: "Afundo pausado", unlock: 8, baseTarget: 5 }
+    ]
+  },
   cardio: {
     name: "Cardio intervalado", short: "Fôlego", category: "CONDITIONING",
     description: "Faça marcha acelerada no lugar ou step jacks sem salto. O objetivo é acelerar a respiração sem transformar cada rodada em um sprint máximo.",
@@ -119,14 +153,18 @@ const exercises = {
 };
 
 const routines = {
-  A: { name: "TREINO A", subtitle: "Empurrar • Pernas • Abdômen • Panturrilhas • Fôlego", exercises: ["pushup", "squat", "abs", "calfRaise", "cardio"] },
-  B: { name: "TREINO B", subtitle: "Puxar • Core • Pegada • Fôlego", exercises: ["pullup", "plank", "deadHang", "cardio"] }
+  UPPER_A: { name: "UPPER A", subtitle: "Costas • Peito • Ombros • Braços", focus: "Força superior", exercises: ["pullup", "pushup", "pikePushup", "deadHang"] },
+  LOWER_A: { name: "LOWER A", subtitle: "Quadríceps • Glúteos • Panturrilhas • Core", focus: "Base inferior", exercises: ["squat", "gluteBridge", "calfRaise", "abs"] },
+  RECOVERY: { name: "RECOVERY", subtitle: "Fôlego • Core • Recuperação ativa", focus: "Condicionamento", exercises: ["cardio", "plank", "abs"] },
+  UPPER_B: { name: "UPPER B", subtitle: "Puxar • Empurrar • Ombros • Estabilidade", focus: "Hipertrofia superior", exercises: ["pullup", "pushup", "pikePushup", "plank"] },
+  LOWER_B: { name: "LOWER B", subtitle: "Pernas • Posterior • Panturrilhas • Core", focus: "Estabilidade inferior", exercises: ["squat", "lunge", "gluteBridge", "calfRaise", "abs"] },
+  REST: { name: "REST DAY", subtitle: "Recuperação planejada • streak protegido", focus: "Recuperação", exercises: [], restDay: true }
 };
 
 const masteryGroups = {
-  push: { name: "PUSH", label: "Peito & empurrar", exercises: ["pushup"] },
+  push: { name: "PUSH", label: "Peito & empurrar", exercises: ["pushup", "pikePushup"] },
   pull: { name: "PULL", label: "Costas & pegada", exercises: ["pullup", "deadHang"] },
-  legs: { name: "LEGS", label: "Pernas & panturrilhas", exercises: ["squat", "calfRaise"] },
+  legs: { name: "LEGS", label: "Pernas & panturrilhas", exercises: ["squat", "lunge", "gluteBridge", "calfRaise"] },
   core: { name: "CORE", label: "Abdômen & estabilidade", exercises: ["plank", "abs"] },
   conditioning: { name: "CONDITIONING", label: "Fôlego", exercises: ["cardio"] }
 };
@@ -180,12 +218,12 @@ const shopItems = {
   effectDarkImpact: { name: "Dark Impact", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 260, effectClass: "effect-dark-impact", duration: 1800, description: "Impacto escuro com duplicação de texto e onda de choque." },
   effectGroundTremor: { name: "Ground Tremor", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 240, effectClass: "effect-ground-tremor", duration: 1800, description: "Pulso pesado, poeira digital e tremor da interface." },
   effectChainBurst: { name: "Chain Burst", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 260, effectClass: "effect-chain-burst", duration: 1800, description: "Linhas cortantes cruzam a tela em uma explosão vermelha." },
-  effectCrimsonDawn: { name: "Crimson Dawn", type: "effect", typeLabel: "LEVEL UP", rarity: "LEGENDARY", price: 650, effectClass: "effect-crimson-dawn", duration: 2400, description: "Arcos vermelho-alaranjados fluem como uma sequência de cortes antes do Level aparecer." },
-  effectMoonlitFlow: { name: "Moonlit Flow", type: "effect", typeLabel: "LEVEL UP", rarity: "LEGENDARY", price: 700, effectClass: "effect-moonlit-flow", duration: 2500, description: "Lua crescente, ondas azuis e rastros prateados atravessam a tela." },
-  effectThunderStep: { name: "Thunder Step", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 950, effectClass: "effect-thunder-step", duration: 2800, description: "A tela apaga por um instante; relâmpagos dourados se acumulam e o Level surge em um clarão." },
+  effectCrimsonDawn: { name: "Crimson Dawn", type: "effect", typeLabel: "LEVEL UP", rarity: "LEGENDARY", price: 650, effectClass: "effect-crimson-dawn", duration: 2400, description: "Uma correnteza azul com espuma atravessa a tela, transforma-se progressivamente em fogo e deixa o novo Level após as chamas." },
+  effectMoonlitFlow: { name: "Moonlit Flow", type: "effect", typeLabel: "LEVEL UP", rarity: "LEGENDARY", price: 700, effectClass: "effect-moonlit-flow", duration: 2500, description: "Crescentes lunares e lâminas azul-violeta atravessam o espaço em sucessão antes da revelação." },
+  effectThunderStep: { name: "Thunder Step", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 950, effectClass: "effect-thunder-step", duration: 2800, description: "A tela mergulha no escuro, uma trajetória dourada corta o quadro e relâmpagos convergem num clarão seco antes do novo Level." },
   effectFlameHeart: { name: "Flame Heart", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1100, effectClass: "effect-flame-heart", duration: 3000, description: "Chamas em camadas crescem do rodapé, fecham no centro e explodem quando o novo Level aparece." },
-  effectInfiniteHorizon: { name: "Infinite Horizon", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1050, effectClass: "effect-infinite-horizon", duration: 3000, description: "Partículas convergem para um vazio azul-branco e o Level rompe o horizonte." },
-  effectMonarchAscension: { name: "Monarch Ascension", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1200, effectClass: "effect-monarch-ascension", duration: 3200, description: "Sombras violetas se erguem de baixo e formam uma coroa abstrata antes da ascensão." },
+  effectInfiniteHorizon: { name: "Infinite Horizon", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1050, effectClass: "effect-infinite-horizon", duration: 3000, description: "Duas forças, azul e vermelha, carregam parcelas do novo Level, colidem no centro e geram um colapso roxo antes da revelação." },
+  effectMonarchAscension: { name: "Monarch Ascension", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1200, effectClass: "effect-monarch-ascension", duration: 3200, description: "Sombras humanas emergem sob chamas azul-negras, a ordem ARISE domina o quadro e a energia recua para revelar o novo Level." },
 
   auraShadowMist: { name: "Shadow Mist", type: "aura", typeLabel: "AURA", rarity: "EPIC", price: 350, className: "aura-shadow-mist", description: "Névoa violeta pulsando discretamente ao redor do perfil." },
   auraCrimsonBreath: { name: "Crimson Breath", type: "aura", typeLabel: "AURA", rarity: "LEGENDARY", price: 500, className: "aura-crimson-breath", description: "Faixas carmesim orbitam o perfil como uma respiração em movimento." },
@@ -205,10 +243,10 @@ const shopItems = {
   effectWaterPulse: { name: "Water Pulse", type: "effect", typeLabel: "LEVEL UP", rarity: "RARE", price: 260, effectClass: "effect-water-pulse", duration: 2600, description: "Uma corrente azul corta a interface em arcos fluidos antes de revelar o novo Level." },
   effectScoutRush: { name: "Scout Rush", type: "effect", typeLabel: "LEVEL UP", rarity: "RARE", price: 280, effectClass: "effect-scout-rush", duration: 2600, description: "Cabos verdes atravessam a tela, vapor explode nas laterais e o Level surge como uma investida além das muralhas." },
   effectCursedSpark: { name: "Cursed Spark", type: "effect", typeLabel: "LEVEL UP", rarity: "RARE", price: 300, effectClass: "effect-cursed-spark", duration: 2700, description: "Energia negra e vermelha comprime no centro e estoura em um impacto seco." },
-  effectDevilEngine: { name: "Devil Engine", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 520, effectClass: "effect-devil-engine", duration: 3600, description: "Correntes dentadas giram ao redor do layout, faíscas riscam a tela e o Level antigo é serrado antes do novo aparecer." },
-  effectKingCleave: { name: "King's Cleave", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 560, effectClass: "effect-king-cleave", duration: 3500, description: "Uma sequência de cortes cruza o número antigo, fatia suas camadas e abre espaço para o novo Level." },
+  effectDevilEngine: { name: "Devil Engine", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 520, effectClass: "effect-devil-engine", duration: 3600, description: "Motosserras longas atravessam a tela com corrente móvel, dentes, motor, faíscas e um corte que encobre o Level antigo antes da revelação." },
+  effectKingCleave: { name: "King's Cleave", type: "effect", typeLabel: "LEVEL UP", rarity: "EPIC", price: 560, effectClass: "effect-king-cleave", duration: 3500, description: "O próprio número antigo é dividido em faixas e despedaçado por uma sequência de cortes carmesim antes do novo Level surgir." },
   effectTitanSteam: { name: "Colossal Steam", type: "effect", typeLabel: "LEVEL UP", rarity: "LEGENDARY", price: 760, effectClass: "effect-titan-steam", duration: 4200, description: "Vapor branco domina a tela, o HUD treme e um clarão quente revela a ascensão por trás da névoa." },
-  effectAbsoluteDomain: { name: "Absolute Domain", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1450, effectClass: "effect-absolute-domain", duration: 5600, description: "O espaço escurece, linhas de domínio fecham ao redor do HUD e múltiplos cortes apagam o Level antigo antes de uma revelação real." },
+  effectAbsoluteDomain: { name: "Absolute Domain", type: "effect", typeLabel: "LEVEL UP", rarity: "MYTHIC", price: 1450, effectClass: "effect-absolute-domain", duration: 5600, description: "O espaço fecha ao redor do Level antigo, que é recortado e separado em partes por uma sequência maior de cortes antes da revelação." },
 
   auraWaterBreath: { name: "Water Breathing", type: "aura", typeLabel: "AURA", rarity: "RARE", price: 300, className: "aura-water-breath", description: "Ondas azuis orbitam o perfil em fluxo contínuo." },
   auraScoutSteam: { name: "Scout Steam", type: "aura", typeLabel: "AURA", rarity: "EPIC", price: 420, className: "aura-scout-steam", description: "Vapor e linhas verdes curtas lembram uma arrancada de equipamento de mobilidade." },
@@ -261,13 +299,17 @@ const defaultPlayer = () => ({
   xp: 0,
   essence: 0,
   bodyXP: { chest: 0, back: 0, arms: 0, core: 0, legs: 0, calves: 0, breath: 0 },
-  skills: { pushup: 1, pullup: 1, squat: 1, plank: 1, abs: 1, calfRaise: 1, deadHang: 1, cardio: 1 },
-  skillXP: { pushup: 0, pullup: 0, squat: 0, plank: 0, abs: 0, calfRaise: 0, deadHang: 0, cardio: 0 },
-  variationIndex: { pushup: 0, pullup: 0, squat: 0, plank: 0, abs: 0, calfRaise: 0, deadHang: 0, cardio: 0 },
+  skills: { pushup: 1, pullup: 1, squat: 1, plank: 1, abs: 1, calfRaise: 1, deadHang: 1, cardio: 1, pikePushup: 1, gluteBridge: 1, lunge: 1 },
+  skillXP: { pushup: 0, pullup: 0, squat: 0, plank: 0, abs: 0, calfRaise: 0, deadHang: 0, cardio: 0, pikePushup: 0, gluteBridge: 0, lunge: 0 },
+  variationIndex: { pushup: 0, pullup: 0, squat: 0, plank: 0, abs: 0, calfRaise: 0, deadHang: 0, cardio: 0, pikePushup: 0, gluteBridge: 0, lunge: 0 },
   variationTargets: defaultVariationTargets(),
-  daily: { routineId: "A", completed: [], bonusClaimed: false, completedAt: null, nextAvailableAt: null },
+  daily: { routineId: "UPPER_A", sessionKey: getTodayKey(), completed: [], bonusClaimed: false, completedAt: null, nextAvailableAt: null },
   streak: { current: 0, best: 0, lastCompletedAt: null, guard: 0 },
   recovery: { status: "good", checkedAt: null },
+  goalMode: "HYBRID • MUSCLE BIAS",
+  ai: { calibration: true, lastMessage: "", lastSessionSummary: "" },
+  weeklyPlan: { targetSessions: 4 },
+  preferences: { animationMode: "full", haptics: true, sound: false, autoRest: true },
   weekly: { key: null, challengeId: null, claimed: false },
   stats: {
     totalExercises: 0,
@@ -283,8 +325,7 @@ const defaultPlayer = () => ({
   achievements: [],
   equippedTitle: "awakened",
   shop: { owned: [], equippedTheme: "default", equippedEffect: "default", equippedAura: "default", equippedFrame: "default" },
-  preferences: { animationMode: "full", haptics: true, sound: false },
-  timeline: [],
+    timeline: [],
   history: []
 });
 
@@ -300,6 +341,9 @@ let streakTimer = null;
 let deferredInstallPrompt = null;
 let selectedExerciseKey = "pushup";
 let shopFilter = "all";
+let activeTimer = null;
+let activeTimerEndsAt = 0;
+let activeTimerMode = "";
 
 const $ = (id) => document.getElementById(id);
 
@@ -325,9 +369,140 @@ function daysBetween(fromKey, toKey) {
   return Math.round((dateFromKey(toKey) - dateFromKey(fromKey)) / 86400000);
 }
 
+function weekdayRoutineId(date = new Date()) {
+  const day = date instanceof Date ? date.getDay() : dateFromKey(date).getUTCDay();
+  if (day === 1) return "UPPER_A";
+  if (day === 2) return "LOWER_A";
+  if (day === 3) return "RECOVERY";
+  if (day === 4) return "UPPER_B";
+  if (day === 5) return "LOWER_B";
+  return "REST";
+}
+
+function isTrainingDay(date = new Date()) {
+  return weekdayRoutineId(date) !== "REST";
+}
+
+function currentRoutineId() {
+  return weekdayRoutineId(new Date());
+}
+
+function plannedSessionCountThisWeek() {
+  return 4;
+}
+
+function completedSessionsThisWeek() {
+  const weekStart = getWeekStart();
+  const doneDays = new Set((player.stats.dailyCompletionTimestamps || []).map((ts) => {
+    const t = parseTime(ts);
+    return t ? getTodayKey(new Date(t)) : null;
+  }).filter(Boolean).filter((key) => parseTime(key + 'T00:00:00') >= weekStart.getTime()));
+  return doneDays.size;
+}
+
+function recommendedRestSeconds(exerciseKey) {
+  if (["pullup", "pushup", "pikePushup", "lunge"].includes(exerciseKey)) return 105;
+  if (["squat", "gluteBridge", "plank", "abs"].includes(exerciseKey)) return 75;
+  if (["deadHang", "calfRaise", "cardio"].includes(exerciseKey)) return 60;
+  return 75;
+}
+
+function sessionEtaMinutes(routineId = player?.daily?.routineId || currentRoutineId()) {
+  const routine = routines[routineId];
+  if (!routine || routine.restDay) return 0;
+  let total = 0;
+  routine.exercises.forEach((key) => {
+    const ex = exercises[key];
+    total += ex.sets * 35;
+    total += Math.max(0, ex.sets - 1) * recommendedRestSeconds(key);
+  });
+  return Math.max(8, Math.round(total / 60));
+}
+
+function readinessScore() {
+  const status = player.recovery?.status || "good";
+  if (status === "good") return 84;
+  if (status === "tired") return 68;
+  return 48;
+}
+
+function readinessLabel() {
+  const score = readinessScore();
+  if (score >= 80) return "Pronto para progressão normal.";
+  if (score >= 60) return "Treino liberado, mas o sistema segura progressões agressivas.";
+  return "Recuperação em prioridade. Metas serão preservadas.";
+}
+
+function recentEntriesForExercise(key, count = 3) {
+  return player.history.filter((entry) => entry.exerciseKey === key).slice(-count);
+}
+
+function averageRIR(entries) {
+  const values = entries.map((e) => Number.isFinite(Number(e.rir)) ? Number(e.rir) : null).filter((v) => v !== null);
+  if (!values.length) return 2;
+  return values.reduce((a,b) => a+b,0) / values.length;
+}
+
+function nextVariationUnlocked(key) {
+  const idx = Number(player.variationIndex[key] || 0);
+  return exercises[key].variations[idx + 1] || null;
+}
+
+function systemRecommendation() {
+  const candidates = Object.keys(exercises).filter((key) => recentEntriesForExercise(key, 2).length >= 2).map((key) => {
+    const entries = recentEntriesForExercise(key, 2);
+    const avgPerf = entries.reduce((sum, e) => sum + (Number(e.performance) || 0), 0) / entries.length;
+    const avgR = averageRIR(entries);
+    return { key, avgPerf, avgR };
+  }).sort((a,b) => (b.avgPerf + b.avgR*0.08) - (a.avgPerf + a.avgR*0.08));
+  const best = candidates[0];
+  if (best && best.avgPerf >= 1.45 && best.avgR >= 2.5) {
+    const ex = exercises[best.key];
+    const nextVar = nextVariationUnlocked(best.key);
+    return `Seu desempenho em <strong>${ex.name}</strong> está acima da prescrição atual. ${nextVar ? `O Arise Core detecta prontidão para a próxima variação: <strong>${nextVar.name}</strong>.` : `A meta da próxima sessão será elevada automaticamente.`}`;
+  }
+  if (currentRoutineId() === "REST") return "Hoje é <strong>REST DAY</strong>. Sua corrente permanece protegida. Use o dia para recuperar, caminhar ou apenas cumprir o plano descansando.";
+  const routine = routines[player.daily?.routineId || currentRoutineId()];
+  return `Treino de hoje: <strong>${routine.name}</strong>. O Arise Core está usando suas últimas sessões para recalibrar metas, descanso e progressão dentro do foco <strong>${player.goalMode || 'HYBRID • MUSCLE BIAS'}</strong>.`;
+}
+
+function startSmartTimer(seconds, mode, label) {
+  clearInterval(activeTimer);
+  const total = Math.max(1, Math.round(seconds));
+  activeTimerEndsAt = Date.now() + total * 1000;
+  activeTimerMode = mode;
+  if ($("trainingTimerTitle")) $("trainingTimerTitle").textContent = mode === "rest" ? "Descanso guiado" : "Tempo de execução";
+  if ($("trainingTimerLabel")) $("trainingTimerLabel").textContent = label;
+  const tick = () => {
+    const remaining = Math.max(0, activeTimerEndsAt - Date.now());
+    const totalSeconds = Math.ceil(remaining / 1000);
+    const mm = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const ss = String(totalSeconds % 60).padStart(2, '0');
+    if ($("trainingTimerDisplay")) $("trainingTimerDisplay").textContent = `${mm}:${ss}`;
+    if (remaining <= 0) {
+      clearInterval(activeTimer);
+      activeTimer = null;
+      if ($("trainingTimerLabel")) $("trainingTimerLabel").textContent = mode === "rest" ? "Descanso concluído. Prepare a próxima série/exercício." : "Tempo concluído. Registre seu resultado.";
+      if (player.preferences?.haptics && navigator.vibrate) navigator.vibrate(mode === "rest" ? [90, 80, 90] : [120, 100, 120]);
+    }
+  };
+  tick();
+  activeTimer = setInterval(tick, 250);
+}
+
+function stopSmartTimer(reset = true) {
+  clearInterval(activeTimer);
+  activeTimer = null;
+  activeTimerMode = "";
+  if (reset) {
+    if ($("trainingTimerDisplay")) $("trainingTimerDisplay").textContent = '00:00';
+    if ($("trainingTimerLabel")) $("trainingTimerLabel").textContent = 'Use um timer para séries de tempo e descanso automático entre séries.';
+    if ($("trainingTimerTitle")) $("trainingTimerTitle").textContent = 'Sessão guiada';
+  }
+}
+
 function routineIdForDate(dateKey) {
-  const days = Math.floor(dateFromKey(dateKey).getTime() / 86400000);
-  return days % 2 === 0 ? "A" : "B";
+  return weekdayRoutineId(dateFromKey(dateKey));
 }
 
 function formatToday() {
@@ -416,18 +591,26 @@ function cooldownRemaining() {
 }
 
 function prepareNextSessionIfReady() {
-  if (!player?.daily?.bonusClaimed) return false;
-  const next = parseTime(player.daily.nextAvailableAt);
-  if (!next || Date.now() < next) return false;
-  player.daily = {
-    routineId: nextRoutineId(player.daily.routineId),
-    completed: [],
-    bonusClaimed: false,
-    completedAt: null,
-    nextAvailableAt: null
-  };
-  saveGame();
-  return true;
+  const todayKey = getTodayKey();
+  const todayRoutineId = currentRoutineId();
+  if (!player.daily) {
+    player.daily = { routineId: todayRoutineId, sessionKey: todayKey, completed: [], bonusClaimed: false, completedAt: null, nextAvailableAt: null };
+    saveGame();
+    return true;
+  }
+  if (player.daily.sessionKey !== todayKey || player.daily.routineId !== todayRoutineId) {
+    player.daily = {
+      routineId: todayRoutineId,
+      sessionKey: todayKey,
+      completed: [],
+      bonusClaimed: false,
+      completedAt: null,
+      nextAvailableAt: player.daily.nextAvailableAt || null
+    };
+    saveGame();
+    return true;
+  }
+  return false;
 }
 
 function latestHistoryTime(history = []) {
@@ -559,7 +742,7 @@ function sanitizePlayer(data, fromLegacy = false) {
   }
 
   const oldDaily = data.daily || {};
-  const routineId = oldDaily.routineId && routines[oldDaily.routineId] ? oldDaily.routineId : "A";
+  const routineId = oldDaily.routineId && routines[oldDaily.routineId] ? oldDaily.routineId : currentRoutineId();
   const routineKeys = routines[routineId].exercises;
   const dailyCompleted = Array.isArray(oldDaily.completed) ? oldDaily.completed.filter((key) => routineKeys.includes(key)) : [];
 
@@ -588,7 +771,7 @@ function sanitizePlayer(data, fromLegacy = false) {
     skillXP: { ...base.skillXP, ...(data.skillXP || {}) },
     variationIndex: { ...base.variationIndex, ...(data.variationIndex || {}) },
     variationTargets,
-    daily: { routineId, completed: dailyCompleted, bonusClaimed: Boolean(oldDaily.bonusClaimed), completedAt, nextAvailableAt },
+    daily: { routineId, sessionKey: oldDaily.sessionKey || getTodayKey(), completed: dailyCompleted, bonusClaimed: Boolean(oldDaily.bonusClaimed), completedAt, nextAvailableAt },
     streak: { ...base.streak, ...(data.streak || {}), lastCompletedAt: migratedLastCompletedAt || data.streak?.lastCompletedAt || null },
     recovery: { ...base.recovery, ...(data.recovery || {}) },
     weekly: { ...base.weekly, ...(data.weekly || {}) },
@@ -632,7 +815,7 @@ function loadGame() {
       if (!raw) continue;
       const migrated = sanitizePlayer(JSON.parse(raw), true);
       localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
-      pendingSystemMessages.push("SAVE ANTERIOR MIGRADO PARA A ALPHA 1.6. Level, XP, Essence, corpo, proficiências, cosméticos e histórico foram preservados.");
+      pendingSystemMessages.push("SAVE ANTERIOR MIGRADO PARA O PROJECT ARISE 2.0. Level, XP, Essence, corpo, proficiências, cosméticos e histórico foram preservados.");
       return migrated;
     }
 
@@ -644,7 +827,7 @@ function loadGame() {
         if (candidate && typeof candidate.level === "number" && typeof candidate.xp === "number") {
           const migrated = sanitizePlayer(candidate, true);
           localStorage.setItem(SAVE_KEY, JSON.stringify(migrated));
-          pendingSystemMessages.push("SAVE ANTIGO MIGRADO PARA A ALPHA 1.6.");
+          pendingSystemMessages.push("SAVE ANTIGO MIGRADO PARA O PROJECT ARISE 2.0.");
           return migrated;
         }
       } catch (_) {
@@ -669,21 +852,20 @@ function saveGame() {
 function processStreakGap() {
   const last = parseTime(player.streak.lastCompletedAt);
   if (!last || player.streak.current <= 0) return false;
-
-  const gap = Date.now() - last;
-  if (gap <= STREAK_WINDOW_MS) return false;
-
-  if (player.streak.guard > 0 && gap <= GUARD_WINDOW_MS) {
-    player.streak.guard -= 1;
-    player.streak.lastCompletedAt = new Date(Date.now() - COOLDOWN_MS).toISOString();
-    pendingSystemMessages.push("STREAK GUARD ATIVADO. Sua corrente recebeu uma extensão de emergência.");
-  } else {
-    const lost = Math.min(10, player.essence);
-    player.essence -= lost;
-    player.streak.current = 0;
-    player.streak.lastCompletedAt = null;
-    pendingSystemMessages.push(`STREAK QUEBRADO. Corrente reiniciada${lost > 0 ? ` e -${lost} Essence` : ""}.`);
+  const lastDate = new Date(last);
+  const today = new Date();
+  const cursor = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate() + 1);
+  let missed = 0;
+  while (cursor < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+    if (isTrainingDay(cursor)) missed += 1;
+    cursor.setDate(cursor.getDate() + 1);
   }
+  if (!missed) return false;
+  const lost = Math.min(10, player.essence);
+  player.essence -= lost;
+  player.streak.current = 0;
+  player.streak.lastCompletedAt = null;
+  pendingSystemMessages.push(`SESSION STREAK QUEBRADO. Você perdeu ${missed} sessão(ões) programada(s)${lost > 0 ? ` e -${lost} Essence` : ""}.`);
   saveGame();
   return true;
 }
@@ -691,7 +873,7 @@ function processStreakGap() {
 function resetDailyIfNeeded() {
   const changed = prepareNextSessionIfReady();
   if (!player.daily || !routines[player.daily.routineId]) {
-    player.daily = { routineId: "A", completed: [], bonusClaimed: false, completedAt: null, nextAvailableAt: null };
+    player.daily = { routineId: currentRoutineId(), sessionKey: getTodayKey(), completed: [], bonusClaimed: false, completedAt: null, nextAvailableAt: null };
     saveGame();
     return true;
   }
@@ -826,30 +1008,47 @@ function newlyUnlockedVariations(key, oldLevel, newLevel) {
   return exercises[key].variations.filter((variation) => variation.unlock > oldLevel && variation.unlock <= newLevel);
 }
 
-function progressionDecision(exerciseKey, performance, difficulty) {
+function progressionDecision(exerciseKey, performance, difficulty, rir = 2) {
   const exercise = exercises[exerciseKey];
   const current = currentTarget(exerciseKey);
   let next = current;
   let reason = "Objetivo mantido";
   const recovery = player.recovery?.status || "good";
+  const recent = recentEntriesForExercise(exerciseKey, 2);
+  const avgPerf = recent.length ? recent.reduce((sum, entry) => sum + (Number(entry.performance) || 0), 0) / recent.length : performance;
+  const avgR = recent.length ? averageRIR(recent) : rir;
 
-  if (recovery === "sore") return "Objetivo mantido: Recovery Check indica muita dor. O sistema não aumenta a carga hoje.";
+  if (recovery === "sore") return "Objetivo mantido: readiness baixo. O sistema priorizou recuperação.";
+  const readyToProgress = (performance >= 1.2 && rir >= 2) || (avgPerf >= 1.35 && avgR >= 2.5) || (difficulty === "easy" && performance >= 1);
+  const needReduction = (performance < 0.7 && (difficulty === "extreme" || rir <= 0)) || (avgPerf < 0.72 && avgR <= 1);
 
-  const wouldProgress = (difficulty === "easy" && performance >= 1) || (difficulty === "normal" && performance >= 1.25);
-  if (wouldProgress && recovery === "tired") {
-    return "Objetivo mantido: você marcou CANSADO, então a progressão foi adiada para preservar recuperação.";
+  if (recovery === "tired" && readyToProgress) {
+    setCurrentTarget(exerciseKey, next);
+    return "Objetivo mantido: sessão concluída bem, mas o Arise Core segurou a progressão porque você marcou CANSADO.";
   }
 
-  if (wouldProgress) {
+  if (readyToProgress) {
+    const atVariationCeiling = current >= Math.round(exercise.maxTarget * 0.75);
+    const nextVar = nextVariationUnlocked(exerciseKey);
+    if (atVariationCeiling && nextVar) {
+      player.variationIndex[exerciseKey] = Math.min(exercises[exerciseKey].variations.length - 1, Number(player.variationIndex[exerciseKey] || 0) + 1);
+      const newBase = nextVar.baseTarget;
+      setCurrentTarget(exerciseKey, newBase);
+      return `ARISE CORE: progressão de variação liberada. Próxima sessão: ${nextVar.name} • ${exercise.sets} × ${newBase}${exercise.unit === "seconds" ? "s" : " reps"}`;
+    }
     next = Math.min(exercise.maxTarget, current + exercise.step);
-    if (next > current) reason = `Próximo objetivo: ${exercise.sets} × ${next}${exercise.unit === "seconds" ? "s" : ""}`;
-  } else if (performance < 0.65 && difficulty === "extreme") {
+    setCurrentTarget(exerciseKey, next);
+    return `ARISE CORE: capacidade acima da prescrição. Próximo objetivo: ${exercise.sets} × ${next}${exercise.unit === "seconds" ? "s" : " reps"}`;
+  }
+
+  if (needReduction) {
     next = Math.max(exercise.minTarget, current - exercise.step);
-    if (next < current) reason = `Objetivo ajustado para ${exercise.sets} × ${next}${exercise.unit === "seconds" ? "s" : ""}`;
+    setCurrentTarget(exerciseKey, next);
+    return `ARISE CORE: meta ajustada para ${exercise.sets} × ${next}${exercise.unit === "seconds" ? "s" : " reps"} para manter coerência com sua recuperação.`;
   }
 
   setCurrentTarget(exerciseKey, next);
-  return reason;
+  return `Objetivo mantido: estímulo coerente para o foco atual.`;
 }
 
 function streakBonusRate() {
@@ -859,28 +1058,30 @@ function streakBonusRate() {
 function completeDailyQuest() {
   if (player.daily.bonusClaimed) return { completed: false, xp: 0, essence: 0 };
   const routine = routines[player.daily.routineId];
+  if (routine.restDay) return { completed: false, xp: 0, essence: 0 };
   if (!routine.exercises.every((key) => player.daily.completed.includes(key))) return { completed: false, xp: 0, essence: 0 };
 
   const now = Date.now();
   const last = parseTime(player.streak.lastCompletedAt);
-  if (!last || player.streak.current <= 0) {
-    player.streak.current = 1;
-  } else if (now - last <= STREAK_WINDOW_MS) {
-    player.streak.current += 1;
-  } else {
-    player.streak.current = 1;
+  let missed = 0;
+  if (last) {
+    const cursor = new Date(new Date(last).getFullYear(), new Date(last).getMonth(), new Date(last).getDate() + 1);
+    const today = new Date();
+    while (cursor < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+      if (isTrainingDay(cursor)) missed += 1;
+      cursor.setDate(cursor.getDate() + 1);
+    }
   }
+  if (!last || player.streak.current <= 0 || missed > 0) player.streak.current = 1;
+  else player.streak.current += 1;
 
   player.streak.lastCompletedAt = new Date(now).toISOString();
   player.streak.best = Math.max(player.streak.best, player.streak.current);
-  if (player.streak.current > 0 && player.streak.current % 7 === 0 && player.streak.guard < 1) {
-    player.streak.guard = 1;
-  }
 
-  const baseXP = 50;
+  const baseXP = 55;
   const bonusXP = Math.round(baseXP * streakBonusRate());
   const totalXP = baseXP + bonusXP;
-  const essence = 10;
+  const essence = 12;
 
   player.daily.bonusClaimed = true;
   player.daily.completedAt = new Date(now).toISOString();
@@ -892,7 +1093,7 @@ function completeDailyQuest() {
   player.essence += essence;
   addXP(totalXP);
 
-  showNotification(`SYSTEM QUEST CONCLUÍDA. +${totalXP} XP • +${essence} Essence • STREAK ${player.streak.current} • COOLDOWN 12H`);
+  showNotification(`SESSION CLEAR. +${totalXP} XP • +${essence} Essence • STREAK ${player.streak.current} • COOLDOWN 12H`);
   return { completed: true, xp: totalXP, essence };
 }
 
@@ -943,7 +1144,7 @@ function evaluateAchievements(showToast = false) {
   return newlyUnlocked;
 }
 
-function registerExerciseResult(exerciseKey, values, difficulty) {
+function registerExerciseResult(exerciseKey, values, difficulty, rir = 2) {
   const exercise = exercises[exerciseKey];
   const previousPR = bestSetForExercise(exerciseKey);
   const sessionBest = Math.max(0, ...values);
@@ -967,7 +1168,7 @@ function registerExerciseResult(exerciseKey, values, difficulty) {
 
   let dailyReward = { completed: false, xp: 0, essence: 0 };
   if (performance >= 0.7) dailyReward = markDailyComplete(exerciseKey);
-  const progression = progressionDecision(exerciseKey, performance, difficulty);
+  const progression = progressionDecision(exerciseKey, performance, difficulty, rir);
   const isNewRecord = previousPR > 0 && sessionBest > previousPR;
 
   player.history.push({
@@ -980,6 +1181,7 @@ function registerExerciseResult(exerciseKey, values, difficulty) {
     targetPerSet,
     performance,
     difficulty,
+    rir,
     recovery: player.recovery?.status || "good",
     xp: earnedXP,
     essence: earnedEssence,
@@ -1004,6 +1206,7 @@ function registerExerciseResult(exerciseKey, values, difficulty) {
   openModal(
     performanceLabel(performance),
     `<p><strong>${exercise.name}</strong> — ${currentVariation(exerciseKey).name}: ${Math.round(performance * 100)}% do objetivo atual.</p>
+     <p><strong>RIR informado:</strong> ${rir}</p>
      <p>Recompensas: <strong>+${earnedXP} XP</strong> • <strong>+${earnedEssence} Essence</strong></p>
      <p>Seu corpo recebeu progresso em: ${bodyText}.</p>
      <p><strong>${progression}</strong>${skillLevels > 0 ? `<br>Proficiência aumentou para Lv. ${player.skills[exerciseKey]}.` : ""}</p>
@@ -1040,9 +1243,9 @@ function setRecovery(status) {
   saveGame();
   renderRecoveryCheck();
   const messages = {
-    good: "RECOVERY: BEM. Progressão normal habilitada.",
-    tired: "RECOVERY: CANSADO. Metas podem ser mantidas mesmo com bom desempenho.",
-    sore: "RECOVERY: MUITO DOLORIDO. O sistema não aumentará metas nesta sessão."
+    good: "READINESS: BOA. Progressão normal habilitada.",
+    tired: "READINESS: CANSADO. Metas podem ser mantidas mesmo com bom desempenho.",
+    sore: "READINESS: MUITO DOLORIDO. O sistema não aumentará metas nesta sessão."
   };
   showNotification(messages[status]);
 }
@@ -1130,22 +1333,31 @@ function updateUI(runAchievementCheck = true) {
   const routine = routines[player.daily.routineId];
   const completed = routine.exercises.filter((key) => player.daily.completed.includes(key)).length;
   const locked = sessionLocked();
-  $("dailyProgress").textContent = `${completed}/${routine.exercises.length}`;
+  $("dailyProgress").textContent = routine.restDay ? "REST" : `${completed}/${routine.exercises.length}`;
   $("routineChip").textContent = routine.name;
   $("routineTitle").textContent = routine.subtitle;
   $("streakValue").textContent = `🔥 ${player.streak.current}`;
-  $("streakBonusText").textContent = `Bônus +${Math.round(streakBonusRate() * 100)}%`;
-  $("streakGuardValue").textContent = player.streak.guard;
+  $("streakBonusText").textContent = `Session Streak • bônus +${Math.round(streakBonusRate() * 100)}%`;
+  $("streakGuardValue").textContent = `${completedSessionsThisWeek()}/${plannedSessionCountThisWeek()}`;
+  if ($("sessionEta")) $("sessionEta").textContent = routine.restDay ? "RECOVERY DAY" : `~ ${sessionEtaMinutes(routine.name)} min`;
+  if ($("goalModeChip")) $("goalModeChip").textContent = player.goalMode || "HYBRID • MUSCLE BIAS";
+  if ($("todayStatusChip")) $("todayStatusChip").textContent = locked ? "COOLDOWN" : routine.restDay ? "STREAK SAFE" : "SESSION READY";
+  if ($("systemRecommendation")) $("systemRecommendation").innerHTML = systemRecommendation();
+  if ($("readinessScoreValue")) $("readinessScoreValue").textContent = `${readinessScore()}%`;
+  if ($("readinessScoreText")) $("readinessScoreText").textContent = readinessLabel();
 
-  if (locked) {
-    $("dailyMessage").textContent = "Quest concluída. Recuperação em andamento — a próxima sessão libera após o cooldown mínimo.";
+  if (routine.restDay) {
+    $("dailyMessage").textContent = "Hoje é um REST DAY programado. Seu streak está protegido — descansar também faz parte da evolução.";
+  } else if (locked) {
+    $("dailyMessage").textContent = "Sessão concluída. Cooldown de 12h ativo antes de nova sessão contabilizada.";
   } else if (player.daily.bonusClaimed) {
-    $("dailyMessage").textContent = "Cooldown encerrado. Preparando a próxima quest...";
+    $("dailyMessage").textContent = "Plano do dia concluído. O sistema mantém a próxima sessão preparada.";
   } else {
-    $("dailyMessage").textContent = `Você concluiu ${completed} de ${routine.exercises.length} missões. Para o streak, finalize a próxima quest em até 36h da anterior.`;
+    $("dailyMessage").textContent = `Plano de hoje: ${routine.focus}. Você concluiu ${completed} de ${routine.exercises.length} exercícios programados.`;
   }
 
-  $("startTrainingButton").disabled = locked;
+  $("startTrainingButton").disabled = locked || routine.restDay;
+  $("startTrainingButton").textContent = routine.restDay ? "☕ RECOVERY DAY" : "⚔ INICIAR TREINO";
   updateCooldownUI();
   renderRecoveryCheck();
   renderWeeklyChallenge();
@@ -1175,6 +1387,10 @@ function renderBodyPreview() {
 function renderMissions() {
   const routine = routines[player.daily.routineId];
   const locked = sessionLocked();
+  if (routine.restDay) {
+    $("missionsGrid").innerHTML = `<article class="mission-card rest-day"><div class="mission-top"><div><h3>RECOVERY DAY</h3><p>Sem perda de streak</p></div><span class="status-pill">STREAK SAFE</span></div><div class="mission-focus">Mobilidade leve • caminhada opcional • sono • alimentação</div><p>O Project Arise 2.0 agora entende que descansar no fim de semana faz parte do plano e não quebra sua sequência.</p></article>`;
+    return;
+  }
   $("missionsGrid").innerHTML = routine.exercises.map((key) => {
     const exercise = exercises[key];
     const done = player.daily.completed.includes(key);
@@ -1186,15 +1402,11 @@ function renderMissions() {
         </div>
         <div class="mission-focus">${bodyNamesForExercise(key).join(" • ")}</div>
         <p>${currentVariation(key).name}</p>
-        <div class="mission-reward">Base: +${exercise.xp} XP • +${exercise.essence} Essence</div>
-        <button class="ghost-button mission-button" data-exercise="${key}" type="button" ${locked ? "disabled" : ""}>${locked ? "RECUPERANDO" : done ? "TREINAR NOVAMENTE" : "TREINAR"}</button>
-      </article>
-    `;
+        <div class="mission-actions"><button class="shop-button" type="button" data-exercise-detail="${key}">VER DETALHES</button><button class="ghost-button" type="button" data-start-exercise="${key}" ${locked ? "disabled" : ""}>INICIAR</button></div>
+      </article>`;
   }).join("");
-
-  document.querySelectorAll("[data-exercise]").forEach((button) => {
-    button.addEventListener("click", () => startSingleExercise(button.dataset.exercise));
-  });
+  document.querySelectorAll("[data-start-exercise]").forEach((button) => button.addEventListener("click", () => startSingleExercise(button.dataset.startExercise)));
+  document.querySelectorAll("[data-exercise-detail]").forEach((button) => button.addEventListener("click", () => openExerciseDetail(button.dataset.exerciseDetail)));
 }
 
 function relatedExercisesForBody(bodyKey) {
@@ -1696,8 +1908,12 @@ async function installPwa() {
 
 function startTraining() {
   resetDailyIfNeeded();
+  if (player.daily.routineId === "REST") {
+    showNotification("REST DAY. Hoje o plano é recuperar sem perder streak.");
+    return;
+  }
   if (sessionLocked()) {
-    showNotification(`RECUPERAÇÃO ATIVA. Próxima quest em ${formatDuration(cooldownRemaining())}.`);
+    showNotification(`RECUPERAÇÃO ATIVA. Próxima sessão em ${formatDuration(cooldownRemaining())}.`);
     return;
   }
   const routine = routines[player.daily.routineId];
@@ -1711,7 +1927,7 @@ function startTraining() {
 
 function startSingleExercise(exerciseKey) {
   if (sessionLocked()) {
-    showNotification(`RECUPERAÇÃO ATIVA. Próxima quest em ${formatDuration(cooldownRemaining())}.`);
+    showNotification(`RECUPERAÇÃO ATIVA. Próxima sessão em ${formatDuration(cooldownRemaining())}.`);
     return;
   }
   trainingQueue = [exerciseKey];
@@ -1734,7 +1950,7 @@ function loadTrainingExercise() {
   $("trainingVariationName").textContent = `Variação: ${currentVariation(key).name}`;
   $("trainingExerciseDescription").textContent = exercise.description;
   $("trainingCategoryChip").textContent = exercise.category;
-  $("trainingTarget").textContent = targetText(key);
+  $("trainingTarget").textContent = `${targetText(key)} • desc. ${recommendedRestSeconds(key)}s`;
   $("skillLevelText").textContent = `Proficiência Lv. ${player.skills[key]}`;
   $("trainingSafetyNote").textContent = exercise.safety || "Registre apenas o que você fez com técnica aceitável. Não precisa chegar à falha para progredir.";
   $("saveExerciseButton").textContent = trainingIndex === trainingQueue.length - 1 ? "FINALIZAR ✓" : "REGISTRAR →";
@@ -1753,6 +1969,12 @@ function loadTrainingExercise() {
 
   const normal = document.querySelector('input[name="difficulty"][value="normal"]');
   if (normal) normal.checked = true;
+  const defaultRir = document.querySelector('input[name="rir"][value="2"]');
+  if (defaultRir) defaultRir.checked = true;
+  stopSmartTimer(true);
+  if (exercise.unit === "seconds") {
+    $("trainingTimerLabel").textContent = `Exercício por tempo detectado. Você pode usar o timer guiado para ${target} segundos.`;
+  }
 }
 
 function collectTrainingValues() {
@@ -1766,12 +1988,14 @@ function collectTrainingValues() {
 function saveCurrentExercise() {
   const key = trainingQueue[trainingIndex];
   const difficulty = document.querySelector('input[name="difficulty"]:checked')?.value || "normal";
+  const rir = Number(document.querySelector('input[name="rir"]:checked')?.value || 2);
   const values = collectTrainingValues();
-  registerExerciseResult(key, values, difficulty);
+  registerExerciseResult(key, values, difficulty, rir);
 
   if (trainingIndex < trainingQueue.length - 1) {
     trainingIndex += 1;
     loadTrainingExercise();
+    if (player.preferences?.autoRest !== false) startSmartTimer(recommendedRestSeconds(key), "rest", `Descanso recomendado para ${exercises[key].name}: ${recommendedRestSeconds(key)} segundos.`);
   } else {
     finishTraining(false);
   }
@@ -1788,6 +2012,7 @@ function skipCurrentExercise() {
 }
 
 function finishTraining(showMessage = true) {
+  stopSmartTimer(true);
   showScreen("dashboardScreen");
   updateUI();
   if (showMessage && !singleExerciseMode) showNotification("Sessão encerrada. Seu progresso foi salvo.");
@@ -1806,6 +2031,9 @@ function clearHistory() {
 function bindEvents() {
   $("startTrainingButton").addEventListener("click", startTraining);
   $("saveExerciseButton").addEventListener("click", saveCurrentExercise);
+  if ($("startWorkTimerButton")) $("startWorkTimerButton").addEventListener("click", () => { const key = trainingQueue[trainingIndex]; if (!key) return; startSmartTimer(currentTarget(key), "work", `Timer para ${exercises[key].name} • alvo atual ${currentTarget(key)}${exercises[key].unit === "seconds" ? "s" : " reps"}. Para repetições, use apenas como referência de ritmo.`); });
+  if ($("startRestTimerButton")) $("startRestTimerButton").addEventListener("click", () => { const key = trainingQueue[trainingIndex]; if (!key) return; startSmartTimer(recommendedRestSeconds(key), "rest", `Descanso recomendado para ${exercises[key].name}: ${recommendedRestSeconds(key)} segundos.`); });
+  if ($("stopTimerButton")) $("stopTimerButton").addEventListener("click", () => stopSmartTimer(true));
   $("skipExerciseButton").addEventListener("click", skipCurrentExercise);
   $("exitTrainingButton").addEventListener("click", () => finishTraining());
 
@@ -1835,17 +2063,17 @@ function bindEvents() {
   });
 
   $("systemButton").addEventListener("click", () => {
-    openModal("Project Arise — Alpha 1.6 • Reforged", `
+    openModal("Project Arise — Alpha 1.7 • Cinematic Identity", `
       <ul>
-        <li><strong>Body Sync 4.0:</strong> silhueta anatômica reconstruída, músculos clipados dentro do corpo, visão frente/costas e sistema respiratório separado.</li>
+        <li><strong>Body Sync 4.2:</strong> silhueta anatômica reconstruída, músculos clipados dentro do corpo, visão frente/costas e sistema respiratório separado.</li>
         <li><strong>Abdômen:</strong> Reverse Crunch e progressões agora fazem parte do Treino A.</li>
         <li><strong>Recovery Check:</strong> marcar Cansado ou Muito dolorido impede aumentos agressivos de meta sem reduzir recompensas.</li>
         <li><strong>Personal Records:</strong> seus melhores resultados recebem NEW RECORD e alimentam marcos físicos.</li>
         <li><strong>Weekly Challenge:</strong> desafio semanal usa o treino normal; ele não exige sessões extras para farmar recompensa.</li>
         <li><strong>Event Director:</strong> Level Up, NEW RECORD e Rank Ascension entram numa fila e nunca mais disputam a tela.</li>
-        <li><strong>Reforged FX:</strong> efeitos agora são desenhados proceduralmente em Canvas/SVG, com movimentos próprios para serras, cortes, água/fogo, sombras, relâmpagos e convergências.</li>
+        <li><strong>Cinematic Identity FX:</strong> efeitos foram coreografados em preparação, ação, clímax e revelação; a identidade visual vem do movimento, não só da cor.</li>
         <li><strong>Cooldown/Streak:</strong> quest bloqueada por 12h; a próxima precisa ser concluída em até 36h para manter a corrente.</li>
-        <li><strong>Save:</strong> exporte um backup antes de cada atualização. A Alpha 1.6 migra saves da 1.5 e anteriores automaticamente.</li>
+        <li><strong>Save:</strong> exporte um backup antes de cada atualização. A Alpha 1.7 migra saves da 1.6 e anteriores automaticamente.</li>
       </ul>
     `);
   });
@@ -1859,7 +2087,7 @@ function bindEvents() {
 
 
 /* ============================================================
-   PROJECT ARISE ALPHA 1.6 — REFORGED UPDATE
+   PROJECT ARISE ALPHA 1.7 — CINEMATIC IDENTITY UPDATE
    Body Sync 4.0 and procedural cinematic FX engine.
    ============================================================ */
 
@@ -1905,6 +2133,40 @@ const exerciseMuscleMap = {
   abs: { primary: ["upper-abs", "mid-abs", "lower-abs"], secondary: ["obliques"], stabilizer: ["quads"] },
   calfRaise: { primary: ["gastrocnemius", "calves-front"], secondary: ["tibialis"], stabilizer: ["quads", "glutes"] },
   deadHang: { primary: ["forearms-front", "forearms-back"], secondary: ["lats", "traps", "biceps"], stabilizer: ["upper-abs", "mid-abs", "obliques"] },
+
+  pikePushup: {
+    name: "Pike Push-up", short: "Ombros", category: "PUSH",
+    description: "Empurre o chão em diagonal mantendo quadris elevados. Pense em levar a cabeça em direção ao chão entre as mãos.",
+    unit: "reps", sets: 3, minTarget: 2, maxTarget: 16, step: 1, xp: 22, essence: 4,
+    body: { chest: 5, arms: 9, core: 3 },
+    variations: [
+      { name: "Pike inclinada", unlock: 1, baseTarget: 4 },
+      { name: "Pike padrão", unlock: 4, baseTarget: 4 },
+      { name: "Pike com pausa", unlock: 8, baseTarget: 3 }
+    ]
+  },
+  gluteBridge: {
+    name: "Glute Bridge", short: "Glúteos", category: "LEGS",
+    description: "Empurre o chão com os pés e eleve o quadril, apertando glúteos no topo sem exagerar na lombar.",
+    unit: "reps", sets: 3, minTarget: 6, maxTarget: 25, step: 2, xp: 18, essence: 4,
+    body: { legs: 10, core: 4 },
+    variations: [
+      { name: "Bridge padrão", unlock: 1, baseTarget: 10 },
+      { name: "Bridge com pausa", unlock: 4, baseTarget: 8 },
+      { name: "Bridge unilateral assistida", unlock: 8, baseTarget: 6 }
+    ]
+  },
+  lunge: {
+    name: "Afundo", short: "Afundo", category: "LEGS",
+    description: "Dê um passo e desça com controle, mantendo estabilidade. Pode fazer parado se tiver pouco espaço.",
+    unit: "reps", sets: 3, minTarget: 4, maxTarget: 20, step: 2, xp: 20, essence: 4,
+    body: { legs: 11, calves: 2, core: 2 },
+    variations: [
+      { name: "Afundo reverso alternado", unlock: 1, baseTarget: 6 },
+      { name: "Split squat", unlock: 4, baseTarget: 6 },
+      { name: "Afundo pausado", unlock: 8, baseTarget: 5 }
+    ]
+  },
   cardio: { primary: ["quads", "gastrocnemius", "calves-front"], secondary: ["glutes", "hamstrings", "tibialis"], stabilizer: ["upper-abs", "mid-abs", "obliques"] }
 };
 
@@ -1934,18 +2196,18 @@ function animationMode() {
 
 function manifestationDuration(rarity = "RARE", kind = "level") {
   if (kind === "rank") {
-    if (animationMode() === "reduced") return 1200;
-    if (animationMode() === "fast") return 3300;
-    return 6200;
+    if (animationMode() === "reduced") return 1500;
+    if (animationMode() === "fast") return 3900;
+    return 7200;
   }
   if (kind === "record") {
-    if (animationMode() === "reduced") return 900;
-    if (animationMode() === "fast") return 1700;
-    return 2900;
+    if (animationMode() === "reduced") return 1000;
+    if (animationMode() === "fast") return 1900;
+    return 3100;
   }
-  const base = { RARE: 3000, EPIC: 3800, LEGENDARY: 4700, MYTHIC: 5700 }[rarity] || 3000;
-  if (animationMode() === "reduced") return 950;
-  if (animationMode() === "fast") return Math.round(base * 0.62);
+  const base = { RARE: 3400, EPIC: 4500, LEGENDARY: 5600, MYTHIC: 7200 }[rarity] || 3400;
+  if (animationMode() === "reduced") return 1100;
+  if (animationMode() === "fast") return Math.round(base * 0.64);
   return base;
 }
 
@@ -2290,7 +2552,15 @@ function previewShopItem(id) {
 
 function openFxGallery() {
   const effects = Object.entries(shopItems).filter(([, item]) => item.type === "effect");
-  openModal("GALERIA CINEMÁTICA", `<p>Os efeitos abaixo usam a mesma animação que aparece num Level Up real. Rare e Epic mantêm referências claras; Legendary e Mythic recebem sequências maiores.</p><div class="fx-gallery-grid">${effects.map(([id,item])=>`<button class="fx-gallery-card rarity-${item.rarity.toLowerCase()}" data-gallery-preview="${id}" type="button"><span>${item.rarity}</span><strong>${item.name}</strong><small>${item.description}</small></button>`).join("")}</div>`);
+  const signature = {
+    effectWaterPulse:"corrente de água • espuma • corte fluido", effectScoutRush:"cabos • vapor • investida", effectCursedSpark:"energia negra • impacto carmesim",
+    effectShadowRise:"sombras • ascensão • fogo azul", effectDarkImpact:"impacto negro • descarga vermelha", effectGroundTremor:"choque • vapor • fissuras",
+    effectChainBurst:"corrente dentada • faíscas • corte", effectDevilEngine:"motosserras longas • corrente móvel • serragem", effectKingCleave:"nível fatiado • múltiplos cortes • vazio",
+    effectCrimsonDawn:"água com espuma → chama • golpe contínuo", effectMoonlitFlow:"crescente lunar • lâminas sucessivas", effectTitanSteam:"vapor colossal • calor • onda de pressão",
+    effectThunderStep:"apagão • trajetória dourada • relâmpago", effectFlameHeart:"círculo de fogo • brasas • combustão", effectInfiniteHorizon:"azul + vermelho → colapso roxo",
+    effectMonarchAscension:"sombras humanas • chamas azul-negras • ARISE", effectAbsoluteDomain:"domínio fechado • nível despedaçado • cortes"
+  };
+  openModal("GALERIA CINEMÁTICA 1.7", `<p>A Cinematic Identity Update usa sequências em etapas: preparação, ação, clímax e revelação. Nenhum preview usa PNG animado; os elementos são desenhados em tempo real.</p><div class="fx-gallery-grid fx17-gallery">${effects.map(([id,item])=>`<button class="fx-gallery-card rarity-${item.rarity.toLowerCase()}" data-gallery-preview="${id}" type="button"><span>${item.rarity}</span><strong>${item.name}</strong><em>${signature[id] || "manifestação do sistema"}</em><small>${item.description}</small><b>▶ VER SEQUÊNCIA</b></button>`).join("")}</div>`);
   setTimeout(() => document.querySelectorAll("[data-gallery-preview]").forEach((button) => button.onclick = () => playLevelEffect(button.dataset.galleryPreview, { oldLevel: Math.max(1,player.level-1), newLevel: player.level })), 0);
 }
 
@@ -2368,94 +2638,232 @@ if (pendingSystemMessages.length) {
 }
 
 
-/* ===== Alpha 1.6 Reforged FX Engine ===== */
-const FX16 = (() => {
+/* ===== Alpha 1.7 — Cinematic Identity FX Engine ===== */
+const FX17 = (() => {
   const TAU = Math.PI * 2;
-  const rand = (a,b) => a + Math.random() * (b-a);
-  const clamp = (v,a,b) => Math.max(a, Math.min(b,v));
-  const ease = t => t < .5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
-  const rgba = (hex, a=1) => {
-    const n = parseInt(hex.replace('#',''),16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+  const clamp = (v,a=0,b=1) => Math.max(a, Math.min(b, v));
+  const lerp = (a,b,t) => a + (b-a)*t;
+  const smooth = t => { t = clamp(t); return t*t*(3-2*t); };
+  const easeOut = t => 1 - Math.pow(1-clamp(t), 3);
+  const easeInOut = t => t < .5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+  const phase = (p,a,b) => clamp((p-a)/(b-a));
+  const hash = str => [...String(str)].reduce((h,c)=>Math.imul(h^c.charCodeAt(0),16777619)>>>0,2166136261);
+  const rng = seed => { let s = seed>>>0 || 1; return () => ((s = Math.imul(1664525,s)+1013904223>>>0)/4294967296); };
+
+  const profiles = {
+    effectWaterPulse:{tag:'FLOW', reveal:.66}, effectScoutRush:{tag:'EXPEDITION', reveal:.67}, effectCursedSpark:{tag:'IMPACT', reveal:.64},
+    effectShadowRise:{tag:'AWAKENING', reveal:.68}, effectDarkImpact:{tag:'IMPACT', reveal:.64}, effectGroundTremor:{tag:'TREMOR', reveal:.68},
+    effectChainBurst:{tag:'IGNITION', reveal:.69}, effectDevilEngine:{tag:'DEVIL ENGINE', reveal:.72}, effectKingCleave:{tag:'CLEAVE', reveal:.73},
+    effectCrimsonDawn:{tag:'CRIMSON DAWN', reveal:.76}, effectMoonlitFlow:{tag:'MOONLIT FLOW', reveal:.72}, effectTitanSteam:{tag:'COLOSSAL STEAM', reveal:.72},
+    effectThunderStep:{tag:'THUNDER STEP', reveal:.72}, effectFlameHeart:{tag:'FLAME HEART', reveal:.72}, effectInfiniteHorizon:{tag:'INFINITE HORIZON', reveal:.78},
+    effectMonarchAscension:{tag:'MONARCH ASCENSION', reveal:.79}, effectAbsoluteDomain:{tag:'ABSOLUTE DOMAIN', reveal:.80}
   };
 
-  function specialMarkup(effectId, oldLevel, newLevel) {
-    if (effectId === 'effectInfiniteHorizon') { const left=Math.floor(newLevel/2), right=newLevel-left; return `<div class="fx16-special infinite-special"><div class="term blue-term"><small>BLUE</small><b>${left}</b></div><div class="plus">+</div><div class="term red-term"><small>RED</small><b>${right}</b></div><div class="purple-result">${newLevel}</div></div>`; }
-    if (effectId === 'effectMonarchAscension' || effectId === 'effectShadowRise') return `<div class="fx16-special monarch-special"><span>ARISE</span></div>`;
-    if (effectId === 'effectKingCleave' || effectId === 'effectAbsoluteDomain') return `<div class="fx16-special king-special"><span class="king-old-number">${oldLevel}</span><span class="king-new-number">${newLevel}</span></div>`;
-    if (effectId === 'effectCrimsonDawn') return `<div class="fx16-special crimson-special"><span>FLOW</span><span>IGNITION</span></div>`;
-    if (effectId === 'effectDevilEngine' || effectId === 'effectChainBurst') return `<div class="fx16-special engine-special"><span>ENGINE IGNITION</span></div>`;
-    if (effectId === 'effectThunderStep') return `<div class="fx16-special thunder-special"><span>FLASH STEP</span></div>`;
-    return '';
+  function resizeCanvas(canvas, ctx) {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = window.innerWidth, h = window.innerHeight;
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {w,h,dpr};
   }
 
-  function setup(layer, effectId, oldLevel, newLevel, duration) {
-    layer.className = `level-effect-layer fx16-overlay fx16-${effectId}`;
-    layer.innerHTML = `<canvas class="fx16-canvas"></canvas><div class="fx16-vignette"></div>${specialMarkup(effectId,oldLevel,newLevel)}<div class="fx16-copy"><div class="fx16-kicker">SYSTEM MANIFESTATION</div><div class="fx16-old">LV. ${oldLevel}</div><div class="fx16-new">LV. ${newLevel}</div></div>`;
+  function makeState(effectId, oldLevel, newLevel, layer) {
+    const profile = profiles[effectId] || {tag:'SYSTEM', reveal:.66};
+    layer.className = `level-effect-layer fx17-overlay fx17-${effectId}`;
+    layer.innerHTML = `
+      <canvas class="fx17-canvas"></canvas>
+      <div class="fx17-grade"></div>
+      <div class="fx17-grain"></div>
+      <div class="fx17-copy">
+        <div class="fx17-tag">${profile.tag}</div>
+        <div class="fx17-old">LV. ${oldLevel}</div>
+        <div class="fx17-new"><small>LEVEL UP</small><strong>LV. ${newLevel}</strong><span>${profile.tag}</span></div>
+      </div>`;
     const canvas = layer.querySelector('canvas');
     const ctx = canvas.getContext('2d');
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const resize = () => { canvas.width = innerWidth*dpr; canvas.height = innerHeight*dpr; canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px'; ctx.setTransform(dpr,0,0,dpr,0,0); };
-    resize();
-    const particles = Array.from({length:72},()=>({x:Math.random(),y:Math.random(),s:rand(.6,2.2),v:rand(.1,.7),a:rand(.2,.9),r:rand(0,TAU)}));
-    return {canvas,ctx,resize,particles,w:()=>innerWidth,h:()=>innerHeight,old:layer.querySelector('.fx16-old'),next:layer.querySelector('.fx16-new'),copy:layer.querySelector('.fx16-copy')};
+    const size = resizeCanvas(canvas,ctx);
+    const random = rng(hash(`${effectId}:${oldLevel}:${newLevel}`));
+    const particles = Array.from({length:110},()=>({x:random(),y:random(),vx:(random()-.5)*.2,vy:-.15-random()*.55,s:.5+random()*2.7,a:.2+random()*.8,o:random()*TAU}));
+    const steam = Array.from({length:38},()=>({x:random(),y:random(),r:18+random()*58,v:.08+random()*.3,a:.08+random()*.18,o:random()*TAU}));
+    const soldiers = Array.from({length:9},(_,i)=>({x:(i+.7)/9,y:.98+random()*.08,s:.62+random()*.6,weapon:i%3}));
+    const slashes = Array.from({length:11},(_,i)=>({y:.18+i*.065,tilt:-.22+random()*.18,delay:i*.027,w:1.6+random()*4}));
+    const bolts = Array.from({length:7},(_,i)=>({x:.1+i*.13,jitter:Array.from({length:12},()=>random()-.5)}));
+    return {effectId,oldLevel,newLevel,profile,layer,canvas,ctx,size,random,particles,steam,soldiers,slashes,bolts,
+      oldEl:layer.querySelector('.fx17-old'), newEl:layer.querySelector('.fx17-new'), tagEl:layer.querySelector('.fx17-tag')};
   }
 
-  function saw(ctx,cx,cy,r,ang,color,alpha=1) {
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate(ang); ctx.globalAlpha=alpha; ctx.strokeStyle=color; ctx.fillStyle='rgba(20,20,22,.78)'; ctx.lineWidth=4;
-    ctx.beginPath();
-    const teeth=34;
-    for(let i=0;i<teeth*2;i++){ const a=i/(teeth*2)*TAU; const rr=i%2===0?r:r*1.18; const x=Math.cos(a)*rr,y=Math.sin(a)*rr; i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
-    ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.arc(0,0,r*.56,0,TAU); ctx.strokeStyle='rgba(255,90,30,.85)'; ctx.lineWidth=3; ctx.stroke();
-    ctx.beginPath(); ctx.arc(0,0,r*.18,0,TAU); ctx.fillStyle='rgba(255,150,70,.9)'; ctx.fill(); ctx.restore();
+  function bg(ctx,w,h,a='#02040a',b='#000'){ const g=ctx.createRadialGradient(w*.5,h*.48,0,w*.5,h*.48,Math.max(w,h)*.75); g.addColorStop(0,a);g.addColorStop(1,b);ctx.fillStyle=g;ctx.fillRect(0,0,w,h); }
+  function glow(ctx,x,y,r,inner,outer='rgba(0,0,0,0)',alpha=1){ ctx.save();ctx.globalAlpha=alpha;const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,inner);g.addColorStop(1,outer);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore(); }
+  function line(ctx,x1,y1,x2,y2,color,width=2,blur=0,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.shadowColor=color;ctx.shadowBlur=blur;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();}
+
+  function bezierPoint(p0,p1,p2,p3,t){const u=1-t;return {x:u*u*u*p0.x+3*u*u*t*p1.x+3*u*t*t*p2.x+t*t*t*p3.x,y:u*u*u*p0.y+3*u*u*t*p1.y+3*u*t*t*p2.y+t*t*t*p3.y};}
+  function bezierTangent(p0,p1,p2,p3,t){const u=1-t;return {x:3*u*u*(p1.x-p0.x)+6*u*t*(p2.x-p1.x)+3*t*t*(p3.x-p2.x),y:3*u*u*(p1.y-p0.y)+6*u*t*(p2.y-p1.y)+3*t*t*(p3.y-p2.y)};}
+
+  function drawWaterForm(ctx,w,h,q,fire=0,reverse=false){
+    q=clamp(q); const p0={x:reverse?w*1.07:-w*.07,y:h*.72}, p1={x:w*.18,y:h*.18}, p2={x:w*.67,y:h*.9}, p3={x:reverse?-w*.08:w*1.08,y:h*.3};
+    const samples=90, end=Math.max(2,Math.floor(samples*q));
+    ctx.save(); ctx.globalCompositeOperation='screen';
+    for(let layer=0;layer<5;layer++){
+      ctx.beginPath(); for(let i=0;i<end;i++){const t=i/(samples-1),pt=bezierPoint(p0,p1,p2,p3,t); if(i===0)ctx.moveTo(pt.x,pt.y);else ctx.lineTo(pt.x,pt.y);} 
+      const flameColor = layer<2 ? `rgba(255,${95+layer*50},25,${.82-layer*.13})` : `rgba(255,205,80,${.58-layer*.09})`;
+      ctx.strokeStyle=fire>0?flameColor:`rgba(${70+layer*18},${170+layer*12},255,${.78-layer*.1})`;
+      ctx.lineWidth=(fire>0?24:30)-layer*4.5; ctx.shadowBlur=fire>0?24:18;ctx.shadowColor=fire>0?'#ff4a14':'#2aa9ff';ctx.lineCap='round';ctx.stroke();
+    }
+    const start=Math.max(0,end-22);
+    for(let i=start;i<end;i+=3){const t=i/(samples-1),pt=bezierPoint(p0,p1,p2,p3,t),tan=bezierTangent(p0,p1,p2,p3,t),ang=Math.atan2(tan.y,tan.x),n={x:-Math.sin(ang),y:Math.cos(ang)};
+      if(fire<=0){ctx.fillStyle='rgba(235,250,255,.75)';ctx.beginPath();ctx.arc(pt.x+n.x*(18+((i%4)*4)),pt.y+n.y*(18+((i%4)*4)),3+(i%3)*1.8,0,TAU);ctx.fill(); if(i%6===0){ctx.strokeStyle='rgba(210,245,255,.65)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(pt.x+n.x*28,pt.y+n.y*28,10,ang-.8,ang+1.1);ctx.stroke();}}
+      else {const len=18+Math.sin(i*1.7)*8;ctx.strokeStyle=i%2?'rgba(255,76,18,.78)':'rgba(255,194,64,.76)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(pt.x,pt.y);ctx.quadraticCurveTo(pt.x-n.x*len*.8,pt.y-n.y*len*.8,pt.x+n.x*len,pt.y+n.y*len);ctx.stroke();}
+    }
+    if(end>8){const t=(end-1)/(samples-1),pt=bezierPoint(p0,p1,p2,p3,t),tan=bezierTangent(p0,p1,p2,p3,t),ang=Math.atan2(tan.y,tan.x);ctx.save();ctx.translate(pt.x,pt.y);ctx.rotate(ang);ctx.globalAlpha=.72*q;ctx.strokeStyle=fire>0?'rgba(255,198,82,.82)':'rgba(224,249,255,.8)';ctx.lineWidth=fire>0?4:3;ctx.shadowColor=fire>0?'#ff5420':'#5bc8ff';ctx.shadowBlur=16;for(let j=0;j<3;j++){ctx.beginPath();ctx.arc(-18-j*9,0,14+j*5,-2.5,.55);ctx.stroke();}ctx.restore();}
+    ctx.restore();
   }
 
-  function lightning(ctx,x1,y1,x2,y2,color,alpha=1,segments=10){ ctx.save(); ctx.strokeStyle=color; ctx.globalAlpha=alpha; ctx.lineWidth=rand(2,5); ctx.shadowColor=color; ctx.shadowBlur=18; ctx.beginPath(); ctx.moveTo(x1,y1); for(let i=1;i<segments;i++){const t=i/segments;ctx.lineTo(x1+(x2-x1)*t+rand(-28,28),y1+(y2-y1)*t+rand(-18,18));} ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore(); }
-
-  function slash(ctx,w,h,p,color='#ff3150',count=7){ ctx.save(); ctx.globalCompositeOperation='screen'; for(let i=0;i<count;i++){ const delay=i*.045; const q=clamp((p-delay)/.22,0,1); if(!q) continue; const y=h*(.22+i*.09); const x0=-w*.1; const x1=w*1.1; ctx.globalAlpha=(1-q)*.9; ctx.strokeStyle=color; ctx.shadowColor=color; ctx.shadowBlur=22; ctx.lineWidth=rand(2,6); ctx.beginPath(); ctx.moveTo(x0+w*q,y+80*Math.sin(i)); ctx.lineTo(x0+w*q+180,y-30); ctx.stroke(); } ctx.restore(); }
-
-  function flames(ctx,w,h,p,base='#08020f',edge='#2d7dff',count=32){ ctx.save(); ctx.globalCompositeOperation='screen'; for(let i=0;i<count;i++){ const x=(i+.5)/count*w + Math.sin(i*1.7+p*8)*16; const rise=(p*1.25 + (i%5)*.06)%1; const y=h*(1.08-rise*.95); const height=rand(70,150)*(0.35+.65*p); ctx.globalAlpha=.18+.55*(1-rise); const grad=ctx.createLinearGradient(x,y,x,y-height); grad.addColorStop(0,rgba(base,.02)); grad.addColorStop(.38,rgba(edge,.42)); grad.addColorStop(1,rgba(edge,0)); ctx.strokeStyle=grad; ctx.lineWidth=rand(3,10); ctx.beginPath(); ctx.moveTo(x,y); ctx.bezierCurveTo(x+Math.sin(i)*22,y-height*.25,x-24,y-height*.62,x+Math.sin(i*.8)*12,y-height); ctx.stroke(); } ctx.restore(); }
-
-  function waterRibbon(ctx,w,h,p,color='#31a9ff',flame=false){ ctx.save(); ctx.globalCompositeOperation='screen'; for(let k=0;k<4;k++){ const y=h*(.35+k*.09); const phase=p*TAU*1.1+k; ctx.beginPath(); for(let x=-40;x<w+40;x+=18){ const yy=y+Math.sin(x*.012+phase)*55 + Math.sin(x*.026-phase)*18; x===-40?ctx.moveTo(x,yy):ctx.lineTo(x,yy); } ctx.strokeStyle=flame?`rgba(255,${Math.floor(80+90*p)},35,${.45+.35*p})`:rgba(color,.42+.3*p); ctx.lineWidth=10-k*1.5; ctx.shadowBlur=22; ctx.shadowColor=flame?'#ff4d1f':color; ctx.stroke(); } ctx.restore(); }
-
-  function crescent(ctx,cx,cy,r,ang,color,alpha){ ctx.save(); ctx.translate(cx,cy);ctx.rotate(ang);ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.shadowColor=color;ctx.shadowBlur=20;ctx.lineWidth=6;ctx.beginPath();ctx.arc(0,0,r,-1.1,1.1);ctx.stroke();ctx.restore(); }
-
-  function steam(ctx,w,h,p,particles){ ctx.save(); for(const s of particles){ const y=(s.y-p*s.v)%1; const yy=(y<0?y+1:y)*h; const xx=s.x*w+Math.sin(p*8+s.r)*35; ctx.fillStyle=`rgba(235,245,255,${s.a*.18})`; ctx.beginPath();ctx.arc(xx,yy,18+s.s*16,0,TAU);ctx.fill(); } ctx.restore(); }
-
-  function draw(effectId, state, p, t){ const {ctx,w:wf,h:hf,particles}=state; const w=wf(),h=hf(); ctx.clearRect(0,0,w,h); ctx.fillStyle='rgba(1,3,8,.92)';ctx.fillRect(0,0,w,h);
-    if(effectId==='effectWaterPulse'){waterRibbon(ctx,w,h,p,'#32aaff',false);}
-    else if(effectId==='effectScoutRush'){ctx.fillStyle='rgba(5,24,20,.55)';ctx.fillRect(0,0,w,h);for(let i=0;i<5;i++){ctx.strokeStyle='rgba(102,255,189,.65)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-100,h*(.2+i*.14));ctx.lineTo(w*p*1.3,h*(.1+i*.17));ctx.stroke();}steam(ctx,w,h,p,particles);}
-    else if(effectId==='effectCursedSpark'||effectId==='effectDarkImpact'){ctx.fillStyle='rgba(48,0,12,.3)';ctx.fillRect(0,0,w,h);for(let i=0;i<18;i++) lightning(ctx,w/2,h/2,w/2+Math.cos(i/18*TAU)*w*.48,h/2+Math.sin(i/18*TAU)*h*.46,'#ff2147',.25+.5*p,5);}
-    else if(effectId==='effectShadowRise'||effectId==='effectMonarchAscension'){flames(ctx,w,h,p,'#030108','#407cff',38);flames(ctx,w,h,p,'#020106','#9b4dff',24);}
-    else if(effectId==='effectGroundTremor'||effectId==='effectTitanSteam'){steam(ctx,w,h,p,particles);ctx.fillStyle=`rgba(255,92,25,${.12*Math.sin(p*Math.PI)})`;ctx.fillRect(0,0,w,h);for(let i=0;i<3;i++){ctx.strokeStyle=`rgba(255,190,100,${.5*(1-p)})`;ctx.lineWidth=5;ctx.beginPath();ctx.arc(w/2,h*.72,80+i*140*p,0,TAU);ctx.stroke();}}
-    else if(effectId==='effectChainBurst'||effectId==='effectDevilEngine'){const n=effectId==='effectDevilEngine'?4:2;for(let i=0;i<n;i++){const a=t*.002*(i%2?1:-1)+i*TAU/n;const rr=Math.min(w,h)*(.22+(i%2)*.07);const cx=w/2+Math.cos(a)*w*.28,cy=h/2+Math.sin(a)*h*.21;saw(ctx,cx,cy,rr*.28,t*.008*(i%2?1:-1),'#ff5a2a',.95);}for(const s of particles){ctx.fillStyle=`rgba(255,146,55,${s.a})`;ctx.fillRect(s.x*w,(s.y+p*s.v)%1*h,2+s.s,2+s.s);}}
-    else if(effectId==='effectKingCleave'||effectId==='effectAbsoluteDomain'){slash(ctx,w,h,p,'#ff234a',effectId==='effectAbsoluteDomain'?12:8);if(effectId==='effectAbsoluteDomain'){for(let i=0;i<4;i++){ctx.strokeStyle=`rgba(150,25,55,${.18+.22*(1-p)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,80+i*95*(.4+p),0,TAU);ctx.stroke();}}}
-    else if(effectId==='effectCrimsonDawn'){if(p<.48)waterRibbon(ctx,w,h,p/.48,'#34aaff',false);else{waterRibbon(ctx,w,h,1,'#34aaff',false);waterRibbon(ctx,w,h,(p-.48)/.52,'#ff4f21',true);}}
-    else if(effectId==='effectMoonlitFlow'){ctx.fillStyle='rgba(8,20,45,.6)';ctx.fillRect(0,0,w,h);for(let i=0;i<9;i++){const a=t*.0014+i*TAU/9;const r=Math.min(w,h)*(.15+(i%3)*.08);crescent(ctx,w/2+Math.cos(a)*w*.28,h/2+Math.sin(a)*h*.24,r,a+1.2,'#a9d7ff',.75);}}
-    else if(effectId==='effectThunderStep'){for(let i=0;i<8;i++){const x=(i+.5)/8*w;lightning(ctx,x,-20,w/2+rand(-w*.25,w*.25),h*.72,'#ffe45a',.3+.5*Math.sin(p*Math.PI),12);} if(Math.sin(t*.02)>0.75){ctx.fillStyle='rgba(255,245,180,.15)';ctx.fillRect(0,0,w,h);}}
-    else if(effectId==='effectFlameHeart'){ctx.fillStyle='rgba(40,0,0,.38)';ctx.fillRect(0,0,w,h);for(let i=0;i<16;i++){const a=i/16*TAU+p*2;const r=Math.min(w,h)*(.18+.18*p);ctx.strokeStyle=`rgba(255,${70+i*5},30,.55)`;ctx.lineWidth=6;ctx.beginPath();ctx.arc(w/2,h/2,r+i*4,a,a+1.0);ctx.stroke();}}
-    else if(effectId==='effectInfiniteHorizon'){const q=ease(clamp(p/.68,0,1));const lx=w*.18+(w*.32)*q,rx=w*.82-(w*.32)*q;for(const [x,c] of [[lx,'#2688ff'],[rx,'#ff2c3f']]){const g=ctx.createRadialGradient(x,h/2,0,x,h/2,90);g.addColorStop(0,'#fff');g.addColorStop(.2,c);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,h/2,100,0,TAU);ctx.fill();} if(p>.65){const r=(p-.65)/.35*Math.min(w,h)*.45;const g=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,r);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.22,'rgba(177,67,255,.75)');g.addColorStop(1,'rgba(130,0,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(w/2,h/2,r,0,TAU);ctx.fill();}}
-    else{for(const s of particles){ctx.fillStyle=`rgba(67,174,255,${s.a*.5})`;ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.s*2,0,TAU);ctx.fill();}}
+  function drawChainsawBar(ctx,x,y,len,thick,angle,progress,flip=1){
+    ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.globalCompositeOperation='source-over';
+    const body=ctx.createLinearGradient(-len*.5,0,len*.5,0);body.addColorStop(0,'#160b08');body.addColorStop(.5,'#3b1710');body.addColorStop(1,'#120907');
+    ctx.fillStyle=body;ctx.strokeStyle='rgba(255,91,36,.7)';ctx.lineWidth=3;ctx.shadowColor='rgba(255,66,21,.45)';ctx.shadowBlur=18;
+    ctx.beginPath();ctx.roundRect(-len*.5,-thick*.38,len,thick*.76,thick*.28);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#050608';ctx.beginPath();ctx.roundRect(-len*.43,-thick*.21,len*.86,thick*.42,thick*.18);ctx.fill();
+    const tooth=14, offset=(progress*len*.9)%tooth;ctx.fillStyle='#e7e7e2';ctx.shadowBlur=7;ctx.shadowColor='#ff5b25';
+    for(let pos=-len*.47-offset;pos<len*.5;pos+=tooth){
+      for(const side of [-1,1]){ctx.save();ctx.translate(pos,side*thick*.41);if(side<0)ctx.scale(1,-1);ctx.beginPath();ctx.moveTo(-5,0);ctx.lineTo(4,0);ctx.lineTo(1,9);ctx.closePath();ctx.fill();ctx.restore();}
+    }
+    ctx.fillStyle='#f06a2b';ctx.beginPath();ctx.arc(-len*.37,0,thick*.13,0,TAU);ctx.fill();
+    /* motor housing + rear handle, so it reads as a chainsaw rather than a generic toothed bar */
+    ctx.fillStyle='rgba(32,12,9,.96)';ctx.strokeStyle='rgba(255,96,42,.78)';ctx.lineWidth=3;ctx.beginPath();ctx.roundRect(-len*.58,-thick*.26,thick*.7,thick*.52,thick*.14);ctx.fill();ctx.stroke();
+    ctx.strokeStyle='rgba(235,235,229,.72)';ctx.lineWidth=Math.max(3,thick*.045);ctx.beginPath();ctx.roundRect(-len*.66,-thick*.5,thick*.55,thick*.34,thick*.15);ctx.stroke();
+    ctx.restore();
   }
 
-  function labelFor(effectId){ const labels={effectDevilEngine:'DEVIL ENGINE',effectChainBurst:'CHAIN BURST',effectKingCleave:'KING\'S CLEAVE',effectAbsoluteDomain:'ABSOLUTE DOMAIN',effectCrimsonDawn:'CRIMSON DAWN',effectMoonlitFlow:'MOONLIT FLOW',effectThunderStep:'THUNDER STEP',effectFlameHeart:'FLAME HEART',effectInfiniteHorizon:'INFINITE HORIZON',effectMonarchAscension:'MONARCH ASCENSION',effectTitanSteam:'COLOSSAL STEAM',effectScoutRush:'SCOUT RUSH',effectWaterPulse:'WATER PULSE',effectCursedSpark:'CURSED SPARK',effectShadowRise:'SHADOW RISE'};return labels[effectId]||'SYSTEM LEVEL UP'; }
+  function drawSparks(ctx,w,h,particles,p,color='#ff8d32',biasX=.5,biasY=.5){ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<particles.length;i++){const s=particles[i],q=(p+s.o/TAU)%1;const x=w*(biasX+(s.x-.5)*.85)+s.vx*w*p,y=h*(biasY+(s.y-.5)*.8)+s.vy*h*p;ctx.globalAlpha=s.a*(1-q)*.9;ctx.strokeStyle=color;ctx.lineWidth=Math.max(1,s.s*.7);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-s.vx*w*.06,y-s.vy*h*.06);ctx.stroke();}ctx.restore();}
 
-  function run(effectId,payload={}){ return new Promise(resolve=>{ const layer=$('levelEffectLayer'); const effect=shopItems[effectId]||{}; const rarity=effect.rarity||'RARE'; const duration=manifestationDuration(rarity,payload.kind||'level'); const oldLevel=Number(payload.oldLevel??Math.max(1,player.level-1)); const newLevel=Number(payload.newLevel??player.level); const st=setup(layer,effectId,oldLevel,newLevel,duration); st.copy.querySelector('.fx16-kicker').textContent=labelFor(effectId); const start=performance.now(); let raf=0; const frame=now=>{const p=clamp((now-start)/duration,0,1); draw(effectId,st,p,now); st.old.style.opacity=p<.42?String(1-clamp((p-.18)/.24,0,1)):'0'; st.old.style.transform=`translate(-50%,-50%) scale(${1+p*.35})`; st.next.style.opacity=String(clamp((p-.62)/.16,0,1)); st.next.style.transform=`translate(-50%,-50%) scale(${.72+clamp((p-.62)/.18,0,1)*.28})`; if(p<1)raf=requestAnimationFrame(frame);else{cancelAnimationFrame(raf);layer.className='level-effect-layer';layer.innerHTML='';resolve();}}; raf=requestAnimationFrame(frame); }); }
-  return {run};
+  function drawShadowFlames(ctx,w,h,particles,p){ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<particles.length;i++){const s=particles[i],rise=(p*.95+s.y*.28)%1,x=s.x*w+Math.sin(s.o+p*8)*24,y=h*(1.08-rise*1.12),height=70+s.s*34;ctx.globalAlpha=.2+.55*(1-rise);const g=ctx.createLinearGradient(x,y,x,y-height);g.addColorStop(0,'rgba(7,4,18,.02)');g.addColorStop(.38,'rgba(29,82,255,.5)');g.addColorStop(.72,'rgba(104,48,220,.32)');g.addColorStop(1,'rgba(15,15,40,0)');ctx.strokeStyle=g;ctx.lineWidth=3+s.s*2;ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x+20*Math.sin(s.o),y-height*.28,x-18,y-height*.68,x+8*Math.cos(s.o),y-height);ctx.stroke();}ctx.restore();}
+
+  function drawSoldiers(ctx,w,h,soldiers,p){const q=phase(p,.18,.62);ctx.save();ctx.fillStyle='rgba(2,5,12,.92)';ctx.strokeStyle='rgba(62,118,255,.28)';ctx.lineWidth=2;for(const s of soldiers){const baseY=lerp(h*1.08,h*.83,q)*s.s;const x=s.x*w,scale=.7+s.s*.3;ctx.save();ctx.translate(x,baseY);ctx.scale(scale,scale);ctx.beginPath();ctx.arc(0,-70,12,0,TAU);ctx.fill();ctx.beginPath();ctx.moveTo(-10,-58);ctx.lineTo(-24,-8);ctx.lineTo(-10,0);ctx.lineTo(0,-35);ctx.lineTo(10,0);ctx.lineTo(24,-8);ctx.lineTo(10,-58);ctx.closePath();ctx.fill();ctx.stroke();if(s.weapon===0)line(ctx,18,-42,42,-105,'rgba(72,130,255,.35)',2,4,.8);if(s.weapon===1)line(ctx,-16,-36,-42,-84,'rgba(72,130,255,.35)',2,4,.8);ctx.restore();}ctx.restore();}
+
+  function drawBolt(ctx,x1,y1,x2,y2,jitter,color,alpha=1,width=4){ctx.save();ctx.strokeStyle=color;ctx.shadowColor=color;ctx.shadowBlur=20;ctx.lineWidth=width;ctx.globalAlpha=alpha;ctx.beginPath();ctx.moveTo(x1,y1);for(let i=1;i<jitter.length;i++){const t=i/(jitter.length-1);const nx=lerp(x1,x2,t)+jitter[i]*42,ny=lerp(y1,y2,t)+(jitter[(i*5)%jitter.length]||0)*32;ctx.lineTo(nx,ny);}ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();}
+
+  function drawSteam(ctx,w,h,steam,p){ctx.save();for(const s of steam){const q=(s.y-p*s.v)%1,yy=(q<0?q+1:q)*h,xx=s.x*w+Math.sin(s.o+p*5)*30;const g=ctx.createRadialGradient(xx,yy,0,xx,yy,s.r);g.addColorStop(0,`rgba(245,250,255,${s.a})`);g.addColorStop(1,'rgba(245,250,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(xx,yy,s.r,0,TAU);ctx.fill();}ctx.restore();}
+
+  function drawOldTextSliced(ctx,w,h,text,p,slashes){
+    const q=phase(p,.24,.62),split=easeOut(phase(p,.36,.64)); ctx.save();ctx.font=`900 ${Math.min(w*.23,180)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';
+    const bandH=Math.min(h*.11,80),top=h*.5-bandH*2.6;
+    for(let i=0;i<6;i++){ctx.save();ctx.beginPath();ctx.rect(0,top+i*bandH,w,bandH+2);ctx.clip();const dx=(i%2?1:-1)*split*(28+i*6),dy=(i-2.5)*split*3;ctx.translate(dx,dy);ctx.fillStyle=`rgba(245,238,242,${1-split*.62})`;ctx.shadowColor='rgba(255,24,62,.55)';ctx.shadowBlur=22;ctx.fillText(String(text),w*.5,h*.5);ctx.restore();}
+    for(let i=0;i<slashes.length;i++){const s=slashes[i],sq=phase(q,s.delay,s.delay+.18);if(sq<=0||sq>=1)continue;const y=h*s.y;line(ctx,-w*.05+w*1.1*sq,y,w*.06+w*1.1*sq,y+w*s.tilt,'#ff1e47',s.w,20,1-sq*.45);}
+    ctx.restore();
+  }
+
+  function drawInfinity(ctx,w,h,p,newLevel,particles){
+    const travel=easeInOut(phase(p,.08,.58)),lx=lerp(w*.17,w*.46,travel),rx=lerp(w*.83,w*.54,travel),cy=h*.47;
+    const drawOrb=(x,c1,c2,num)=>{glow(ctx,x,cy,86,c1,'rgba(0,0,0,0)',.95);glow(ctx,x,cy,42,c2,'rgba(0,0,0,0)',.95);ctx.save();ctx.fillStyle='white';ctx.font=`800 ${Math.min(w*.07,56)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(num,x,cy);ctx.restore();};
+    const left=Math.floor(newLevel/2),right=newLevel-left;drawOrb(lx,'rgba(37,122,255,.84)','rgba(230,248,255,.95)',left);drawOrb(rx,'rgba(255,46,71,.84)','rgba(255,235,239,.95)',right);
+    ctx.save();ctx.globalCompositeOperation='screen';for(const s of particles.slice(0,70)){const target=s.x<.5?{x:lx,y:cy}:{x:rx,y:cy};const q=phase(p,.05,.6);const x=lerp(s.x*w,target.x,q*.78),y=lerp(s.y*h,target.y,q*.78);ctx.fillStyle=s.x<.5?`rgba(67,154,255,${s.a*.45})`:`rgba(255,75,91,${s.a*.45})`;ctx.fillRect(x,y,1.5+s.s*.5,1.5+s.s*.5);}ctx.restore();
+    if(p>.56){const q=phase(p,.56,.82),r=easeOut(q)*Math.min(w,h)*.48;glow(ctx,w*.5,cy,r,'rgba(176,67,255,.72)','rgba(70,0,145,0)',.95);ctx.save();ctx.strokeStyle=`rgba(214,170,255,${1-q})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(w*.5,cy,r*.85,0,TAU);ctx.stroke();ctx.restore();}
+  }
+
+  function drawMoonSlashes(ctx,w,h,p){bg(ctx,w,h,'#06152b','#02040a');const q=phase(p,.08,.72);ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<10;i++){const delay=i*.042,s=phase(q,delay,delay+.28);if(!s||s>=1)continue;const a=-1.15+i*.24,cx=lerp(-w*.1,w*1.1,s),cy=h*(.18+(i%5)*.15);ctx.strokeStyle=i%2?'rgba(186,215,255,.86)':'rgba(137,98,255,.76)';ctx.lineWidth=4+(i%3)*2;ctx.shadowColor='#8aa7ff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(cx,cy,45+(i%4)*16,a,a+1.9);ctx.stroke();}ctx.restore();}
+
+  function drawHeatRings(ctx,w,h,p){const q=phase(p,.15,.8);ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<5;i++){const r=(70+i*90)+q*180;ctx.strokeStyle=`rgba(255,121,52,${.38*(1-q)})`;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(w*.5,h*.65,r,r*.35,0,0,TAU);ctx.stroke();}ctx.restore();}
+
+  function drawEffect(state,p,now){
+    const {ctx,size:{w,h},effectId,particles,steam,soldiers,slashes,bolts,newLevel,oldLevel}=state;ctx.clearRect(0,0,w,h);
+    switch(effectId){
+      case 'effectDevilEngine':
+      case 'effectChainBurst':{
+        bg(ctx,w,h,'#160805','#010101'); const q=phase(p,.08,.74); const strong=effectId==='effectDevilEngine';
+        ctx.save();ctx.globalAlpha=.18;ctx.fillStyle='#7a1208';ctx.fillRect(0,0,w,h);ctx.restore();
+        const len=Math.min(w*1.08,900),th=Math.min(h*.14,105);
+        const x1=lerp(w*1.35,w*.46,easeOut(phase(q,0,.55))),y1=h*.34;
+        drawChainsawBar(ctx,x1,y1,len,th,-.23,q,1);
+        if(strong){const x2=lerp(-w*.35,w*.55,easeOut(phase(q,.16,.82))),y2=h*.66;drawChainsawBar(ctx,x2,y2,len*.92,th*.92,.19,q*1.3,-1);}
+        drawSparks(ctx,w,h,particles,q,'#ff8c3e',.52,.5);
+        if(p>.42)line(ctx,w*.08,h*.72,w*.92,h*.24,'rgba(255,77,31,.72)',3,26,phase(p,.42,.7));
+        break;
+      }
+      case 'effectCrimsonDawn':{
+        bg(ctx,w,h,'#071624','#02040a');const water=phase(p,.04,.52);drawWaterForm(ctx,w,h,water,0,false);
+        if(p>.42){const fire=phase(p,.42,.82);ctx.fillStyle=`rgba(56,5,0,${fire*.35})`;ctx.fillRect(0,0,w,h);drawWaterForm(ctx,w,h,fire,1,false);drawSparks(ctx,w,h,particles,fire,'#ff8f3d',.58,.55);}
+        break;
+      }
+      case 'effectKingCleave':
+      case 'effectAbsoluteDomain':{
+        bg(ctx,w,h,'#21020a','#020103');ctx.fillStyle='rgba(60,0,9,.18)';ctx.fillRect(0,0,w,h);drawOldTextSliced(ctx,w,h,oldLevel,p,slashes);
+        if(effectId==='effectAbsoluteDomain'){const q=phase(p,.08,.72);ctx.save();ctx.strokeStyle=`rgba(159,20,48,${.36*(1-q*.4)})`;ctx.lineWidth=2;for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(w*.5,h*.5,lerp(65,Math.min(w,h)*.48,q)+i*42,0,TAU);ctx.stroke();}ctx.restore();}
+        break;
+      }
+      case 'effectInfiniteHorizon': bg(ctx,w,h,'#07122b','#000');drawInfinity(ctx,w,h,p,newLevel,particles);break;
+      case 'effectMonarchAscension':
+      case 'effectShadowRise':{
+        bg(ctx,w,h,'#07051b','#000207');drawSoldiers(ctx,w,h,soldiers,p);drawShadowFlames(ctx,w,h,particles,p);
+        if(p>.35&&p<.68){ctx.save();ctx.globalAlpha=Math.sin(phase(p,.35,.68)*Math.PI);ctx.fillStyle='#cbd7ff';ctx.font=`800 ${Math.min(w*.09,78)}px system-ui`;ctx.letterSpacing='12px';ctx.textAlign='center';ctx.fillText('ARISE',w*.5,h*.45);ctx.restore();}
+        break;
+      }
+      case 'effectThunderStep':{
+        bg(ctx,w,h,'#0b0b05','#000');const q=phase(p,.08,.72);for(let i=0;i<bolts.length;i++){const b=bolts[i],delay=i*.055,s=phase(q,delay,delay+.26);if(!s||s>=1)continue;drawBolt(ctx,w*b.x,-20,w*.5+(i-3)*28,h*.72,b.jitter,'#ffe566',1-s*.28,2.5+(i%2));}
+        if(p>.48&&p<.58){ctx.fillStyle=`rgba(255,250,210,${Math.sin(phase(p,.48,.58)*Math.PI)*.65})`;ctx.fillRect(0,0,w,h);}line(ctx,w*.08,h*.78,w*.9,h*.22,'rgba(255,229,85,.72)',4,28,phase(p,.35,.68));break;
+      }
+      case 'effectMoonlitFlow': drawMoonSlashes(ctx,w,h,p);break;
+      case 'effectTitanSteam':{
+        bg(ctx,w,h,'#4c1609','#090201');drawHeatRings(ctx,w,h,p);drawSteam(ctx,w,h,steam,p);if(p>.2&&p<.5){ctx.fillStyle=`rgba(255,205,150,${Math.sin(phase(p,.2,.5)*Math.PI)*.22})`;ctx.fillRect(0,0,w,h);}break;
+      }
+      case 'effectWaterPulse': bg(ctx,w,h,'#07182a','#01050a');drawWaterForm(ctx,w,h,phase(p,.06,.7),0,false);break;
+      case 'effectScoutRush':{
+        bg(ctx,w,h,'#071710','#020706');const q=phase(p,.05,.7);line(ctx,-40,h*.22,w*1.05*q,h*.42,'rgba(116,255,193,.78)',2,12,.9);line(ctx,w+40,h*.18,w*(1-1.05*q),h*.62,'rgba(116,255,193,.78)',2,12,.9);drawSteam(ctx,w,h,steam,p*.7);break;
+      }
+      case 'effectCursedSpark':
+      case 'effectDarkImpact':{
+        bg(ctx,w,h,'#22020b','#010101');const q=phase(p,.12,.65);for(let i=0;i<bolts.length;i++){const a=i/bolts.length*TAU,r=Math.min(w,h)*.48;drawBolt(ctx,w*.5,h*.5,w*.5+Math.cos(a)*r,h*.5+Math.sin(a)*r,bolts[i].jitter,'#ff2748',.3+.65*(1-q),3);}glow(ctx,w*.5,h*.5,140*easeOut(q),'rgba(255,34,68,.45)','rgba(255,34,68,0)',.9);break;
+      }
+      case 'effectGroundTremor':{
+        bg(ctx,w,h,'#26170b','#030201');drawHeatRings(ctx,w,h,p);drawSteam(ctx,w,h,steam,p*.8);for(let i=0;i<8;i++){const a=(i-4)*.16;line(ctx,w*.5,h*.78,w*.5+Math.sin(a)*w*.4,h*.78-Math.cos(a)*h*.35,'rgba(255,181,92,.42)',2,8,phase(p,.14,.58));}break;
+      }
+      case 'effectFlameHeart':{
+        bg(ctx,w,h,'#350802','#050100');const q=phase(p,.08,.76);for(let i=0;i<18;i++){const a=(i/18)*TAU,r=lerp(Math.min(w,h)*.08,Math.min(w,h)*.34,q),cx=w*.5+Math.cos(a)*r,cy=h*.5+Math.sin(a)*r;ctx.save();ctx.translate(cx,cy);ctx.rotate(a+Math.PI/2);ctx.strokeStyle=i%2?'#ff5b22':'#ffd065';ctx.shadowColor='#ff3d10';ctx.shadowBlur=18;ctx.lineWidth=3+(i%3);ctx.beginPath();ctx.moveTo(0,18);ctx.quadraticCurveTo(-15,-12,0,-36-12*Math.sin(q*Math.PI));ctx.quadraticCurveTo(13,-12,0,18);ctx.stroke();ctx.restore();}drawSparks(ctx,w,h,particles,q,'#ff9c38',.5,.58);break;
+      }
+      default: bg(ctx,w,h,'#061221','#01030a');drawSparks(ctx,w,h,particles,p,'#58b9ff',.5,.5);break;
+    }
+  }
+
+  function updateDOM(state,p){
+    const r=state.profile.reveal;
+    const oldFade=1-smooth(phase(p,.18,Math.min(r-.12,.58)));
+    state.oldEl.style.opacity=String(state.effectId==='effectKingCleave'||state.effectId==='effectAbsoluteDomain'?0:oldFade);
+    state.oldEl.style.filter=`blur(${phase(p,.28,r)*8}px)`;
+    const reveal=smooth(phase(p,r,Math.min(.94,r+.14)));
+    state.newEl.style.opacity=String(reveal);
+    state.newEl.style.transform=`translate(-50%,-50%) scale(${lerp(.94,1,reveal)})`;
+    state.tagEl.style.opacity=String(phase(p,.05,.2)*(1-phase(p,.84,.98)));
+    state.layer.style.setProperty('--fx17-reveal',reveal.toFixed(3));
+  }
+
+  function run(effectId,payload={}){
+    return new Promise(resolve=>{
+      const layer=$('levelEffectLayer'),effect=shopItems[effectId]||{},rarity=effect.rarity||'RARE';
+      const duration=manifestationDuration(rarity,payload.kind||'level');
+      const oldLevel=Number(payload.oldLevel??Math.max(1,player.level-1)),newLevel=Number(payload.newLevel??player.level);
+      const st=makeState(effectId,oldLevel,newLevel,layer);let raf=0,start=performance.now();
+      const onResize=()=>{st.size=resizeCanvas(st.canvas,st.ctx);};window.addEventListener('resize',onResize,{passive:true});
+      const frame=now=>{const p=clamp((now-start)/duration);drawEffect(st,p,now);updateDOM(st,p);if(p<1)raf=requestAnimationFrame(frame);else{cancelAnimationFrame(raf);window.removeEventListener('resize',onResize);layer.className='level-effect-layer';layer.innerHTML='';layer.removeAttribute('style');resolve();}};
+      vibratePattern(rarity==='MYTHIC'?[35,40,60,45,85]:rarity==='LEGENDARY'?[25,30,50]:[18,24,34]);
+      synthCue(effectId==='effectThunderStep'?'thunder':(effectId==='effectKingCleave'||effectId==='effectAbsoluteDomain')?'slash':'level');
+      raf=requestAnimationFrame(frame);
+    });
+  }
+
+  function rank(rank,meta={}){
+    return new Promise(resolve=>{
+      const layer=$('levelEffectLayer'),duration=manifestationDuration('MYTHIC','rank')+800,oldRank=meta.oldRank||'—';
+      layer.className='level-effect-layer fx17-overlay fx17-rank';
+      layer.innerHTML=`<canvas class="fx17-canvas"></canvas><div class="fx17-grade"></div><div class="fx17-grain"></div><div class="fx17-rank-copy"><small>SYSTEM RANK ASCENSION</small><span>${oldRank}</span><b>→</b><strong>${rank}</strong><em>LIMIT RECALIBRATED</em></div>`;
+      const canvas=layer.querySelector('canvas'),ctx=canvas.getContext('2d');let size=resizeCanvas(canvas,ctx),start=performance.now(),raf=0;const random=rng(hash(`${oldRank}:${rank}:rank`));const shards=Array.from({length:42},()=>({a:random()*TAU,r:.08+random()*.38,s:1+random()*4,o:random()}));
+      const frame=now=>{const p=clamp((now-start)/duration),{w,h}=size;ctx.clearRect(0,0,w,h);bg(ctx,w,h,'#071526','#000');const q=phase(p,.12,.72);for(const sh of shards){const r=Math.min(w,h)*sh.r*easeOut(q),x=w*.5+Math.cos(sh.a)*r,y=h*.5+Math.sin(sh.a)*r;ctx.fillStyle=`rgba(80,192,255,${(1-q)*(.12+sh.o*.45)})`;ctx.save();ctx.translate(x,y);ctx.rotate(sh.a);ctx.fillRect(-sh.s*4,-1,sh.s*8,2);ctx.restore();}for(let i=0;i<6;i++){const rr=lerp(40,Math.min(w,h)*.45,phase(p,.25,.78))+i*28;ctx.strokeStyle=`rgba(87,198,255,${.25*(1-phase(p,.52,.9))})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(w*.5,h*.5,rr,0,TAU);ctx.stroke();}if(p<1)raf=requestAnimationFrame(frame);else{layer.className='level-effect-layer';layer.innerHTML='';resolve();}};vibratePattern([45,35,70,45,120]);synthCue('rank');raf=requestAnimationFrame(frame);
+    });
+  }
+
+  return {run,rank};
 })();
 
-function runCinematic(effectId, payload = {}) {
-  return FX16.run(effectId, payload);
-}
+function runCinematic(effectId, payload = {}) { return FX17.run(effectId, payload); }
+function playRankAscension(rank, meta = {}) { queueManifestation(() => FX17.rank(rank, meta)); }
 
-function playRankAscension(rank, meta = {}) {
-  queueManifestation(() => new Promise((resolve) => {
-    const layer = $("levelEffectLayer");
-    const duration = manifestationDuration("MYTHIC", "rank") + 900;
-    const oldRank = meta.oldRank || "—";
-    layer.className = "level-effect-layer fx16-overlay fx16-rank";
-    layer.innerHTML = `<canvas class="fx16-canvas"></canvas><div class="fx16-vignette"></div><div class="fx16-rank-copy"><small>SYSTEM RANK ASCENSION</small><span class="old-rank">${oldRank}</span><b>→</b><strong>${rank}</strong><em>LIMIT RECALIBRATED</em></div>`;
-    const canvas=layer.querySelector('canvas'),ctx=canvas.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1); canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0);
-    const start=performance.now(); const loop=now=>{const p=Math.min(1,(now-start)/duration),w=innerWidth,h=innerHeight;ctx.clearRect(0,0,w,h);ctx.fillStyle='rgba(0,3,9,.96)';ctx.fillRect(0,0,w,h);for(let i=0;i<28;i++){const a=i/28*Math.PI*2+now*.00025;const r=(.12+.42*p)*Math.min(w,h);ctx.strokeStyle=`rgba(${60+i*3},${150+i*2},255,${.08+.18*(1-p)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(w/2,h/2,r+i*5,a,a+1.4);ctx.stroke();}for(let i=0;i<7;i++){lightning(ctx,w/2,h/2,w/2+Math.cos(i/7*TAU)*w*.55,h/2+Math.sin(i/7*TAU)*h*.48,'#5ac8ff',.18+.35*Math.sin(p*Math.PI),8);}if(p<1)requestAnimationFrame(loop);else{layer.className='level-effect-layer';layer.innerHTML='';resolve();}}; requestAnimationFrame(loop); vibratePattern([40,35,70,45,120]); synthCue('rank');
-  }));
-}

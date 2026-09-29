@@ -1,0 +1,37 @@
+PROJECT ARISE 2.0 — AWAKENING SYSTEM
+
+PROJECT ARISE — ALPHA 1.7
+CINEMATIC IDENTITY UPDATE
+
+PRINCIPAL FOCO
+- FX Engine 1.7 refeito para sequências coreografadas: preparação, ação, clímax e revelação.
+- Menos efeitos genéricos; cada cosmético tem movimento e composição próprios.
+- Rare, Epic, Legendary e Mythic mantêm identidade clara, com Mythic recebendo as sequências mais longas.
+
+FX PRINCIPAIS
+- Devil Engine: motosserras longas com dentes/corrente móveis, motor, faíscas e corte de tela.
+- Crimson Dawn: correnteza azul com espuma que se transforma progressivamente em fogo.
+- King's Cleave: o Level antigo é dividido em faixas e despedaçado por cortes.
+- Infinite Horizon: azul + vermelho convergem e colapsam em roxo antes do novo Level.
+- Monarch Ascension: sombras humanas, chamas azul-negras e sequência ARISE.
+- Thunder Step: apagão, trajetória dourada e relâmpagos concentrados.
+- Moonlit Flow: crescentes lunares e lâminas sucessivas.
+- Colossal Steam: vapor, calor e ondas de pressão.
+- Rare/Epic também receberam identidade própria, sem depender apenas de troca de cor.
+
+APRESENTAÇÃO
+- Signature frame no final de cada Level Up para o novo Level permanecer legível.
+- Durações maiores em modo ESPETÁCULO.
+- NORMAL e REDUZIDA continuam disponíveis.
+- Galeria Cinemática ampliada com assinatura visual de cada efeito.
+- Rank Ascension permanece separada da animação de Level Up pelo Event Director.
+
+BODY SYNC 4.2
+- Mantém o corpo corrigido da 1.6, uma visão por vez e músculos presos à silhueta.
+- Refinamento visual de pele, contornos, músculos ativos e progressão por Rank.
+- Sistema respiratório continua separado do mapa muscular.
+
+SAVE
+- Nova chave: projectAriseAlpha17
+- Migração automática da Alpha 1.6 e versões anteriores.
+- Ainda é recomendado exportar o save antes de atualizar.

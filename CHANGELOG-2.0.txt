@@ -1,0 +1,10 @@
+PROJECT ARISE 2.0 — AWAKENING SYSTEM
+
+- Novo plano semanal coerente: UPPER A / LOWER A / RECOVERY / UPPER B / LOWER B / REST
+- Sábado e domingo agora são REST DAY e não quebram streak
+- Arise Core: lógica adaptativa para recalibrar metas e sugerir progressões
+- Timers inteligentes para exercício por tempo e descanso
+- Campo RIR para informar proximidade da falha
+- Nova identidade visual de topo / nova logo
+- Recomendações dinâmicas na tela inicial
+- Inclusão de Pike Push-up, Glute Bridge e Afundo para treino mais coerente

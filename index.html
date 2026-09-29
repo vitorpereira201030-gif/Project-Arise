@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>Project Arise — Alpha 1.6 • Reforged Update</title>
+  <title>Project Arise — 2.0 • Awakening System</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -20,10 +20,13 @@
 
   <main class="app-shell">
     <header class="topbar panel">
-      <div>
-        <p class="eyebrow">[ SYSTEM ]</p>
-        <h1>PROJECT <span>ARISE</span></h1>
-        <p class="subtitle">Alpha 1.6 • Reforged Update</p>
+      <div class="brand-wrap">
+        <div class="brand-mark" aria-hidden="true"><span></span></div>
+        <div>
+          <p class="eyebrow">[ SYSTEM ]</p>
+          <h1>PROJECT <span>ARISE</span></h1>
+          <p class="subtitle">2.0 • Awakening System</p>
+        </div>
       </div>
       <button id="systemButton" class="icon-button" type="button" title="Ajuda do sistema">?</button>
     </header>
@@ -56,9 +59,9 @@
 
           <div class="resource-grid">
             <div><span class="label">ESSENCE</span><strong id="essenceValue">0</strong></div>
-            <div><span class="label">QUEST ATUAL</span><strong id="dailyProgress">0/4</strong></div>
+            <div><span class="label">PLANO</span><strong id="dailyProgress">0/4</strong></div>
             <div><span class="label">STREAK</span><strong id="streakValue">🔥 0</strong><small id="streakBonusText">Bônus +0%</small></div>
-            <div><span class="label">PROTEÇÃO</span><strong id="streakGuardValue">0</strong><small>máx. 1</small></div>
+            <div><span class="label">WEEKLY</span><strong id="streakGuardValue">0/4</strong><small>sessões</small></div>
           </div>
         </article>
 
@@ -76,14 +79,21 @@
 
       <section class="panel recovery-panel">
         <div>
-          <p class="eyebrow">RECOVERY CHECK</p>
+          <p class="eyebrow">READINESS CHECK</p>
           <h2>Como seu corpo está hoje?</h2>
-          <p id="recoveryHint">Isso não reduz suas recompensas. Serve para impedir progressões agressivas quando você ainda não recuperou bem.</p>
+          <p id="recoveryHint">O Arise Core usa isso para evitar progressões agressivas e para ajustar seu treino ao seu estado atual.</p>
         </div>
-        <div class="recovery-options" role="group" aria-label="Estado de recuperação">
-          <button class="recovery-button" data-recovery="good" type="button">◆ BEM</button>
-          <button class="recovery-button" data-recovery="tired" type="button">◈ CANSADO</button>
-          <button class="recovery-button" data-recovery="sore" type="button">◇ MUITO DOLORIDO</button>
+        <div class="recovery-score-wrap">
+          <div class="readiness-box">
+            <span>READINESS</span>
+            <strong id="readinessScoreValue">84%</strong>
+            <small id="readinessScoreText">Pronto para progressão normal.</small>
+          </div>
+          <div class="recovery-options" role="group" aria-label="Estado de recuperação">
+            <button class="recovery-button" data-recovery="good" type="button">◆ BEM</button>
+            <button class="recovery-button" data-recovery="tired" type="button">◈ CANSADO</button>
+            <button class="recovery-button" data-recovery="sore" type="button">◇ MUITO DOLORIDO</button>
+          </div>
         </div>
       </section>
 
@@ -94,7 +104,7 @@
             <span id="routineChip" class="routine-chip">TREINO A</span>
           </div>
           <h2 id="routineTitle">Treino atual</h2>
-          <p id="dailyMessage">Complete as missões no seu ritmo.</p>
+          <p id="dailyMessage">Complete as missões no seu ritmo.</p><div class="plan-meta"><span id="sessionEta" class="mini-chip">~ 30 min</span><span id="goalModeChip" class="mini-chip">HYBRID • MUSCLE BIAS</span><span id="todayStatusChip" class="mini-chip">SESSION READY</span></div><div id="systemRecommendation" class="system-recommendation">O Arise Core vai analisar seu treino e recalibrar metas automaticamente.</div>
           <div id="cooldownInfo" class="cooldown-info" aria-live="polite"></div>
         </div>
         <button id="startTrainingButton" class="primary-button" type="button">⚔ INICIAR TREINO</button>
@@ -170,6 +180,34 @@
           </div>
         </fieldset>
 
+        
+        <div class="smart-tools">
+          <div class="smart-tools-head">
+            <div>
+              <p class="eyebrow">SMART TIMERS</p>
+              <h3 id="trainingTimerTitle">Sessão guiada</h3>
+            </div>
+            <div id="trainingTimerDisplay" class="timer-display">00:00</div>
+          </div>
+          <p id="trainingTimerLabel" class="smart-tools-label">Use um timer para séries de tempo e descanso automático entre séries.</p>
+          <div class="timer-actions">
+            <button id="startWorkTimerButton" class="ghost-button" type="button">TIMER DO EXERCÍCIO</button>
+            <button id="startRestTimerButton" class="ghost-button" type="button">DESCANSO</button>
+            <button id="stopTimerButton" class="ghost-button" type="button">PARAR</button>
+          </div>
+        </div>
+
+        <fieldset class="rir-fieldset">
+          <legend>Quantas repetições ainda sobrariam com boa técnica? (RIR)</legend>
+          <div class="rir-grid">
+            <label><input type="radio" name="rir" value="0" /><span>0</span></label>
+            <label><input type="radio" name="rir" value="1" /><span>1</span></label>
+            <label><input type="radio" name="rir" value="2" checked /><span>2</span></label>
+            <label><input type="radio" name="rir" value="3" /><span>3</span></label>
+            <label><input type="radio" name="rir" value="4" /><span>4+</span></label>
+          </div>
+        </fieldset>
+
         <p id="trainingSafetyNote" class="safety-note">Registre apenas o que você fez com técnica aceitável. Não precisa chegar à falha para progredir.</p>
 
         <div class="training-actions">
@@ -185,7 +223,7 @@
       <article class="panel detail-panel body-sync-reforged-panel">
         <div class="section-heading body-sync-reforged-heading">
           <div>
-            <p class="eyebrow">BODY SYNC 4.0</p>
+            <p class="eyebrow">BODY SYNC 4.2</p>
             <h2>Anatomia funcional</h2>
             <p class="detail-intro compact-intro">Mapa muscular reconstruído para leitura humana real: uma visão por vez, músculos presos à silhueta e informações apenas quando você pede.</p>
           </div>
@@ -437,7 +475,7 @@
         <h2>Apresentação & feedback</h2>
         <p class="detail-intro">Escolha quanto espetáculo o sistema deve mostrar. As animações completas são pensadas como recompensa; o modo rápido mantém a identidade com menos espera.</p>
         <div class="manifestation-settings">
-          <div class="setting-card cinematic-setting"><div><strong>Modo das animações</strong><p>Completa, rápida ou reduzida.</p></div><div id="animationModeButtons" class="segmented-control"><button data-animation-mode="full" type="button">COMPLETA</button><button data-animation-mode="fast" type="button">RÁPIDA</button><button data-animation-mode="reduced" type="button">REDUZIDA</button></div></div>
+          <div class="setting-card cinematic-setting"><div><strong>Modo das animações</strong><p>Espetáculo, normal ou reduzida.</p></div><div id="animationModeButtons" class="segmented-control"><button data-animation-mode="full" type="button">ESPETÁCULO</button><button data-animation-mode="fast" type="button">NORMAL</button><button data-animation-mode="reduced" type="button">REDUZIDA</button></div></div>
           <div class="setting-card"><div><strong>Feedback tátil</strong><p>Vibrações curtas em impactos, cortes, recordes e ascensões quando o aparelho permitir.</p></div><button id="hapticsToggleButton" class="ghost-button" type="button">ATIVADO</button></div>
           <div class="setting-card"><div><strong>Som original do sistema</strong><p>Efeitos sintetizados pelo próprio app. Não usa áudio de anime.</p></div><button id="soundToggleButton" class="ghost-button" type="button">DESATIVADO</button></div>
         </div>
